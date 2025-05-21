@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>页面标题</title>
+<link rel="stylesheet" href="css/htgov.css" />
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
+        </head>
+        <body>
+            <div class="header">
+                <a href="https://htcb-12c7.github.io/htgov/">
+                    <img class="logo" src="https://cdn.jsdelivr.net/gh/HTcB-12C7/htchocolate.github.io@main/HTengov.webp" alt="返回主页">
+                </a>
+                黑铁工作室主页 <span>【灰度开放测试中】</span>
+                
+                <!-- Language 按钮 -->
+                <button id="lang-toggle" style="
+                    position: absolute;
+                    top: 10px;
+                    right: 70px;
+                    padding: 8px 16px;
+                    font-size: 16px;           /* 字体大小 */
+                    background: black;
+                    color: #03a9f4;
+                    border: 1px solid #03a9f4;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-weight: bold;
+                ">
+                🌐 Language
+                </button>
+
+                <!-- 头像 + 弹出卡片 -->
+                <div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
+                  <img
+                    src="assets/61892f13-66e7-412f-9881-00ddea29080b.png"
+                    alt="头像"
+                    style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
+                    onclick="toggleAccountInfo()" />
+                  <div class="account-popup" id="accountPopup" style="
+                    display: none;
+                    position: absolute;
+                    top: 45px;
+                    right: 0;
+                    background: rgba(0,0,0,0.9);
+                    padding: 10px 15px;
+                    border-radius: 8px;
+                    color: white;
+                    z-index: 9999;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                    white-space: nowrap; /* ✅ 加这行：防止换行 */">
+                    <div><strong>姓名：</strong>HTc</div>
+                    <div><strong>身份证：</strong>HT10001</div>
+                    <div><strong>银行卡号：</strong>1530 0089 8607 2871</div>
+                    <div><strong>地址：</strong>上海市 徐汇县 川东新区 728弄 黑铁快递柜</div>
+                  </div>
+                </div>
+
+                <!-- Google 翻译语言框（请放在最外面，不嵌套在上面的 div 中） -->
+                <div id="google_translate_element" style="
+                    position: absolute;
+                    top: 50px;
+                    right: 0px;
+                    display: none;
+                    background: rgba(0, 0, 0, 0.8);
+                    padding: 8px;
+                    border-radius: 5px;
+                    z-index: 9999;
+                "></div>
+                    </div>
+
+            <div class="main-container">
+                <div class="sidebar">
+                    <h3>黑铁工作室</h3>
+                    <ul>
+                        <li><a href="https://htcb-12c7.github.io/htgov/HTcalendar.html">黑铁实时日历系统</a></li>                        
+                        <li><a href="https://htcb-12c7.github.io/htgov/HTCMVideo.html">黑铁CMVideo</a></li>
+			<li><a href="https://htcb-12c7.github.io/htgov/HTVIP">黑铁 VIP</a></li>
+                        <li><a href="https://htcb-12c7.github.io/htgov/HTcookie_converter.html">黑铁Cookie提取工具</a></li>
+                        <li><a href="https://htcb-12c7.github.io/HT_QRTool/">黑铁二维码工具</a></li>
+                        <li><a href="https://htcb-12c7.github.io/HT_RedhatHacker_boxsell/">黑铁红帽黑客自学箱</a></li>
+                        <li><a href="https://htchocolate.kit.com/6eba531f42">黑铁英格ZOO G</a></li>
+                        <li><a href="https://hpubgmjby.sh-cqxzjxcomputer.workers.dev/">小克力【测试未部署】</a></li>
+                        <li><a href="https://htcb-12c7.github.io/htgov/index.html">黑铁工作室简介</a></li>
+                    </ul>
+                </div>
+
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'zh-CN',
+        includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+
+    document.getElementById("lang-toggle").onclick = () => {
+      const el = document.getElementById("google_translate_element");
+      el.style.display = el.style.display === "none" ? "block" : "none";
+    };
+
+    function toggleAccountInfo() {
+      const popup = document.getElementById('accountPopup');
+      popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+    }
+  </script>
+</body>
+
+
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>黑铁日历</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #3e2723, #6d4c41, #b71c1c);
+      margin: 0;
+      padding: 30px;
+      font-family: Arial, sans-serif;
+    }
+    .calendar-wrapper {
+      color: #ffd700;
+      background: rgba(0,0,0,0.4);
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .time-display {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .sun-compass {
+      width: 120px;
+      height: 120px;
+      position: relative;
+      background: radial-gradient(circle at center, #ffeb3b 10%, #f57f17 70%, #3e2723 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 20px #ff9800;
+
+    }
+    .shadow {
+      position: absolute;
+      width: 2px;
+      height: 50px;
+      background: gold;
+      top: 10px;
+      left: 59px;
+      transform-origin: bottom;
+      transition: transform 0.5s linear;
+    }
+    .center-dot {
+      width: 10px;
+      height: 10px;
+      background: red;
+      border-radius: 50%;
+      position: absolute;
+      top: 55px;
+      left: 55px;
+    }
+
+.dial {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120px;
+  height: 120px;
+  /* z-index: 2; */
+  pointer-events: none;
+
+  /* 你可以修改这里来移动数字刻度的位置 */
+  transform: translate(39px, 39px);
+
+
+}
+
+    .dial span {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      color: white;
+      font-size: 12px;
+      top: 50%;
+      left: 50%;
+      transform: rotate(calc(var(--i) * 30deg)) translateY(-54px) rotate(calc(var(--i) * -30deg));
+      transform-origin: center;
+    }
+    .clock-text {
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff8e1;
+    }
+    .toggle-buttons label {
+      margin-right: 15px;
+    }
+    .calendar-controls {
+      margin-bottom: 20px;
+    }
+    .calendar-controls label {
+      margin-right: 20px;
+      color: #f44336;
+    }
+    .calendar-content .calendar-block {
+      padding: 15px;
+      margin: 10px 0;
+      background: rgba(0,0,0,0.6);
+      border-left: 5px solid gold;
+      border-radius: 5px;
+      color: #ffc107;
+      cursor: pointer;
+    }
+    .today-highlight {
+      border: 2px solid red !important;
+    }
+  </style>
+</head>
+<body>
+<div class="calendar-wrapper">
+  <div class="time-display">
+
+<!-- 用一个 dial-wrapper 来包住 sun-compass 和独立 dial -->
+<div class="dial-wrapper">
+  <div class="sun-compass">
+    <div class="shadow" id="shadow-hand"></div>
+    <div class="center-dot"></div>
+  </div>
+  <div class="dial">
+    <span style="--i:1">1</span><span style="--i:2">2</span>
+    <span style="--i:3">3</span><span style="--i:4">4</span>
+    <span style="--i:5">5</span><span style="--i:6">6</span>
+    <span style="--i:7">7</span><span style="--i:8">8</span>
+    <span style="--i:9">9</span><span style="--i:10">10</span>
+    <span style="--i:11">11</span><span style="--i:12">12</span>
+  </div>
+</div>
+
+    <div class="clock-text" id="clock-text">北京时间：00:00:00</div>
+    <div class="toggle-buttons">
+      <label><input type="radio" name="region" value="china" checked> 中国北京-上海时间</label>
+      <label><input type="radio" name="region" value="usa"> 美国时间</label>
+      <label><input type="radio" name="region" value="turkey"> 土耳其时间</label>
+    </div>
+  </div>
+
+  <div class="calendar-controls">
+    <label><input type="checkbox" class="calendar-toggle" value="yinli" checked> 显示中国阴历</label>
+    <label><input type="checkbox" class="calendar-toggle" value="china" checked> 显示中国农历</label>
+    <label><input type="checkbox" class="calendar-toggle" value="huangli" checked> 显示黄历</label>
+    <label><input type="checkbox" class="calendar-toggle" value="usa" checked> 显示美国日历</label>
+  </div>
+
+  <div class="calendar-content">
+    <div id="calendar-yinli" class="calendar-block expandable">🌙 中国阴历：2025年<div class="month-view" style="display:none;"></div></div>
+    <div id="calendar-china" class="calendar-block expandable">📜 中国农历：2025年<div class="month-view" style="display:none;"></div></div>
+    <div id="calendar-huangli" class="calendar-block expandable">🧧🪔 黄历：2025年<div class="month-view" style="display:none;"></div></div>
+    <div id="calendar-usa" class="calendar-block expandable">🦃 美国日历：2025 (Y)<div class="month-view" style="display:none;"></div></div>
+  </div>
+</div>
+
+<script>
+function updateTime() {
+  const region = document.querySelector('input[name="region"]:checked').value;
+  const now = new Date();
+  let displayTime = now;
+
+  if (region === 'china') {
+    displayTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Shanghai" }));
+  } 
+  else if (region === 'usa') {
+    displayTime = new Date(now.toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
+  }
+  else if (region === 'turkey') {
+  displayTime = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Istanbul" }));
+}
+
+
+  const hh = displayTime.getHours().toString().padStart(2, '0');
+  const mm = displayTime.getMinutes().toString().padStart(2, '0');
+  const ss = displayTime.getSeconds().toString().padStart(2, '0');
+
+let regionText = "";
+if (region === "china") {
+  regionText = "中国北京-上海时间：";
+} else if (region === "usa") {
+  regionText = "美西时间：";
+} else if (region === "turkey") {
+  regionText = "土耳其时间：";
+}
+
+document.getElementById("clock-text").textContent = regionText + `${hh}:${mm}:${ss}`;
+
+
+  const angle = ((hh % 12) * 60 + displayTime.getMinutes()) * 0.5;
+  document.getElementById("shadow-hand").style.transform = `rotate(${angle}deg)`;
+}
+
+function styleBlock(isToday) {
+  return `display:inline-block;margin:4px 8px;padding:4px 8px;border:${isToday ? "2px solid red" : "1px solid #777"};border-radius:4px;`;
+}
+
+function generateSampleView(container, type) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const days = new Date(year, month, 0).getDate();
+  const today = now.getDate();
+  container.innerHTML = "";
+  const samples = {
+    yinli: ["初一", "初二", "初三", "初四", "初五", "初六", "初七"],
+    china: ["立夏", "小满", "芒种", "端午", "夏至", "小暑", "大暑"],
+    huangli: ["宜出行 忌动土", "宜祭祀 忌嫁娶", "宜纳财 忌开市", "宜入宅 忌破土"],
+    usa: {
+      "5-12": "Mother's Day",
+      "5-27": "Memorial Day"
+    }
+  };
+
+  for (let i = 1; i <= days; i++) {
+    const div = document.createElement("div");
+    let content = "";
+    if (type === "usa") {
+      const date = new Date(year, month - 1, i);
+      const weekday = date.toLocaleDateString("en-US", { weekday: 'long' });
+      const key = `${month}-${i}`;
+      const holiday = samples.usa[key] || "";
+      content = `${weekday}` + (holiday ? `<br><span style="color:red">${holiday}</span>` : "");
+      div.innerHTML = `<strong>${month}/${i}</strong><br><span style="font-size:11px;color:#ccc;">${content}</span>`;
+    } else {
+      const sample = samples[type][i % samples[type].length];
+      div.innerHTML = `<strong>${month}月${i}日</strong><br><span style="font-size:11px;color:#ccc;">${sample}</span>`;
+    }
+    div.style = styleBlock(i === today);
+    container.appendChild(div);
+  }
+}
+
+document.querySelectorAll(".calendar-block.expandable").forEach(block => {
+  block.addEventListener("click", () => {
+    const view = block.querySelector(".month-view");
+    const id = block.id;
+    if (view.style.display === "none") {
+      view.style.display = "block";
+      const type = id.replace("calendar-", "");
+      generateSampleView(view, type);
+    } else {
+      view.style.display = "none";
+    }
+  });
+});
+
+document.querySelectorAll(".calendar-toggle").forEach(cb => {
+  cb.addEventListener("change", () => {
+    const id = `calendar-${cb.value}`;
+    document.getElementById(id).style.display = cb.checked ? "block" : "none";
+  });
+});
+
+document.querySelectorAll('input[name="region"]').forEach(radio => {
+  radio.addEventListener("change", updateTime);
+});
+
+setInterval(updateTime, 1000);
+updateTime();
+</script>
+</body>
+
+</html>
