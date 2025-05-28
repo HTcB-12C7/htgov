@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<!NE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑铁华夏每日视频 - HTCMVideo</title>
+    <link rel="stylesheet" href="../css/htgov.css">
+    <style>
+        /* 修复header定位问题 */
+        .header {
+            position: relative;
+            width: 100%;
+            height: 60px;
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 视频页面专属样式 */
+        .video-container {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .video-card {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        video {
+            width: 100%;
+            display: block;
+            background: #000;
+        }
+        
+        .video-info {
+            padding: 15px;
+            color: #e0e0e0;
+        }
+        
+        .video-title {
+            color: gold;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .video-desc {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        /* 确保翻译弹窗可见 */
+        #google_translate_element {
+            position: absolute !important;
+            top: 50px !important;
+            right: 10px !important;
+            background: rgba(0, 0, 0, 0.9) !important;
+            z-index: 9999 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- 修正后的header结构 -->
+    <div class="header">
+        <a href="https://htcb-12c7.github.io/htgov/">
+            <img class="logo" src="https://cdn.jsdelivr.net/gh/HTcB-12C7/htchocolate.github.io@main/HTengov.webp" alt="返回主页">
+        </a>
+        黑铁华夏每日视频 - HTCMVideo<span>【灰度开放测试中】</span>
+        
+        <!-- Language 按钮 -->
+        <button id="lang-toggle" style="
+            position: absolute;
+            top: 10px;
+            right: 70px;
+            padding: 8px 16px;
+            font-size: 16px;
+            background: black;
+            color: #03a9f4;
+            border: 1px solid #03a9f4;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;">
+            🌐 Language
+        </button>
+        
+        <!-- 头像 + 弹出卡片 -->
+        <div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
+            <img src="../assets/61892f13-66e7-412f-9881-00ddea29080b.png" 
+                 alt="头像"
+                 style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
+                 onclick="toggleAccountInfo()" />
+            <div class="account-popup" id="accountPopup" style="
+                display: none;
+                position: absolute;
+                top: 45px;
+                right: 0;
+                background: rgba(0,0,0,0.9);
+                padding: 10px 15px;
+                border-radius: 8px;
+                color: white;
+                z-index: 9999;
+                box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                white-space: nowrap;">
+                <div><strong>姓名：</strong>HTc</div>
+                <div><strong>身份证：</strong>HT10001</div>
+                <div><strong>银行卡号：</strong>1530 0089 8607 2871</div>
+                <div><strong>地址：</strong>上海市 徐汇县 川东新区 728弄 黑铁快递柜</div>
+            </div>
+        </div>
+        
+        <!-- Google 翻译语言框 -->
+        <div id="google_translate_element" style="
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            display: none;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 8px;
+            border-radius: 5px;
+            z-index: 9999;">
+        </div>
+    </div> <!-- 结束header -->
+
+    <div class="main-container">
+        <div class="sidebar">
+            <h3>视频分类</h3>
+            <ul>
+                <li><a href="/">最新视频</a></li>
+                <li><a href="/U/">环球系列</a></li>
+                <li><a href="/HPJB M/">HPJB M【N/J】</a></li>
+                <li><a href="/enST/">English Column</a></li>
+                <li><a href="/MU/">音乐频道</a></li>
+                <li><a href="/CD/">存档记录</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <div class="video-container">
+                <h2 style="color: gold; border-bottom: 2px solid gold; padding-bottom: 10px;">
+                    最新视频
+                </h2>
+                
+                <div class="video-gallery">
+                    <!-- 视频卡片1 -->
+                    <div class="video-card">
+                        <video controls poster="NE/v1.jpg">
+                            <source src="NE/On My Way  [itXOwCAShFU].mp4" type="video/mp4">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div class="video-info">
+                            <h3 class="video-title">ON MY WAY</h3>
+                            <p class="video-desc">出现在S2赛季以及夏日海滩！我第二团体入坑，夏日海滩的清爽，主题玩法的海水·新富，仿佛还回荡在耳边和新中</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 视频卡片2 -->
+                    <div class="video-card">
+                        <video controls poster="NE/v2.jpg">
+                            <source src="NE/My Heart Full Of Flames ｜｜ PUBG Mobile Update 2.2 Song [J4ZCJKzqzS0].mp4" type="video/mp4">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div class="video-info">
+                            <h3 class="video-title">My Heart Full o Flames</h3>
+                            <p class="video-desc">出现在第二大更[Update 2.2],是我入坑的赛季，金沙传奇，时光回溯！第一个连续吃鸡27天2500时光币换的实力金沙DISICO车皮！！万分怀念！！！</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="HTCMVideo.js"></script>
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'zh-CN',
+                includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+
+        document.getElementById("lang-toggle").onclick = () => {
+            const el = document.getElementById("google_translate_element");
+            el.style.display = el.style.display === "none" ? "block" : "none";
+        };
+
+        function toggleAccountInfo() {
+            const popup = document.getElementById('accountPopup');
+            popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
