@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cookie 转换器</title>
+  <link rel="stylesheet" href="css/htgov.css" />
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<style>
+/* 深色输入框样式 */
+textarea {
+  background-color: #2e1b17; /* 深棕 */
+  color: #e0e0e0;            /* 浅字 */
+  border: 1px solid #8d6e63;
+  padding: 10px;
+  border-radius: 5px;
+  font-family: monospace;
+}
+
+/* 深色按钮样式（黑底金边） */
+button {
+  background-color: #000000;
+  color: #ffd700;
+  border: 1px solid #ffd700;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+/* 悬停时更亮 */
+button:hover {
+  background-color: #2b2b2b;
+  color: #fff8dc;
+}
+.container {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  max-width: 1000px;       /* 原来是 800px，现在更宽 */
+  width: 100%;
+  margin: 0 auto;           /* 水平居中 */
+}
+
+.header {
+  height: 60px; /* ✅ 原来是 60px */
+
+}
+
+</style>
+</head>
+<body>
+  <div class="header">
+    <a href="https://htcb-12c7.github.io/htgov/">
+      <img class="logo" src="https://cdn.jsdelivr.net/gh/HTcB-12C7/htchocolate.github.io@main/HTengov.webp" alt="返回主页">
+    </a>
+    黑铁工作室主页 <span>【灰度开放测试中】</span>
+    <button id="lang-toggle">🌐 Language</button>
+    <div class="account-toggle">
+      <img src="assets/61892f13-66e7-412f-9881-00ddea29080b.png" onclick="toggleAccountInfo()"/>
+      <div class="account-popup" id="accountPopup">
+        <div><strong>姓名：</strong>HTc</div>
+        <div><strong>身份证：</strong>HT10001</div>
+        <div><strong>银行卡号：</strong>1530 0089 8607 2871</div>
+        <div><strong>地址：</strong>上海市 徐汇区 川东新区 728弄 黑铁快递柜</div>
+      </div>
+    </div>
+    <div id="google_translate_element" style="position: absolute; top: 50px; right: 0; display: none;"></div>
+  </div>
+
+  <div class="main-container">
+    <div class="sidebar">
+      <h3>黑铁工作室</h3>
+      <ul>
+                        <li><a href="https://htcb-12c7.github.io/htgov/HTcalendar">黑铁实时日历系统</a></li>                        
+                        <li><a href="https://htcb-12c7.github.io/htgov/HTCMVideo">黑铁CMVideo</a></li>
+			<li><a href="https://htcb-12c7.github.io/htgov/HTVIP">黑铁 VIP</a></li>
+                        <li><a href="https://htcb-12c7.github.io/htgov/HTcookie_converter">黑铁Cookie提取工具</a></li>
+                        <li><a href="https://htcb-12c7.github.io/HT_QRTool/">黑铁二维码工具</a></li>
+                        <li><a href="https://htcb-12c7.github.io/HT_RedhatHacker_boxsell/">黑铁红帽黑客自学箱</a></li>
+                        <li><a href="https://htchocolate.kit.com/6eba531f42">黑铁英格ZOO G</a></li>
+                        <li><a href="https://hpubgmjby.sh-cqxzjxcomputer.workers.dev/">小克力【测试未部署】</a></li>
+                        <li><a href="https://htcb-12c7.github.io/htgov">黑铁工作室简介</a></li>
+      </ul>
+    </div>
+
+    <div class="content">
+      <div class="container">
+        <h2>粘贴 Chrome 开发者工具复制的 Cookie 行</h2>
+        <textarea id="input" placeholder="粘贴 DevTools 的 Cookie 表格数据..." style="width:100%; height: 200px;"></textarea>
+        <br><br>
+        <button onclick="convertCookies()">生成 cookies.txt</button>
+        <br><br>
+        <h3>转换结果：</h3>
+        <textarea id="output" readonly style="width:100%; height: 200px;"></textarea>
+        <br>
+        <button onclick="download()">下载 cookies.txt</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'zh-CN',
+        includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+
+    document.getElementById("lang-toggle").onclick = () => {
+      const el = document.getElementById("google_translate_element");
+      el.style.display = el.style.display === "none" ? "block" : "none";
+    };
+
+    function toggleAccountInfo() {
+      const popup = document.getElementById('accountPopup');
+      popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function convertCookies() {
+        const input = document.getElementById("input").value;
+        const lines = input.split("\n");
+        let result = "# Netscape HTTP Cookie File\n";
+
+        for (let line of lines) {
+            const parts = line.trim().split("\t");
+            if (parts.length < 2) continue;
+
+            let name = parts[0];
+            let value = parts[1];
+            let domain = ".youtube.com";
+            let path = "/";
+            let secure = "FALSE";
+            let expiration = Math.floor(Date.now() / 1000) + 3600 * 24 * 180;
+
+            result += `${domain}\tTRUE\t${path}\t${secure}\t${expiration}\t${name}\t${value}\n`;
+        }
+
+        document.getElementById("output").value = result;
+    }
+
+    function download() {
+        const text = document.getElementById("output").value;
+        const blob = new Blob([text], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "cookies.txt";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>
+
