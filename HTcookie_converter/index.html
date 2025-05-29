@@ -164,6 +164,35 @@ button:hover {
         link.click();
         document.body.removeChild(link);
     }
+
+
+  // 标记是否已初始化翻译组件
+  let googleLoaded = false;
+
+  function googleTranslateElementInit() {
+    googleLoaded = true;
+    new google.translate.TranslateElement({
+      pageLanguage: 'zh-CN',
+      includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+  }
+
+  document.getElementById("lang-toggle").onclick = () => {
+    if (!googleLoaded) {
+      alert("⚠️ 翻译服务尚未加载，请稍后再试。");
+      return;
+    }
+    const el = document.getElementById("google_translate_element");
+    el.style.display = (el.style.display === "none" || el.style.display === "") ? "block" : "none";
+  };
+
+  function toggleAccountInfo() {
+    const popup = document.getElementById('accountPopup');
+    popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+  }
+
+	  
   </script>
 </body>
 </html>
