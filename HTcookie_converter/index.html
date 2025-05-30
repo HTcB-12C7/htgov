@@ -185,7 +185,28 @@ button:hover {
     popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
   }
 
-	  
+function applyTranslateStyle() {
+  const iframe = document.querySelector('iframe.goog-te-banner-frame');
+  const combo = document.querySelector('.goog-te-combo');
+
+  if (combo) {
+    combo.style.border = "2px solid black";
+    combo.style.borderRadius = "6px";
+    combo.style.backgroundColor = "#000";
+    combo.style.color = "#03a9f4";
+  }
+
+  if (iframe) iframe.style.display = "none"; // 隐藏横幅
+}
+
+// 每 500ms 检查一次是否加载完翻译控件
+const intervalId = setInterval(() => {
+  if (document.querySelector('.goog-te-combo')) {
+    applyTranslateStyle();
+    clearInterval(intervalId);
+  }
+}, 500);
+	  	  
   </script>
 </body>
 </html>
