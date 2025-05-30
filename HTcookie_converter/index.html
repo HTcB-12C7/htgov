@@ -199,13 +199,6 @@ function applyTranslateStyle() {
   if (iframe) iframe.style.display = "none"; // 隐藏横幅
 }
 
-// 每 500ms 检查一次是否加载完翻译控件
-const intervalId = setInterval(() => {
-  if (document.querySelector('.goog-te-combo')) {
-    applyTranslateStyle();
-    clearInterval(intervalId);
-  }
-}, 500);
 	  	  
   </script>
 </body>
