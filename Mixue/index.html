@@ -153,5 +153,28 @@
     .catch(err => console.error("菜单加载失败：", err));
          </script>
 
+				<script>
+  const v = document.getElementById("bg-video");
+
+  // 确保视频先静音自动播放
+  v.muted = true;
+  v.play().catch(() => {});
+
+  // 第一次用户交互时解除静音
+  function enableAudio() {
+    v.muted = false;
+    v.volume = 1.0;   // 设置音量
+    v.play().catch(() => {});
+    document.removeEventListener("click", enableAudio);
+    document.removeEventListener("touchstart", enableAudio);
+    document.removeEventListener("keydown", enableAudio);
+  }
+
+  document.addEventListener("click", enableAudio);
+  document.addEventListener("touchstart", enableAudio);
+  document.addEventListener("keydown", enableAudio);
+</script>
+
+
         </body>
         </html>
