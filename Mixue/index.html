@@ -88,40 +88,25 @@
                     <ul id="sidebar-nav"></ul>
                     
                 </div>
-                <div class="content">
-                    <div class="container">
-                        <h2>欢迎光临HT蜜雪冰城，点击任意位置播放（中/EN）蜜雪冰城主题曲</h2>
-              <style>
-/* 背景视频固定在页面底层 */
-#bg-video {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: -1; /* 保证在内容后面 */
-  object-fit: cover; /* 保持比例并覆盖全屏 */
-  background-size: cover;
-}
+                <!-- 内容区：视频做背景，不遮挡导航 -->
+<div class="content">
+  <!-- 背景视频层（只铺满 content 区域） -->
+  <div class="video-bg">
+    <video id="bg-video" autoplay muted loop playsinline preload="auto">
+      <source src="../assets/Mixue.mp4" type="video/mp4">
+      你的浏览器不支持 video 标签。
+    </video>
+  </div>
 
-/* 页面内容在视频上面显示 */
-.content {
-  position: relative;
-  z-index: 1;
-  color: white; /* 文字颜色根据需要调整 */
-}
-</style>
+  <!-- 实际页面内容（盖在视频上方） -->
+  <div class="page-inner">
+    <div class="container">
+      <h2>欢迎光临HT蜜雪冰城，点击任意位置开启声音（中/EN）蜜雪冰城主题曲</h2>
+      <!-- 你的其它内容… -->
+    </div>
+  </div>
+</div>
 
-<!-- 背景视频 -->
-<video id="bg-video" autoplay muted loop playsinline>
-  <source src="../assets/Mixue.mp4" type="video/mp4">
-  你的浏览器不支持 video 标签。
-</video>
-                    </div>
-                </div>
-            </div>
 
           <!-- ✅ Google 语言选择初始化 -->
         <script>
