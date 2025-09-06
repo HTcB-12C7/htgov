@@ -87,16 +87,17 @@ body {
 .content {
     flex-grow: 1;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;  /* 不要强制居中 */
     align-items: flex-start;
     padding: 40px;
+    margin-left: 40px;            /* 让内容右移 */
 }
 
 .container {
     background: rgba(0, 0, 0, 0.6);
     padding: 30px 40px;
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);    
     max-width: 800px;
 }
 
