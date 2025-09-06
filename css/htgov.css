@@ -90,7 +90,7 @@ body {
     justify-content: flex-start;  /* 不要强制居中 */
     align-items: flex-start;
     padding: 40px;
-    margin-left: 80px;            /* 让内容右移 */
+    margin-left: 100px;            /* 让内容右移 */
 }
 
 .container {
