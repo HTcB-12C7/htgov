@@ -87,7 +87,7 @@ body {
 .content {
     flex-grow: 1;
     display: flex;
-    justify-content: flex-start;  /* 不要强制居中 */
+    justify-content: center;   /* 水平居中内容 */
     align-items: flex-start;
     padding: 40px;
 }
@@ -98,7 +98,6 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);    
     max-width: 800px;
-    margin-left: 40px;            /* 让内容右移 */
 }
 
 /* 顶部语言按钮 */
