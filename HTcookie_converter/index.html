@@ -6,61 +6,63 @@
   <title>Cookie 转换器</title>
   <link rel="stylesheet" href="../css/htgov.css" />
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<style>
-/* 深色输入框样式 */
-textarea {
-  background-color: #2e1b17; /* 深棕 */
-  color: #e0e0e0;            /* 浅字 */
-  border: 1px solid #8d6e63;
-  padding: 10px;
-  border-radius: 5px;
-  font-family: monospace;
-}
-
-/* 深色按钮样式（黑底金边） */
-button {
-  background-color: #000000;
-  color: #ffd700;
-  border: 1px solid #ffd700;
-  padding: 8px 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-/* 悬停时更亮 */
-button:hover {
-  background-color: #2b2b2b;
-  color: #fff8dc;
-}
-.container {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 30px 40px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  max-width: 1000px;       /* 原来是 800px，现在更宽 */
-  width: 100%;
-  margin: 0 auto;           /* 水平居中 */
-}
-
-.header {
-  height: 60px; /* ✅ 原来是 60px */
-
-}
-
-/* ✅ 强制美化 Google Translate 的语言选择框 */
-.goog-te-combo {
-  background-color: #000000 !important;
-  color: #03a9f4 !important;
-  border: 1px solid #03a9f4 !important;
-  border-radius: 5px !important;
-  padding: 6px 12px !important;
-  font-weight: bold !important;
-  outline: none !important;
-}
-	
-</style>
+  <style>
+    /* 深色输入框样式 */
+    textarea {
+      background-color: #2e1b17; /* 深棕 */
+      color: #e0e0e0;            /* 浅字 */
+      border: 1px solid #8d6e63;
+      padding: 10px;
+      border-radius: 5px;
+      font-family: monospace;
+    }
+    /* 深色按钮样式（黑底金边） */
+    button {
+      background-color: #000000;
+      color: #ffd700;
+      border: 1px solid #ffd700;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    /* 悬停时更亮 */
+    button:hover {
+      background-color: #2b2b2b;
+      color: #fff8dc;
+    }
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      max-width: 1000px;     /* 原来是 800px，现在更宽 */
+      width: 100%;
+      margin: 0 auto;        /* 水平居中 */
+    }
+    .header { height: 60px; }
+    /* 强制美化 Google Translate 的语言选择框 */
+    .goog-te-combo {
+      background-color: #000000 !important;
+      color: #03a9f4 !important;
+      border: 1px solid #03a9f4 !important;
+      border-radius: 5px !important;
+      padding: 6px 12px !important;
+      font-weight: bold !important;
+      outline: none !important;
+    }
+    .logo {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 60px;
+      width: 60px;
+      object-fit: cover;
+      cursor: pointer;
+      z-index: 10;
+    }
+  </style>
 </head>
 <body>
   <div class="header">
@@ -69,6 +71,7 @@ button:hover {
     </a>
     黑铁工作室主页 <span>【#2552 正式开放】</span>
     <button id="lang-toggle">🌐 Language</button>
+
     <div class="account-toggle">
       <img src="../assets/HTgovIconV2.png" onclick="toggleAccountInfo()"/>
       <div class="account-popup" id="accountPopup">
@@ -78,30 +81,21 @@ button:hover {
         <div><strong>地址：</strong>上海市 徐汇区 川东新区 728弄 黑铁快递柜</div>
       </div>
     </div>
+
     <div id="google_translate_element" style="position: absolute; top: 50px; right: 0; display: none;"></div>
   </div>
 
-<div class="main-container">
-  <div class="sidebar">
-    <h3>黑铁工作室</h3>
-    <ul id="sidebar-nav"></ul>
-  </div>
-  <!-- 其它内容 -->
-</div>
+  <!-- ✅ 正确结构：sidebar 与 content 同级，均在 main-container 内 -->
+  <div class="main-container">
+    <!-- 左侧导航 -->
+    <div class="sidebar">
+      <h3>黑铁工作室</h3>
+      <ul id="sidebar-nav"></ul>
+    </div>
 
-<!-- 动态加载 nav.html -->
-<script>
-  fetch("../nav/nav.html")
-    .then(r => r.text())
-    .then(html => {
-      document.getElementById("sidebar-nav").innerHTML = html;
-    })
-    .catch(err => console.error("菜单加载失败：", err));
-</script>
-
-
-    <div class="content">
-      <div class="container">
+    <!-- 右侧内容 -->
+    <div class="content" style="display:flex; justify-content:center; align-items:flex-start; padding:40px;">
+      <div class="container" style="max-width:1000px; width:100%;">
         <h2>粘贴 Chrome 开发者工具复制的 Cookie 行</h2>
         <textarea id="input" placeholder="粘贴 DevTools 的 Cookie 表格数据..." style="width:100%; height: 200px;"></textarea>
         <br><br>
@@ -115,94 +109,91 @@ button:hover {
     </div>
   </div>
 
+  <!-- 动态加载 nav.html：放在 main-container 后，保证 #sidebar-nav 已渲染 -->
   <script>
+    fetch("../nav/nav.html")
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById("sidebar-nav").innerHTML = html;
+      })
+      .catch(err => console.error("菜单加载失败：", err));
+  </script>
 
+  <!-- 交互脚本 -->
+  <script>
+    // Google 语言选择初始化
+    let googleLoaded = false;
+    function googleTranslateElementInit() {
+      googleLoaded = true;
+      new google.translate.TranslateElement({
+        pageLanguage: 'zh-CN',
+        includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+    // Language 按钮：显示/隐藏语言框
     document.getElementById("lang-toggle").onclick = () => {
+      if (!googleLoaded) {
+        alert("⚠️ 翻译服务尚未加载，请稍后再试。");
+        return;
+      }
       const el = document.getElementById("google_translate_element");
-      el.style.display = el.style.display === "none" ? "block" : "none";
+      el.style.display = (el.style.display === "none" || el.style.display === "") ? "block" : "none";
     };
 
+    // 头像信息卡片
     function toggleAccountInfo() {
       const popup = document.getElementById('accountPopup');
       popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
     }
 
+    // Cookie 转换
     function convertCookies() {
-        const input = document.getElementById("input").value;
-        const lines = input.split("\n");
-        let result = "# Netscape HTTP Cookie File\n";
+      const input = document.getElementById("input").value;
+      const lines = input.split("\n");
+      let result = "# Netscape HTTP Cookie File\n";
 
-        for (let line of lines) {
-            const parts = line.trim().split("\t");
-            if (parts.length < 2) continue;
+      for (let line of lines) {
+        const parts = line.trim().split("\t");
+        if (parts.length < 2) continue;
 
-            let name = parts[0];
-            let value = parts[1];
-            let domain = ".youtube.com";
-            let path = "/";
-            let secure = "FALSE";
-            let expiration = Math.floor(Date.now() / 1000) + 3600 * 24 * 180;
+        let name = parts[0];
+        let value = parts[1];
+        let domain = ".youtube.com";
+        let path = "/";
+        let secure = "FALSE";
+        let expiration = Math.floor(Date.now() / 1000) + 3600 * 24 * 180;
 
-            result += `${domain}\tTRUE\t${path}\t${secure}\t${expiration}\t${name}\t${value}\n`;
-        }
-
-        document.getElementById("output").value = result;
+        result += `${domain}\tTRUE\t${path}\t${secure}\t${expiration}\t${name}\t${value}\n`;
+      }
+      document.getElementById("output").value = result;
     }
 
+    // 下载 cookies.txt
     function download() {
-        const text = document.getElementById("output").value;
-        const blob = new Blob([text], { type: "text/plain" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "cookies.txt";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+      const text = document.getElementById("output").value;
+      const blob = new Blob([text], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "cookies.txt";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
 
-
-  // 标记是否已初始化翻译组件
-  let googleLoaded = false;
-
-  function googleTranslateElementInit() {
-    googleLoaded = true;
-    new google.translate.TranslateElement({
-      pageLanguage: 'zh-CN',
-      includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
-      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-    }, 'google_translate_element');
-  }
-
-  document.getElementById("lang-toggle").onclick = () => {
-    if (!googleLoaded) {
-      alert("⚠️ 翻译服务尚未加载，请稍后再试。");
-      return;
+    // 可选：隐藏 Google 顶部横幅，微调下拉样式
+    function applyTranslateStyle() {
+      const iframe = document.querySelector('iframe.goog-te-banner-frame');
+      const combo = document.querySelector('.goog-te-combo');
+      if (combo) {
+        combo.style.border = "2px solid black";
+        combo.style.borderRadius = "6px";
+        combo.style.backgroundColor = "#000";
+        combo.style.color = "#03a9f4";
+      }
+      if (iframe) iframe.style.display = "none";
     }
-    const el = document.getElementById("google_translate_element");
-    el.style.display = (el.style.display === "none" || el.style.display === "") ? "block" : "none";
-  };
-
-  function toggleAccountInfo() {
-    const popup = document.getElementById('accountPopup');
-    popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
-  }
-
-function applyTranslateStyle() {
-  const iframe = document.querySelector('iframe.goog-te-banner-frame');
-  const combo = document.querySelector('.goog-te-combo');
-
-  if (combo) {
-    combo.style.border = "2px solid black";
-    combo.style.borderRadius = "6px";
-    combo.style.backgroundColor = "#000";
-    combo.style.color = "#03a9f4";
-  }
-
-  if (iframe) iframe.style.display = "none"; // 隐藏横幅
-}
-
-	  	  
   </script>
 </body>
 </html>
