@@ -70,7 +70,7 @@ button:hover {
     黑铁工作室主页 <span>【#2552 正式开放】</span>
     <button id="lang-toggle">🌐 Language</button>
     <div class="account-toggle">
-      <img src="../assets/61892f13-66e7-412f-9881-00ddea29080b.png" onclick="toggleAccountInfo()"/>
+      <img src="../assets/HTgovIconV2.png" onclick="toggleAccountInfo()"/>
       <div class="account-popup" id="accountPopup">
         <div><strong>姓名：</strong>HTc</div>
         <div><strong>身份证：</strong>HT10001</div>
@@ -81,21 +81,24 @@ button:hover {
     <div id="google_translate_element" style="position: absolute; top: 50px; right: 0; display: none;"></div>
   </div>
 
-  <div class="main-container">
-    <div class="sidebar">
-      <h3>黑铁工作室</h3>
-      <ul>
-                        <li><a href="https://htcb-12c7.github.io/htgov/HTcalendar">黑铁实时日历系统</a></li>                        
-                        <li><a href="https://htcb-12c7.github.io/htgov/HTCMVideo">黑铁CMVideo</a></li>
-			<li><a href="https://htcb-12c7.github.io/htgov/HTVIP">黑铁 VIP</a></li>
-                        <li><a href="https://htcb-12c7.github.io/htgov/HTcookie_converter">黑铁Cookie提取工具</a></li>
-                        <li><a href="https://htcb-12c7.github.io/HT_QRTool/">黑铁二维码工具</a></li>
-                        <li><a href="https://htcb-12c7.github.io/HT_RedhatHacker_boxsell/">黑铁红帽黑客自学箱</a></li>
-                        <li><a href="https://htchocolate.kit.com/6eba531f42">黑铁英格ZOO G</a></li>
-                        <li><a href="https://hpubgmjby.sh-cqxzjxcomputer.workers.dev/">小克力【测试未部署】</a></li>
-                        <li><a href="https://htcb-12c7.github.io/htgov">黑铁工作室简介</a></li>
-      </ul>
-    </div>
+<div class="main-container">
+  <div class="sidebar">
+    <h3>黑铁工作室</h3>
+    <ul id="sidebar-nav"></ul>
+  </div>
+  <!-- 其它内容 -->
+</div>
+
+<!-- 动态加载 nav.html -->
+<script>
+  fetch("../nav/nav.html")
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById("sidebar-nav").innerHTML = html;
+    })
+    .catch(err => console.error("菜单加载失败：", err));
+</script>
+
 
     <div class="content">
       <div class="container">
@@ -203,4 +206,5 @@ function applyTranslateStyle() {
   </script>
 </body>
 </html>
+
 
