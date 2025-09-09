@@ -85,65 +85,66 @@
     </style>
 </head>
 <body>
-    <!-- 修正后的header结构 -->
-    <div class="header">
-            <img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png" alt="返回主页">
-       
-        黑铁华夏每日视频 - HTCMVideo<span>【#2552 正式开放】</span>
-        </div>
-        <!-- Language 按钮 -->
-        <button id="lang-toggle" style="
-            position: absolute;
-            top: 10px;
-            right: 70px;
-            padding: 8px 16px;
-            font-size: 16px;
-            background: black;
-            color: #03a9f4;
-            border: 1px solid #03a9f4;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;">
-            🌐 Language
-        </button>
-        
-        <!-- 头像 + 弹出卡片 -->
-        <div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
-            <img src="../assets/HTgovIconV2.png" 
-                 alt="头像"
-                 style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
-                 onclick="toggleAccountInfo()" />
-            <div class="account-popup" id="accountPopup" style="
-                display: none;
-                position: absolute;
-                top: 45px;
-                right: 0;
-                background: rgba(0,0,0,0.9);
-                padding: 10px 15px;
-                border-radius: 8px;
-                color: white;
-                z-index: 9999;
-                box-shadow: 0 0 10px rgba(0,0,0,0.5);
-                white-space: nowrap;">
-                <div><strong>姓名：</strong>HTc</div>
-                <div><strong>身份证：</strong>HT10001</div>
-                <div><strong>银行卡号：</strong>1530 0089 8607 2871</div>
-                <div><strong>地址：</strong>上海市 徐汇县 川东新区 728弄 黑铁快递柜</div>
-            </div>
-        </div>
-        
-        <!-- Google 翻译语言框 -->
-        <div id="google_translate_element" style="
-            position: absolute;
-            top: 50px;
-            right: 10px;
-            display: none;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 8px;
-            border-radius: 5px;
-            z-index: 9999;">
-        </div>
-    </div> <!-- 结束header -->
+<div class="header">
+  <!-- 左上角 logo -->
+  <img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png" alt="返回主页">
+
+  黑铁华夏每日视频 - HTCMVideo<span>【#2552 正式开放】</span>
+
+  <!-- Language 按钮（必须放 header 里面，才会绝对定位在右上角） -->
+  <button id="lang-toggle" style="
+      position: absolute;
+      top: 10px;
+      right: 70px;
+      padding: 8px 16px;
+      font-size: 16px;
+      background: black;
+      color: #03a9f4;
+      border: 1px solid #03a9f4;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;">
+      🌐 Language
+  </button>
+
+  <!-- 头像 + 弹出卡片（也放 header 里，路径用绝对 URL） -->
+  <div class="account-toggle" style="position: absolute; top: 10px; right: 10px; z-index:10000;">
+    <img src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png"
+         alt="头像"
+         style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
+         onclick="toggleAccountInfo()" />
+    <div class="account-popup" id="accountPopup" style="
+        display: none;
+        position: absolute;
+        top: 45px;
+        right: 0;
+        background: rgba(0,0,0,0.9);
+        padding: 10px 15px;
+        border-radius: 8px;
+        color: white;
+        z-index: 9999;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        white-space: nowrap;">
+      <div><strong>姓名：</strong>HTc</div>
+      <div><strong>身份证：</strong>HT10001</div>
+      <div><strong>银行卡号：</strong>1530 0089 8607 2871</div>
+      <div><strong>地址：</strong>上海市 徐汇县 川东新区 728弄 黑铁快递柜</div>
+    </div>
+  </div>
+
+  <!-- Google 翻译语言框（一样放 header 里） -->
+  <div id="google_translate_element" style="
+      position: absolute;
+      top: 50px;
+      right: 10px;
+      display: none;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 8px;
+      border-radius: 5px;
+      z-index: 9999;">
+  </div>
+</div> <!-- ✅ header 真正结束 -->
+
 
     <div class="main-container">
         <div class="sidebar">
@@ -216,6 +217,7 @@
     <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
+
 
 
 
