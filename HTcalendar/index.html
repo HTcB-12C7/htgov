@@ -88,9 +88,18 @@
     })
     .catch(err => console.error("菜单加载失败：", err));
 </script>
+			
+<script>
+  window.addEventListener('click', () => {
+    const bgm = document.getElementById('bgm');
+    if (bgm) {
+      bgm.play();
+    }
+  }, { once: true });
+</script>
 	
-<audio autoplay loop style="display:none">
-<source src="../assets/356.m4a" type="audio/mpeg">
+<<audio id="bgm" loop style="display:none">
+  <source src="../assets/356.m4a" type="audio/mp4">
 </audio>
 
   <script>
@@ -130,6 +139,7 @@
 
 </body>
 </html>
+
 
 
 
