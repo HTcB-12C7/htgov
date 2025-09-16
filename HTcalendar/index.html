@@ -95,13 +95,20 @@
 
 <script>
   // 用户点击后解除静音
-  window.addEventListener('click', () => {
-    const bgm = document.getElementById('bgm');
-    if (bgm) {
-      bgm.muted = false;  
-      bgm.play();
-    }
-  }, { once: true });
+function enableBgm() {
+  const bgm = document.getElementById('bgm');
+  if (bgm) {
+    bgm.muted = false;
+    bgm.play().catch(err => console.log("播放失败：", err));
+  }
+}
+
+// 监听整个文档
+document.addEventListener('click', enableBgm, { once: true });
+// 监听键盘按键
+document.addEventListener('keydown', enableBgm, { once: true });
+// 监听触摸（手机用）
+document.addEventListener('touchstart', enableBgm, { once: true });
 </script>
 			
   <script>
@@ -141,6 +148,7 @@
 
 </body>
 </html>
+
 
 
 
