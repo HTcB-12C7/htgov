@@ -89,13 +89,16 @@
     .catch(err => console.error("菜单加载失败：", err));
 </script>
 	
-<audio id="bgm" loop style="display:none">
-  <source src="../assets/356.m4a" type="audio/mpeg">
-</audio>
+<video id="bgm" autoplay loop muted playsinline style="display:none">
+  <source src="../assets/356.mp4" type="video/mp4">
+</video>
+
 <script>
+  // 用户点击后解除静音
   window.addEventListener('click', () => {
     const bgm = document.getElementById('bgm');
     if (bgm) {
+      bgm.muted = false;  
       bgm.play();
     }
   }, { once: true });
@@ -138,6 +141,7 @@
 
 </body>
 </html>
+
 
 
 
