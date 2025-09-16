@@ -88,7 +88,10 @@
     })
     .catch(err => console.error("菜单加载失败：", err));
 </script>
-			
+	
+<audio id="bgm" loop style="display:none">
+  <source src="../assets/356.m4a" type="audio/mpeg">
+</audio>
 <script>
   window.addEventListener('click', () => {
     const bgm = document.getElementById('bgm');
@@ -97,11 +100,7 @@
     }
   }, { once: true });
 </script>
-	
-<<audio id="bgm" loop style="display:none">
-  <source src="../assets/356.m4a" type="audio/mp4">
-</audio>
-
+			
   <script>
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
@@ -139,6 +138,7 @@
 
 </body>
 </html>
+
 
 
 
