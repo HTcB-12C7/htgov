@@ -162,3 +162,24 @@ body {
     display: none !important;
     height: 0 !important;
 }
+
+.basket {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 12px;
+  background: url("../assets/pudding-choco-milktea.jpg") no-repeat center/cover;
+  color: #fff;
+  text-shadow: 0 0 5px rgba(0,0,0,0.7);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.basket h3 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  color: #ffd700;
+}
+
+.basket p {
+  margin: 5px 0;
+  font-size: 16px;
+}
