@@ -96,39 +96,31 @@
   </div>
 
   <!-- 实际页面内容（盖在视频上方） -->
-  <div class="page-inner">
-    <div class="container">
+ <div class="page-inner">
+  <!-- 上排：视频 + 欢迎文字 -->
+  <div class="row-top">
+    <div class="video-col">
+      <video id="bg-video" autoplay muted loop playsinline preload="auto">
+        <source src="../assets/Mixue.mp4" type="video/mp4">
+        你的浏览器不支持 video 标签。
+      </video>
+    </div>
+    <div class="welcome-col">
+      <h2>欢迎光临HT蜜雪冰城，点击任意位置开启声音（中/EN）蜜雪冰城主题曲</h2>
+    </div>
+  </div>
 
-      <!-- 第一行：视频 + 欢迎文字 -->
-      <div class="row-top" style="display:flex; gap:20px; margin-bottom:20px;">
-        <!-- 左边视频 -->
-        <div class="video-left" style="flex:0 0 480px;">
-          <video id="bg-video" autoplay muted loop playsinline preload="auto" style="width:100%; border-radius:8px;">
-            <source src="../assets/Mixue.mp4" type="video/mp4">
-            你的浏览器不支持 video 标签。
-          </video>
-        </div>
-        <!-- 右边欢迎文字 -->
-        <div class="welcome-right" style="flex:1; background:rgba(0,0,0,0.6); padding:20px; border-radius:8px; color:#fff;">
-          <h2>欢迎光临HT蜜雪冰城，点击任意位置开启声音（中/EN）蜜雪冰城主题曲</h2>
-        </div>
-      </div>
-
-      <!-- 第二行：奶茶篮筐 -->
-      <div class="row-bottom" style="margin-top:20px;">
-        <div class="basket" style="width:480px; background:rgba(0,0,0,0.7); padding:20px; border-radius:10px; color:#fff;">
-          <h3>🧋🍮布丁（黑糖）巧克力（原味）奶茶/特调冰淇凌（果汁）奶泡（汽水）</h3>
-          <p>✅ 可以自定义任何饮品</p>
-          <p>👍 菜单: 联系 微信 / QQ:15317842061 【首选】</p>
-          <p>💰 价格：联系 短信:(+1)4254712471 / (+86)15317842061</p>
-          <p>🛒 下单：联系 邮箱：sh_cqxzjxcomputer@outlook.com / sh_cqxipadyx@163.com</p>
-        </div>
-      </div>
-
+  <!-- 下排：售卖篮筐 -->
+  <div class="row-bottom">
+    <div class="basket">
+      <h3>🧋🍮布丁（黑糖）巧克力（原味）奶茶 / 特调冰淇凌（果汁）奶泡（汽水）</h3>
+      <p>✅ 可以自定义任何饮品</p>
+      <p>👍 菜单: 联系 微信 / QQ:15317842061 【首选】</p>
+      <p>💰 价格：联系 短信:(+1)4254712471 / (+86)15317842061</p>
+      <p>🛒 下单：联系 邮箱：sh_cqxzjxcomputer@outlook.com / sh_cqxipadyx@163.com</p>
     </div>
   </div>
 </div>
-
 
           <!-- ✅ Google 语言选择初始化 -->
         <script>
