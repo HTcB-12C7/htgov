@@ -11,10 +11,13 @@
       padding: 0!important;
 }
 
-        .header a {
-          color: white !important;
-          text-decoration: none !important;
-            }
+.header a {
+    color: white !important;
+    text-decoration: none !important;
+    pointer-events: none; /* 禁止点击 */
+    cursor: default;
+}
+
 
         /* 修复header定位问题 */
         .header {
@@ -223,4 +226,5 @@
     <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
+
 
