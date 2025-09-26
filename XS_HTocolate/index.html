@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+        <html lang="zh-CN">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>HT小克力</title>
+<link rel="stylesheet" href="../css/htgov.css" />
+<style>
+.logo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 60px;
+    width: 60px;
+    object-fit: cover;
+    cursor: pointer;
+    z-index: 10;
+}
+</style>
+        </head>
+        <body>
+            <div class="header">
+                <a href="https://htcb-12c7.github.io/htgov/">
+                    <img class="logo" src="../assets/HTgovIconV2.png" alt="返回主页">
+                </a>
+                HT小克力 <span>主题：731部队</span>
+                
+                <!-- Language 按钮 -->
+                <button id="lang-toggle" style="
+                    position: absolute;
+                    top: 10px;
+                    right: 70px;
+                    padding: 8px 16px;
+                    font-size: 16px;           /* 字体大小 */
+                    background: black;
+                    color: #03a9f4;
+                    border: 1px solid #03a9f4;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-weight: bold;
+                ">
+                🌐 Language
+                </button>
+
+                <!-- 头像 + 弹出卡片 -->
+                <div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
+                  <img
+                    src="../assets/HTgovIconV2.png"
+                    alt="头像"
+                    style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
+                    onclick="toggleAccountInfo()" />
+                  <div class="account-popup" id="accountPopup" style="
+                    display: none;
+                    position: absolute;
+                    top: 45px;
+                    right: 0;
+                    background: rgba(0,0,0,0.9);
+                    padding: 10px 15px;
+                    border-radius: 8px;
+                    color: white;
+                    z-index: 9999;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                    white-space: nowrap; /* ✅ 加这行：防止换行 */">
+                    <div><strong>姓名：</strong>HTc</div>
+                    <div><strong>身份证：</strong>HT10001</div>
+                    <div><strong>银行卡号：</strong>1530 0089 8607 2871</div>
+                    <div><strong>地址：</strong>上海市 徐汇县 川东新区 728弄 黑铁快递柜</div>
+                  </div>
+                </div>
+
+                <!-- Google 翻译语言框（请放在最外面，不嵌套在上面的 div 中） -->
+                <div id="google_translate_element" style="
+                    position: absolute;
+                    top: 50px;
+                    right: 0px;
+                    display: none;
+                    background: rgba(0, 0, 0, 0.8);
+                    padding: 8px;
+                    border-radius: 5px;
+                    z-index: 9999;
+                "></div>
+                    </div>
+
+            <div class="main-container">
+                <div class="sidebar">
+                    <h3>黑铁工作室</h3>
+                    
+                    <ul id="sidebar-nav"></ul>
+                    
+                </div>
+                <div class="content">
+                    <div class="container">
+                        <h2>731部队【小克力】</h2>
+                        <p>黑铁建站/黑铁~~：HTc【黑铁CEO】 创作，根据原版小恐龙改变，下载解压运行"Unit 731.exe"即可体验！无需安装！！！</p>
+                    </div>
+                </div>
+            </div>
+
+          <!-- ✅ Google 语言选择初始化 -->
+        <script>
+          function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+              pageLanguage: 'zh-CN',
+              includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
+              layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+          }
+        </script>
+
+        <!-- ✅ Google 提供的翻译组件脚本（只保留一条） -->
+        <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+        <!-- ✅ 控制 Language 按钮点击时显示/隐藏语言框 -->
+        <script>
+          window.addEventListener('load', function () {
+            const toggle = document.getElementById("lang-toggle");
+            const box = document.getElementById("google_translate_element");
+            if (toggle && box) {
+              toggle.addEventListener("click", () => {
+                box.style.display = box.style.display === "none" ? "block" : "none";
+              });
+            }
+          });
+        </script>
+
+        <!-- ✅ 头像弹出信息卡片逻辑 -->
+        <script>
+          function toggleAccountInfo() {
+            const popup = document.getElementById('accountPopup');
+            popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+          }
+        </script>
+
+		// 动态加载 nav.html
+        <script>
+  fetch("../nav/nav.html")
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById("sidebar-nav").innerHTML = html;
+    })
+    .catch(err => console.error("菜单加载失败：", err));
+         </script>
+
+        </body>
+        </html>
