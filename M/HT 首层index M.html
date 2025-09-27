@@ -4,7 +4,7 @@
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>输入主标题</title>
-<link rel="stylesheet" href="css/htgov.css" />
+<link rel="stylesheet" href="https://htcb-12c7.github.io/htgov/css/htgov.css" />
 <style>
 .logo {
     position: absolute;
@@ -46,7 +46,7 @@
                 <!-- 头像 + 弹出卡片 -->
                 <div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
                   <img
-                    src="assets/HTgovIconV2.png"
+                    src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png"
                     alt="头像"
                     style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
                     onclick="toggleAccountInfo()" />
@@ -137,7 +137,7 @@
 
 		 <!-- 动态加载 nav.html -->
         <script>
-  fetch("nav/nav.html")
+  fetch("https://htcb-12c7.github.io/htgov/nav/nav.html")
     .then(r => r.text())
     .then(html => {
       document.getElementById("sidebar-nav").innerHTML = html;
