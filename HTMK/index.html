@@ -92,6 +92,144 @@
                     <div class="container">
                         <h2>拓竹A1 3D打印</h2>
                         <p>"现"时（图书馆摆摊出售时原价）特价出售，更低的价格FRO英格IMS</p>
+<div class="sell-box">
+  <h2 class="sell-title">🔥 “现”时特价！/IMS低价出售 🔥</h2>
+  <div class="sell-items">
+    
+    <div class="sell-card">
+      <div class="img-wrap">
+        <img src="https://via.placeholder.com/200x150?text=A1+3D打印机" alt="拓竹A1 3D打印机">
+      </div>
+      <h3>拓竹A1 3D打印【小号】</h3>
+      <p class="price">2$</p>
+      <button class="buy-btn">⚡ 立即购买</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.sell-box {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 20px;
+  background: black;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(255, 180, 0, 0.8);
+  font-family: "Microsoft YaHei", sans-serif;
+  color: white;
+  text-align: center;
+  border: 4px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 闪光爆炸边框 */
+.sell-box::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    #ffb400,
+    #ff3c00,
+    #ffd700,
+    #ffb400
+  );
+  animation: spin 3s linear infinite;
+  z-index: 0;
+}
+
+.sell-box::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  background: black;
+  border-radius: 15px;
+  z-index: 1;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+.sell-title {
+  position: relative;
+  z-index: 2;
+  font-size: 28px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 15px #ff3c00;
+}
+
+.sell-items {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.sell-card {
+  background: #1a1a1a;
+  border-radius: 15px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(255, 140, 0, 0.5);
+  transition: transform 0.3s ease;
+}
+
+.sell-card:hover {
+  transform: scale(1.08);
+}
+
+.img-wrap {
+  width: 100%;
+  height: 150px;
+  margin-bottom: 10px;
+}
+
+.img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.sell-card h3 {
+  margin: 8px 0;
+  font-size: 18px;
+  color: #ffd700;
+}
+
+.price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffb400;
+  margin: 8px 0;
+}
+
+.buy-btn {
+  background: linear-gradient(90deg, #ff9500, #ff3c00);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+.buy-btn:hover {
+  transform: scale(1.1);
+  background: linear-gradient(90deg, #ffd700, #ff3c00);
+}
+</style>
+
+						
                     </div>
                 </div>
             </div>
