@@ -299,43 +299,38 @@
                     </div>
 
                     <!-- 主内容 -->
-                    <div class="content">
-                        <div class="container">
-                            <div class="vip-badge">VIP</div>
-                            <h2>加入/下单 黑铁VIP表单</h2>
-                            <form id="vip-form" onsubmit="sendEmail(event)">
-                                <label for="name">姓名/支付方式：</label>
-                                <input type="text" id="name" name="name" required>
-                                <label for="email">邮箱/支付账号：</label>
-                                <input type="email" id="email" name="email" required>
-                                <label for="message">留言/购买内容：</label>
-                                <textarea id="message" name="message" rows="4" required></textarea>
-                                <button type="submit">提交</button>
-                                     </form>
+<div class="content">
+  <div class="payment-left">
+    <h3>Zelle 收款邮箱</h3>
+    <p>b_HTc@outlook.com</p>
+  </div>
 
-                                    
-                           <!-- 支付信息区 -->
-                        <div class="payment-box">
-                          <h3>支付方式</h3>
-                          <p><strong>Zelle 收款邮箱：</strong>b_HTc@outlook.com</p>
-                          <div class="qr-codes">
-                            <div>
-                              <p>微信收款码</p>
-                              <img src="../assets/WX_qr.png" alt="微信收款码">
-                            </div>
-                            <div>
-                              <p>支付宝收款码</p>
-                              <img src="../assets/AP_qr.png" alt="支付宝收款码">
-                            </div>
-                          </div>
-                        </div>
+  <div class="container">
+    <div class="vip-badge">VIP</div>
+    <h2>加入/下单 黑铁VIP表单</h2>
+    <form id="vip-form" onsubmit="sendEmail(event)">
+      <label for="name">姓名/支付方式：</label>
+      <input type="text" id="name" name="name" required>
+      <label for="email">邮箱/支付账号：</label>
+      <input type="email" id="email" name="email" required>
+      <label for="message">留言/购买内容：</label>
+      <textarea id="message" name="message" rows="4" required></textarea>
+      <button type="submit">提交</button>
+    </form>
+  </div>
 
-                                    
-                        </div>
-                    </div>
-
-                </div>
-
+  <div class="payment-right">
+    <div>
+      <p>微信收款码</p>
+      <img src="../assets/WX_qr.png" alt="微信收款码">
+    </div>
+    <div>
+      <p>支付宝收款码</p>
+      <img src="../assets/AP_qr.png" alt="支付宝收款码">
+    </div>
+  </div>
+</div>
+                        
             <!-- Google Translate 容器 -->
 <div id="google_translate_element" style="display: none;"></div>
 
