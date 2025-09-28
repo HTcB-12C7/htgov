@@ -245,26 +245,31 @@
   box-sizing: border-box;
 }
 
-.payment-left p {
-  color: #00b0ff;      /* 高亮蓝色 */
-  font-weight: bold;   /* 加粗 */
-  font-size: 18px;     /* 稍微大点 */
-  cursor: pointer;     /* 鼠标悬停显示小手 */
-  text-decoration: underline; /* 下划线表示可点 */
+.payment-left {
+  text-align: center;         /* 整体居中 */
+  color: #4caf50;             /* 全部绿色 */
+  font-size: 16px;
+  line-height: 1.8em;         /* 行距更舒服 */
+}
+
+.payment-left h3 {
+  margin-top: 15px;
+  font-size: 18px;
+  color: gold;                /* 标题依然金色 */
+}
+
+.payment-left p.copy-email {
+  color: #00b0ff;             /* 邮箱保持高亮蓝色 */
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;            /* 鼠标变小手 */
+  text-decoration: underline; /* 邮箱才有下划线 */
 }
 
 .payment-right { 
 text-align: center;
 color: #ffd700; 
 font-size: 16px; 
-}
-
-.payment-left h3 {
-  margin-bottom: 10px;
-  font-size: 18px;
-  border-bottom: 1px solid gold;
-  display: inline-block;
-  padding-bottom: 4px;
 }
 
 .payment-right div {
