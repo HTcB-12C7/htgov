@@ -364,13 +364,15 @@ font-size: 16px;
                     <!-- 主内容 -->
 <div class="content">
   <div class="payment-left">
+              
 <p>三项转账均无手续费，微信转账最优惠</p>
 <p>美国银行付款支持：Zelle！</p>
 <p>1.打开你的银行APP，查找Zelle</p>
 <p>2.支持Zelle，使用Zelle填写我的邮箱转账</p>
 <p>3.不支持Zelle，下载Zelle App,绑定你的银行卡后转账</p>
-    <h3>Zelle 收款邮箱【点击“邮箱”自动复制】</h3>
-  <p onclick="copyEmail()">b_HTc@outlook.com</p>              
+              
+<h3>Zelle 收款邮箱【点击“邮箱”自动复制】</h3>
+<p class="copy-email" onclick="copyEmail()">b_HTc@outlook.com</p>         
   </div>
 
   <div class="container">
@@ -435,7 +437,18 @@ font-size: 16px;
                 popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
               }
             </script>
-
+                            
+<script>
+  function copyEmail() {
+    const email = "b_HTc@outlook.com";
+    navigator.clipboard.writeText(email).then(() => {
+      alert("已复制邮箱地址: " + email);
+    }).catch(err => {
+      console.error("复制失败:", err);
+      alert("复制失败，请手动复制");
+    });
+  }
+</script>
                         
             </body>
             </html>
