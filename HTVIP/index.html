@@ -228,11 +228,12 @@
 .content {
   flex-grow: 1;
   display: flex;
-  justify-content: center;   /* 水平居中 */
-  align-items: center;       /* 垂直居中 */
-  gap: 70px;                 /* 三列之间的间距 */
+  justify-content: center;       /* 水平居中 */
+  align-items: center;           /* 垂直居中 */
+  gap: 70px;                     /* 三列之间的间距 */
   padding: 20px;
-  min-height: calc(100vh - 60px); /* 扣掉顶部 header 高度 */
+  min-height: calc(100vh - 60px); /* 扣掉顶部横幅的高度 */
+  box-sizing: border-box;
 }
 
 .payment-left,
