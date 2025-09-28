@@ -197,10 +197,18 @@
                     }
 
                     <!-- 🌐 Google Translate 样式美化 -->
-                        #google_translate_element {
-                            font-size: 0;
-                            z-index: 9999;
-                          }
+#google_translate_element {
+  position: absolute;
+  top: 70px;         /* 在 header 下方 */
+  right: 20px;       /* 贴右边 */
+  display: none;     /* 默认隐藏 */
+  background: rgba(0,0,0,0.8);
+  padding: 10px;     /* 内边距，让黑边看起来更粗 */
+  border: 2px solid #03a9f4; /* ✅ 加粗边框 */
+  border-radius: 6px;
+  z-index: 9999;
+}
+
 
                           .goog-te-combo {
                             padding: 5px 10px;
