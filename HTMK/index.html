@@ -161,9 +161,9 @@
 
 /* 出售整体容器 */
 .sell-box {
-  width: 100%;           /* 占满内容区宽度，而不是整个屏幕 */
-  max-width: 900px;      /* 限制一下最大宽度，避免太宽 */
-  margin: 20px auto;     /* 居中 */
+  width: 95%;             /* 占内容区宽度 */
+  max-width: 900px;       /* 限制最大宽度 */
+  margin: 20px 0 20px 40px; /* ✅ 往左移动，右边空一点 */
   padding: 20px;
   background: black;
   border-radius: 15px;
@@ -173,7 +173,6 @@
   position: relative;
   overflow: hidden;
 }
-
 
 /* 闪光爆炸边框 */
 .sell-box::before {
