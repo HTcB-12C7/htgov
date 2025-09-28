@@ -225,6 +225,41 @@
                           cursor: pointer;
                         }
 
+                            .content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px; /* 三列之间的间距 */
+  padding: 20px;
+}
+
+.payment-left,
+.payment-right {
+  text-align: center;
+  color: #ffd700;
+  font-size: 16px;
+}
+
+.payment-left h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  border-bottom: 1px solid gold;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.payment-right div {
+  margin-bottom: 15px;
+}
+
+.payment-right img {
+  width: 150px;
+  height: 150px;
+  border: 2px solid gold;
+  border-radius: 10px;
+}
+
                 </style>
             </head>
             <body>
@@ -322,11 +357,11 @@
   <div class="payment-right">
     <div>
       <p>微信收款码</p>
-      <img src="../assets/WX_qr.png" alt="微信收款码">
+      <img src="../assets/WX_qr.jpg" alt="微信收款码">
     </div>
     <div>
       <p>支付宝收款码</p>
-      <img src="../assets/AP_qr.png" alt="支付宝收款码">
+      <img src="../assets/AP_qr.jpg" alt="支付宝收款码">
     </div>
   </div>
 </div>
