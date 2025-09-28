@@ -200,26 +200,26 @@
                             
 #google_translate_element {
   position: absolute;
-  top: 70px;         /* 在 header 下方 */
-  right: 20px;       /* 贴右边 */
-  display: none;     /* 默认隐藏 */
-  background: rgba(0,0,0,0.8);
-  padding: 10px;     /* 内边距，让黑边看起来更粗 */
-  border: 2px solid #03a9f4; /* ✅ 加粗边框 */
-  border-radius: 6px;
+  top: 60px;   /* 紧贴 header 底部 */
+  right: 0;    /* 紧贴右边 */
+  display: none;
+  background: rgba(0,0,0,0.9);
+  padding: 8px;
+  border-radius: 5px;
   z-index: 9999;
+  /* ❌ 去掉这里的 border，否则会叠加出两层边框 */
 }
 
+.goog-te-combo {
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: #000 !important;
+  color: #03a9f4 !important;
+  border: 2px solid #03a9f4 !important; /* ✅ 在这里加粗边框 */
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-                          .goog-te-combo {
-                            padding: 5px 10px;
-                            font-size: 14px;
-                            background-color: #000000 !important;
-                            color: #03a9f4 !important;
-                            border: 1px solid #03a9f4 !important;
-                            border-radius: 5px;
-                            cursor: pointer;
-                          }
 
                           .goog-te-combo:focus {
                             outline: none;
