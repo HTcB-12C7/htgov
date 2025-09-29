@@ -173,18 +173,19 @@
 </div> <!-- ✅ header 真正结束 -->
 
 
-    <div class="main-container">
-        <div class="sidebar">
-            <h3>视频分类</h3>
-            <ul>
-                <li><a href="https://htcb-12c7.github.io/htgov/HTCMVideo/NU">最新内容</a></li>
-                <li><a href="https://htcb-12c7.github.io/htgov/HTCMVideo/MU/">放松阴乐</a></li>
-                <li><a href="https://htcb-12c7.github.io/htgov/HTCMVideo/U/">换球系列</a></li>
-                <li><a href="https://htcb-12c7.github.io/htgov/HTCMVideo/enST/">English Column</a></li>
-                <li><a href="https://htcb-12c7.github.io/htgov/HTCMVideo/HPJBM/">HPJB_M【N/J】</a></li>
-                <li><a href="https://htcb-12c7.github.io/htgov/HTCMVideo/CD/">存档记录</a></li>
-            </ul>
-        </div>
+<div class="main-container">
+  <div class="sidebar">
+    <h3>视频分类</h3>
+    <ul id="sidebar-nav"></ul>
+  </div>  <!-- 动态加载 nav.html -->
+<script>
+  fetch("../nav/nav.html")
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById("sidebar-nav").innerHTML = html;
+    })
+    .catch(err => console.error("菜单加载失败：", err));
+</script>
 
         <div class="content">
             <div class="video-container">
