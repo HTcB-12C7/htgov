@@ -1,220 +1,178 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>黑铁华夏每日视频 - HTCMVideo</title>
-    <link rel="stylesheet" href="../css/htgov.css">
-    <style>
-      html, body {
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>黑铁华夏每日视频 - HTCMVideo</title>
+  <link rel="stylesheet" href="../css/htgov.css">
+  <style>
+    html, body {
       margin: 0!important;
       padding: 0!important;
-}
+      height: 100%;
+      font-family: "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #009688, #2196f3);
+      background-attachment: fixed;
+      background-size: cover;
+      color: #fff;
+    }
 
-.header span {
-    pointer-events: none;
-    cursor: default;
-}
-.content {
-    padding-top: 0 !important;
-}
-.video-container {
-.main-container {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-}
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url("https://www.transparenttextures.com/patterns/leaf.png");
+      opacity: 0.15;
+      z-index: -1;
+    }
 
-.video-container h2 {
-    margin-top: 0 !important;   /* 去掉 H2 默认外边距 */
-}
-    
-.container {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 30px 40px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);    
-    max-width: 800px;
-}
-        /* 修复header定位问题 */
-        .header {
-            position: relative;
-            width: 100%;
-            height: 60px;
-            background: black;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        
-        /* 视频页面专属样式 */
-        .video-container {
-            padding: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .video-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
-        }
-        
-        .video-card {
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s;
-        }
-        
-        .video-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        video {
-            width: 100%;
-            display: block;
-            background: #000;
-        }
-        
-        .video-info {
-            padding: 15px;
-            color: #e0e0e0;
-        }
-        
-        .video-title {
-            color: gold;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-        
-        .video-desc {
-            font-size: 14px;
-            opacity: 0.8;
-        }
-        
-#google_translate_element {
-    position: absolute;
-    top: 50px;
-    right: 10px;
-    background: rgba(0,0,0,0.9);
-    z-index: 9999;
-    padding: 8px;
-    border-radius: 5px;
-    font-size: 14px !important;  /* 保证文字可见 */
-    display: none;               /* 初始隐藏，点击按钮再显示 */
-}
-    </style>
-</head>
-<body>
-<div class="header">
-  <!-- 左上角 logo -->
-<a href="https://htcb-12c7.github.io/htgov/">
-<img class="logo" src="../assets/HTgovIconV2.png" alt="返回主页">
-</a>
-  黑铁华夏轻松视频 - HTCMVideo<span>上新洗脑神曲</span>
+    .header {
+      position: relative;
+      width: 100%;
+      height: 70px;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #e0f7fa;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
 
-  <!-- Language 按钮（必须放 header 里面，才会绝对定位在右上角） -->
-  <button id="lang-toggle" style="
+    .header span {
+      margin-left: 10px;
+      color: #a5f5a5;
+    }
+
+    .logo {
       position: absolute;
+      left: 15px;
       top: 10px;
+      height: 50px;
+    }
+
+    /* 按钮主题 */
+    #lang-toggle {
+      position: absolute;
+      top: 15px;
       right: 70px;
       padding: 8px 16px;
-      font-size: 16px;
-      background: black;
-      color: #03a9f4;
-      border: 1px solid #03a9f4;
-      border-radius: 5px;
+      font-size: 15px;
+      background: rgba(0, 150, 136, 0.9);
+      color: #fff;
+      border: 1px solid #00e5ff;
+      border-radius: 6px;
       cursor: pointer;
-      font-weight: bold;">
-      🌐 Language
-  </button>
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    #lang-toggle:hover {
+      background: #00acc1;
+    }
 
-  <!-- 头像 + 弹出卡片（也放 header 里，路径用绝对 URL） -->
-  <div class="account-toggle" style="position: absolute; top: 10px; right: 10px; z-index:10000;">
-    <img src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png"
-         alt="头像"
-         style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
-         onclick="toggleAccountInfo()" />
-    <div class="account-popup" id="accountPopup" style="
+    /* 内容区居中 */
+    .main-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .contain p {
+      background: rgba(0,0,0,0.4);
+      padding: 20px 30px;
+      border-radius: 12px;
+      line-height: 1.8;
+      max-width: 800px;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.3);
+    }
+
+    /* 视频卡片 */
+    .video-card {
+      background: rgba(255,255,255,0.08);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .video-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+    }
+    .video-title {
+      color: #a5f5a5;
+    }
+
+    /* 翻译框 */
+    #google_translate_element {
+      position: absolute;
+      top: 55px;
+      right: 10px;
+      background: rgba(0,0,0,0.7);
+      z-index: 9999;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="https://htcb-12c7.github.io/htgov/">
+      <img class="logo" src="../assets/HTgovIconV2.png" alt="返回主页">
+    </a>
+    黑铁华夏轻松视频 - HTCMVideo <span>上新洗脑神曲</span>
+
+    <button id="lang-toggle">🌐 Language</button>
+    <div class="account-toggle" style="position: absolute; top: 15px; right: 15px;">
+      <img src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png"
+           alt="头像"
+           style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
+           onclick="toggleAccountInfo()" />
+      <div class="account-popup" id="accountPopup" style="
         display: none;
         position: absolute;
         top: 45px;
         right: 0;
-        background: rgba(0,0,0,0.9);
+        background: rgba(0,0,0,0.8);
         padding: 10px 15px;
         border-radius: 8px;
-        color: white;
-        z-index: 9999;
-        box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        white-space: nowrap;">
-      <div><strong>姓名：</strong>HTc</div>
-      <div><strong>身份证：</strong>HT10001</div>
-      <div><strong>银行卡号：</strong>1530 0089 8607 2871</div>
-      <div><strong>地址：</strong>上海市 徐汇县 川东新区 728弄 黑铁快递柜</div>
+        color: white;">
+        <div><strong>姓名：</strong>HTc</div>
+        <div><strong>身份证：</strong>HT10001</div>
+        <div><strong>银行卡号：</strong>1530 0089 8607 2871</div>
+        <div><strong>地址：</strong>上海市 徐汇县 川东新区 728弄 黑铁快递柜</div>
+      </div>
     </div>
+    <div id="google_translate_element"></div>
   </div>
 
-  <!-- Google 翻译语言框（一样放 header 里） -->
-  <div id="google_translate_element" style="
-      position: absolute;
-      top: 50px;
-      right: 10px;
-      display: none;
-      background: rgba(0, 0, 0, 0.9);
-      padding: 8px;
-      border-radius: 5px;
-      z-index: 9999;">
-  </div>
-</div> <!-- ✅ header 真正结束 -->
-
-
-<div class="main-container">
-  <div class="sidebar">
-    <h3>视频分类</h3>
-    <ul id="sidebar-nav"></ul>
-  </div>  <!-- 动态加载 nav.html -->
-<script>
-  fetch("nav/nav.html")
-    .then(r => r.text())
-    .then(html => {
-      document.getElementById("sidebar-nav").innerHTML = html;
-    })
-    .catch(err => console.error("菜单加载失败：", err));
-</script>
+  <div class="main-container">
     <div class="contain">
-        <P>此页面由黑铁建站/黑铁视频：HTc【黑铁CEO】搭建运营维护。此页面无暴力血腥、少儿不宜、非法的视频或音频，可放心观看。推荐去：放松阴月，有增强磁场、问题审核、洗脑歌曲、防洗脑歌曲</P>
+      <p>此页面由黑铁建站/黑铁视频：HTc【黑铁CEO】搭建运营维护。此页面无暴力血腥、少儿不宜、非法的视频或音频，可放心观看。推荐去：放松阴月，有增强磁场、问题审核、洗脑歌曲、防洗脑歌曲</p>
     </div>
+  </div>
 
-    <script src="HTCMVideo.js"></script>
-    <script>
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'zh-CN',
-                includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-            }, 'google_translate_element');
-        }
-
-        document.getElementById("lang-toggle").onclick = () => {
-            const el = document.getElementById("google_translate_element");
-            el.style.display = el.style.display === "none" ? "block" : "none";
-        };
-
-        function toggleAccountInfo() {
-            const popup = document.getElementById('accountPopup');
-            popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
-        }
-    </script>
-    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'zh-CN',
+        includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+    document.getElementById("lang-toggle").onclick = () => {
+      const el = document.getElementById("google_translate_element");
+      el.style.display = el.style.display === "none" ? "block" : "none";
+    };
+    function toggleAccountInfo() {
+      const popup = document.getElementById('accountPopup');
+      popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+    }
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
-
-
-
-
