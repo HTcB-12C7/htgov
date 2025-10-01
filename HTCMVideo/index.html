@@ -18,16 +18,17 @@ html, body {
   padding-top: 0 !important; 
 } 
 
-.main-container {
-  background: linear-gradient(160deg, #2e7d32 40%, #26a69a 100%);
-  flex: 1;                   /* 占满右侧剩余空间 */
-  margin: 0;                 /* 去掉外边距 */
-  padding: 20px;             /* 缩小内边距，不要 60px */
-  display: flex;
-  justify-content: flex-start; /* 内容顶对齐 */
-  align-items: flex-start;     /* 内容靠左 */
-  position: relative;
-  overflow: hidden;
+.main-container { 
+  background: linear-gradient(160deg, #2e7d32 40%, #26a69a 100%); 
+  padding: 60px 20px; 
+  min-height: calc(100vh - 60px); 
+  /* header 高度是 60px */ display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  flex-direction: column; 
+  text-align: center;
+  position: relative; 
+  overflow: hidden; 
 }
 
 .video-container h2 { 
@@ -255,6 +256,7 @@ video {
 
 </body> 
 </html>
+
 
 
 
