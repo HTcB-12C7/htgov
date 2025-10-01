@@ -65,11 +65,12 @@
     white-space: nowrap;">
 
     <!-- 未登录显示登录表单 -->
-    <div id="loginForm">
-      <input type="email" id="email" placeholder="邮箱" style="width: 150px; margin: 3px;" />
-      <input type="password" id="password" placeholder="密码" style="width: 150px; margin: 3px;" />
-      <button id="loginBtn">登录</button>
-    </div>
+<div id="loginForm">
+  <input type="email" id="email" placeholder="邮箱/用户名" style="width: 150px; margin: 3px;" />
+  <input type="password" id="password" placeholder="密码" style="width: 150px; margin: 3px;" />
+  <button id="loginBtn">登录</button>
+  <button id="googleLoginBtn" style="background:#fff; color:#000; margin-top:5px;">使用 Google 登录</button>
+</div>
 
     <!-- 登录后显示/修改用户信息 -->
     <div id="userInfo" style="display:none;">
@@ -165,87 +166,103 @@
 
 <!-- Firebase 登录逻辑 -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
-    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-  import { getDatabase, ref, set, get } 
-    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { 
+  getAuth, 
+  signInWithEmailAndPassword, 
+  signInWithPopup,
+  GoogleAuthProvider,
+  onAuthStateChanged, 
+  signOut 
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
-    authDomain: "ht-chat-91e5f.firebaseapp.com",
-    databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
-    projectId: "ht-chat-91e5f",
-    storageBucket: "ht-chat-91e5f.firebasestorage.app",
-    messagingSenderId: "325331727527",
-    appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
-    measurementId: "G-VYV13LWP14"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
+  authDomain: "ht-chat-91e5f.firebaseapp.com",
+  databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
+  projectId: "ht-chat-91e5f",
+  storageBucket: "ht-chat-91e5f.firebasestorage.app",
+  messagingSenderId: "325331727527",
+  appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
+  measurementId: "G-VYV13LWP14"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getDatabase(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+const provider = new GoogleAuthProvider();
 
-  // 切换弹窗显示
-  window.toggleAccountInfo = function () {
-    const popup = document.getElementById('accountPopup');
-    popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
-  };
+// ✅ 切换弹窗显示
+window.toggleAccountInfo = function () {
+  const popup = document.getElementById('accountPopup');
+  popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+};
 
-  // 登录
-  document.getElementById("loginBtn").onclick = async () => {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-    } catch (err) {
-      alert("登录失败: " + err.message);
-    }
-  };
+// ✅ 邮箱/用户名 登录
+document.getElementById("loginBtn").onclick = async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (err) {
+    alert("登录失败: " + err.message);
+  }
+};
 
-  // 保存用户信息
-  document.getElementById("saveBtn").onclick = async () => {
-    const user = auth.currentUser;
-    if (!user) return alert("请先登录");
+// ✅ Google 登录
+document.getElementById("googleLoginBtn").onclick = async () => {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    alert("Google 登录失败: " + err.message);
+  }
+};
 
-    const userRef = ref(db, "users/" + user.uid);
-    await set(userRef, {
-      name: document.getElementById("userName").value,
-      id: document.getElementById("userId").value,
-      bank: document.getElementById("userBank").value,
-      address: document.getElementById("userAddress").value
-    });
-    alert("保存成功！");
-  };
+// ✅ 保存用户信息
+document.getElementById("saveBtn").onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return alert("请先登录");
 
-  // 登出
-  document.getElementById("logoutBtn").onclick = () => {
-    signOut(auth);
-  };
-
-  // 监听登录状态
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("userInfo").style.display = "block";
-      document.getElementById("userPhoto").src = "assets/HTgovIconV2.png"; // 默认头像
-
-      // 从数据库加载信息
-      const userRef = ref(db, "users/" + user.uid);
-      const snapshot = await get(userRef);
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        document.getElementById("userName").value = data.name || "";
-        document.getElementById("userId").value = data.id || "";
-        document.getElementById("userBank").value = data.bank || "";
-        document.getElementById("userAddress").value = data.address || "";
-      }
-    } else {
-      document.getElementById("loginForm").style.display = "block";
-      document.getElementById("userInfo").style.display = "none";
-      document.getElementById("userPhoto").src = "assets/login-placeholder.svg";
-    }
+  const userRef = ref(db, "users/" + user.uid);
+  await set(userRef, {
+    name: document.getElementById("userName").value,
+    id: document.getElementById("userId").value,
+    bank: document.getElementById("userBank").value,
+    address: document.getElementById("userAddress").value
   });
+  alert("保存成功！");
+};
+
+// ✅ 登出
+document.getElementById("logoutBtn").onclick = () => {
+  signOut(auth);
+};
+
+// ✅ 登录状态监听
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("userInfo").style.display = "block";
+    document.getElementById("userPhoto").src = user.photoURL || "assets/HTgovIconV2.png";
+
+    // 从数据库加载用户信息
+    const userRef = ref(db, "users/" + user.uid);
+    const snapshot = await get(userRef);
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      document.getElementById("userName").value = data.name || "";
+      document.getElementById("userId").value = data.id || "";
+      document.getElementById("userBank").value = data.bank || "";
+      document.getElementById("userAddress").value = data.address || "";
+    }
+  } else {
+    document.getElementById("loginForm").style.display = "block";
+    document.getElementById("userInfo").style.display = "none";
+    document.getElementById("userPhoto").src = "assets/login-placeholder.svg";
+  }
+});
+
 </script>
         
         </body>
