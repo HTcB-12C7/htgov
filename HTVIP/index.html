@@ -1,454 +1,235 @@
 <!DOCTYPE html>
-            <html lang="zh-CN">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>VIP 加入</title>
-                <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-                <script>
-                    (function(){
-                        emailjs.init("sbFx6huxFVrhXPqr5"); // 你的 EmailJS user_id
-                    })();
-                    
-                    async function sendEmail(event) {
-                        event.preventDefault();
-                        const form = event.target;
-                        const formData = new FormData(form);
-                        const data = Object.fromEntries(formData.entries());
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>黑铁VIP 注册</title>
+  <link rel="stylesheet" href="https://htcb-12c7.github.io/htgov/css/htgov.css" />
+<style>
+  .register-box {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #222;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  }
+  .register-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .register-box input, 
+  .register-box select {
+    width: 100%;              /* ✅ 统一长度 */
+    box-sizing: border-box;   /* ✅ 包含内边距和边框 */
+    margin: 6px 0;
+    padding: 10px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  .register-box button {
+    width: 100%;              /* ✅ 按钮也统一 */
+    padding: 10px;
+    background: orange;
+    border: none;
+    border-radius: 5px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  .small-btn {
+    width: 100%;              /* ✅ 独占一行 */
+    background: #03a9f4;
+    color: white;
+    padding: 8px 10px;
+    font-size: 12px;
+    margin: 5px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+  }
+  .avatar-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 10px auto;
+    display: block;
+    object-fit: cover;
+    border: 2px solid #666;
+    background: #444;
+  }
+</style>
 
-                        try {
-                            const response = await emailjs.send("htcoutlook01", "t_htcoutlook01", {
-                                name: data.name,
-                                email: data.email,
-                                message: data.message
-                            });
+</head>
+<body>
+  <div class="header">
+    <a href="https://htcb-12c7.github.io/htgov/">
+      <img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png" alt="返回主页">
+    </a>
+    黑铁VIP 注册 <span></span>
+  </div>
 
-                            alert("表单提交成功！感谢您的下单。");
-                        } catch (error) {
-                            alert("表单发送失败：" + error.text);
-                        }
-                    }
-                </script>
-                <style>
-                    body {
-                        margin: 0;
-                        padding: 0;
-                        font-family: Arial, sans-serif;
-                        background-color: #3e2723; 
-                        display: flex;
-                        height: 100vh;
-                        color: #e0e0e0;
-                        flex-direction: column;
-                    }
+  <div class="main-container">
+    <div class="sidebar">
+      <h3>黑铁工作室</h3>
+      <ul id="sidebar-nav"></ul>
+    </div>
 
-                    /* 顶部横幅 */
-                    .header {
-                        position: relative;
-                        width: 100%;
-                        height: 60px;
-                        background: black;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 20px;
-                        font-weight: bold;
-                        color: white;
-                        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-                    }
-                    .header span {
-                        color: red; /* “测试中暂未开放” 变红色 */
-                    }
+    <div class="content">
+      <div class="container">
+        <div class="register-box">
+          <h2>注册黑铁VIP账号</h2>
 
-                    /* Logo 图标 */
-                    .logo {
-                        position: absolute;
-                        left: 0;
-                        top: 0;
-                        height: 60px;
-                        width: 60px;
-                        object-fit: cover;
-                        cursor: pointer;
-                        z-index: 10;
-                        border-radius: 0; /* ✅ 方形，不是圆形 */
-                    }
+          <!-- 昵称 -->
+          <input type="text" id="regNickname" placeholder="昵称" />
+          <button type="button" class="small-btn" onclick="checkNickname()">检查昵称</button>
+          <div id="nickStatus" style="font-size:12px;color:orange;"></div>
 
-                    .account-popup div {
-                        margin-bottom: 6px;
-                        white-space: nowrap; /* 防止自动换行 */
-                        }
+          <!-- 真实姓名 -->
+          <input type="text" id="regName" placeholder="真实姓名（中文/英文）" />
 
+          <!-- 邮箱 -->
+          <input type="email" id="regEmail" placeholder="邮箱" />
+          <button type="button" class="small-btn" onclick="sendEmailCode()">发送验证码</button>
+          <input type="text" id="emailCode" placeholder="输入邮箱验证码" />
 
-                    /* 页面布局 */
-                    .main-container {
-                        display: flex;
-                        flex-grow: 1;
-                        width: 100%;
-                    }
+          <!-- 密码 -->
+          <input type="password" id="regPassword" placeholder="密码" />
+          <input type="password" id="regConfirmPassword" placeholder="确认密码" />
 
-                    /* 左侧导航菜单 */
-                    .sidebar {
-                        width: 200px;
-                        background: linear-gradient(45deg, #5d4037, #8d6e63);
-                        padding: 20px;
-                        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-                        display: flex;
-                        flex-direction: column;
-                    }
-                    .sidebar h3 {
-                        color: gold;
-                        text-align: center;
-                        border-bottom: 2px solid gold;
-                        padding-bottom: 10px;
-                    }
-                    .sidebar ul {
-                        list-style: none;
-                        padding: 0;
-                    }
-                    .sidebar ul li {
-                        margin: 10px 0;
-                    }
-                    .sidebar ul li a {
-                        text-decoration: none;
-                        color: #fff;
-                        display: block;
-                        padding: 29.5px;
-                        background: #6d4c41;
-                        border-radius: 5px;
-                        text-align: center;
-                        transition: 0.3s;
-                        font-size: 16px;       /* ✅ 增加这一行 */
-                        box-sizing: border-box;/* ✅ 再加这一行 */
-                        /*white-space: nowrap;*/
-                    }
-                    .sidebar ul li a:hover {
-                        background: #8d6e63;
-                    }
+          <!-- ✅ 上传头像 -->
+          <label style="margin-top:10px; display:block;">上传头像 (jpg/png, ≤2MB)</label>
+          <input type="file" id="avatarUpload" accept="image/*" />
+          <img id="avatarPreview" class="avatar-preview" src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg" alt="预览头像" />
 
-                    /* 主内容区域 */
-                    .content {
-                        flex-grow: 1;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        padding: 20px;
-                    }
-                    .container {
-                        background: rgba(0, 0, 0, 0.6);
-                        padding: 20px 40px;
-                        border-radius: 10px;
-                        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-                        text-align: center;
-                        position: relative;
-                    }
-                    .vip-badge {
-                        position: absolute;
-                        top: -20px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        background-color: gold;
-                        color: #3e2723;
-                        padding: 5px 20px;
-                        border-radius: 5px;
-                        font-weight: bold;
-                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-                    }
-                    h2 {
-                        margin-bottom: 20px;
-                        font-size: 2em;
-                        border-bottom: 2px solid gold;
-                        display: inline-block;
-                        padding-bottom: 5px;
-                    }
-                    form {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                    }
-                    label {
-                        margin: 10px 0;
-                        width: 100%;
-                    }
-                    input, textarea {
-                        width: 100%;
-                        padding: 10px;
-                        margin-top: 5px;
-                        border: 1px solid #5d4037;
-                        border-radius: 5px;
-                        background-color: #4e342e;
-                        color: #e0e0e0;
-                    }
-                    input:focus, textarea:focus {
-                        outline: none;
-                        border-color: gold;
-                    }
-                    button {
-                        margin-top: 20px;
-                        padding: 10px 20px;
-                        border: none;
-                        border-radius: 5px;
-                        background: linear-gradient(45deg, #8d6e63, #a1887f);
-                        color: #ffffff;
-                        font-size: 1em;
-                        cursor: pointer;
-                        transition: background 0.3s ease;
-                    }
-                    button:hover {
-                        background: linear-gradient(45deg, #a1887f, #8d6e63);
-                    }
+          <!-- 支付方式 -->
+          <select id="payType">
+            <option value="">支付方式（可选）</option>
+            <option value="bank">银行卡</option>
+            <option value="wechat">微信</option>
+            <option value="alipay">支付宝</option>
+            <option value="zelle">Zelle</option>
+            <option value="other">其他（请填写名称）</option>
+          </select>
+          <input type="text" id="payName" placeholder="名称（例：银行名称/微信名称/其他）" />
+          <input type="text" id="payAccount" placeholder="账号（例：银行卡号/微信号）" />
 
-
-                            
-#google_translate_element {
-  position: absolute;
-  top: 60px;   /* 紧贴 header 底部 */
-  right: 0;    /* 紧贴右边 */
-  display: none;
-  background: rgba(0,0,0,0.9);
-  padding: 8px;
-  border-radius: 5px;
-  z-index: 9999;
-  /* ❌ 去掉这里的 border，否则会叠加出两层边框 */
-}
-
-.goog-te-combo {
-  padding: 5px 10px;
-  font-size: 14px;
-  background-color: #000 !important;
-  color: #03a9f4 !important;
-  border: 2px solid #03a9f4 !important; /* ✅ 在这里加粗边框 */
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-
-                          .goog-te-combo:focus {
-                            outline: none;
-                            box-shadow: none;
-                          }
-
-                          .avatar {
-                            width: 40px;
-                            height: 40px;
-                          border-radius: 50%;
-                          object-fit: cover;
-                          cursor: pointer;
-                        }
-
-.content {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;       /* 水平居中 */
-  align-items: center;           /* 垂直居中 */
-  gap: 70px;                     /* 三列之间的间距 */
-  padding: 20px;
-  min-height: calc(100vh - 60px); /* 扣掉顶部横幅的高度 */
-  box-sizing: border-box;
-}
-
-.payment-left {
-  text-align: center;
-  color: #4caf50;         /* 绿色说明文字 */
-  font-size: 20px;        /* ✅ 字体更大 */
-  font-weight: bold;      /* ✅ 加粗 */
-  line-height: 2em;
-  margin-top: -30px;      /* ✅ 整体上移，不影响表单 */
-}
-
-.payment-left h3 {
-  margin-top: 15px;
-  font-size: 22px;
-  color: gold;
-}
-
-.payment-left p.copy-email {
-  color: #00b0ff;        /* 高亮蓝色 */
-  font-weight: bold;
-  font-size: 22px;       /* 更大字体 */
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.payment-right { 
-text-align: center;
-color: #ffd700; 
-font-size: 16px; 
-}
-
-.payment-right div {
-  margin-bottom: 15px;
-}
-
-.payment-right img {
-  width: 180px;       /* 固定宽度 */
-  height: auto;       /* 保持比例 */
-  border: 2px solid gold;
-  border-radius: 10px;
-  display: block;
-  margin: 0 auto;
-}
-
-
-                </style>
-            </head>
-            <body>
-
-                        <!-- 顶部横幅 -->
-                        <div class="header">
-                        <!-- 左边 LOGO -->
-                <a href="https://htcb-12c7.github.io/htgov/">
-                    <img class="logo" src="../assets/HTgovIconV2.png" alt="返回主页">
-                </a>
-
-                          <!-- 中间标题 -->
-            <div>黑铁VIP <span>加入/下单/咨询留言</span></div>
-
-            <!-- 右侧按钮区 -->
-            <div style="
-              display: flex;
-              align-items: center;
-              gap: 20px;
-              position: absolute;
-              right: 10px;
-              top: 10px;
-            ">
-
-                <!-- Language 按钮 -->
-                <button id="lang-toggle" style="
-                    position: absolute;
-                    top: -20px;
-                    right: 70px;
-/*---------------*/ padding: 8px 17px; /* 宽 ， 长 */
-                    font-size: 16px;           /* 字体大小 */
-                    background: black;
-                    color: #03a9f4;
-                    border: 1px solid #03a9f4;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    font-weight: bold;
-                    white-space: nowrap
-                ">
-                🌐 Language
-                </button>
-
-                <div class="account-toggle" style="position: relative;">
-                  <img src="../assets/HTgovIconV2.png"
-                       alt="头像"
-                       class="avatar"
-                       onclick="toggleAccountInfo()" />
-      <div class="account-popup" id="accountPopup" style="display: none; position: absolute; top: 45px; right: 0; background: rgba(0,0,0,0.9); padding: 10px 15px; border-radius: 8px; color: white; z-index: 9999; box-shadow: 0 0 10px rgba(0,0,0,0.5);">
-        <div><strong>姓名：</strong>HTc</div>
-        <div><strong>身份证：</strong>HT10001</div>
-        <div><strong>银行卡号：</strong>1530 0089 8607 2871</div>
-        <div><strong>地址：</strong>上海市 徐汇县 川东新区 728弄 黑铁快递柜</div>
+          <button id="registerBtn">注册</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-                <!-- 页面主体 -->
-                <div class="main-container">
-                    
-                    <!-- 左侧导航栏 -->
-                    <div class="sidebar">
-                        <h3>黑铁工作室</h3>
-                        <ul>
-                            <li><a href="https://htcb-12c7.github.io/htgov/HTVIP">黑铁 VIP</a></li>
-                            <li><a href="https://htcb-12c7.github.io/htgov/">黑铁工作室简介</a></li>
-                            <li><a href="https://htcb-12c7.github.io/htgov/">特殊加密页面，前往其他页面点我</a></li>
-                                    
-                            <li><a href="https://htcb-12c7.github.io/htgov/">The language selection box is in the lower left corner! Please click the "language button" in the upper right corner, and the language selection box will pop up in the lower left corner.</a></li>
-                                                                                   
-                        </ul>
-                    </div>
+  <!-- Firebase 注册逻辑 -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
-                    <!-- 主内容 -->
-<div class="content">
-  <div class="payment-left">
-              
-<p>三项(外加现金)转账均无手续费，微信转账最优惠</p>
-<p>美国银行付款支持：Zelle！</p>
-<p>1.打开你的银行APP，查找Zelle</p>
-<p>2.支持Zelle，使用Zelle填写我的邮箱转账</p>
-<p>3.不支持Zelle，下载Zelle App,绑定你的银行卡后转账</p>
-              
-<h3>Zelle 收款邮箱【点击“邮箱”自动复制】</h3>
-<p class="copy-email" onclick="copyEmail()">b_HTc@outlook.com</p>         
-  </div>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
+      authDomain: "ht-chat-91e5f.firebaseapp.com",
+      databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
+      projectId: "ht-chat-91e5f",
+      storageBucket: "ht-chat-91e5f.appspot.com",
+      messagingSenderId: "325331727527",
+      appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
+      measurementId: "G-VYV13LWP14"
+    };
 
-  <div class="container">
-    <div class="vip-badge">VIP</div>
-    <h2>下单 黑铁VIP表单</h2>
-    <form id="vip-form" onsubmit="sendEmail(event)">
-      <label for="name">正式名字：</label>
-      <input type="text" id="name" name="name" required>
-      <label for="email">联系邮箱：</label>
-      <input type="email" id="email" name="email" required>
-      <label for="message">支付方式【凭证】/购买内容：</label>
-      <textarea id="message" name="message" rows="4" required></textarea>
-      <button type="submit">提交</button>
-    </form>
-  </div>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+    const storage = getStorage(app);
 
-  <div class="payment-right">
-    <div>
-      <p>微信收款码</p>
-      <img src="../assets/WX_qr.jpg" alt="微信收款码">
-    </div>
-    <div>
-      <p>支付宝收款码</p>
-      <img src="../assets/AP_qr.jpg" alt="支付宝收款码">
-    </div>
-  </div>
-</div>
-                        
-            <!-- Google Translate 容器 -->
-<div id="google_translate_element" style="display: none;"></div>
+    let avatarFile = null;
+    let avatarURL = "";
 
-            <!-- 🌐 Google Translate 初始化函数 -->
-            <script>
-              function googleTranslateElementInit() {
-                new google.translate.TranslateElement({
-                  pageLanguage: 'zh-CN',
-                  includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
-                  layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-                }, 'google_translate_element');
-              }
-            </script>
-
-            <!-- 🌐 加载 Google 提供的语言组件 -->
-<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-            <!-- 🌐 控制语言选择显示/隐藏 -->
-            <script>
-              window.addEventListener('load', function () {
-                const toggle = document.getElementById("lang-toggle");
-                const box = document.getElementById("google_translate_element");
-                if (toggle && box) {
-                  toggle.addEventListener("click", () => {
-                    box.style.display = box.style.display === "none" ? "block" : "none";
-                  });
-                }
-              });
-            </script>
-
-            <script>
-              function toggleAccountInfo() {
-                const popup = document.getElementById('accountPopup');
-                popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
-              }
-            </script>
-                            
-<script>
-  function copyEmail() {
-    const email = "b_HTc@outlook.com";
-    navigator.clipboard.writeText(email).then(() => {
-      alert("已复制邮箱地址: " + email);
-    }).catch(err => {
-      console.error("复制失败:", err);
-      alert("复制失败，请手动复制");
+    // ✅ 实时预览头像
+    document.getElementById("avatarUpload").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) {
+        alert("图片大小不能超过2MB！");
+        return;
+      }
+      avatarFile = file;
+      document.getElementById("avatarPreview").src = URL.createObjectURL(file);
     });
-  }
-</script>
-                        
-            </body>
-            </html>
+
+    // ✅ 昵称检查
+    window.checkNickname = async function () {
+      const nick = document.getElementById("regNickname").value.trim();
+      if (!nick) return alert("请输入昵称");
+      const snapshot = await get(ref(db, "nicknames/" + nick));
+      document.getElementById("nickStatus").innerText = snapshot.exists() ? "❌ 昵称已存在，请更换" : "✅ 昵称可用";
+    };
+
+    // ✅ 邮箱验证码（模拟）
+    let emailCodeSent = "";
+    window.sendEmailCode = function () {
+      emailCodeSent = Math.floor(100000 + Math.random() * 900000).toString();
+      alert("验证码（测试用）: " + emailCodeSent);
+    };
+
+    // ✅ 注册
+    document.getElementById("registerBtn").onclick = async () => {
+      const nickname = document.getElementById("regNickname").value.trim();
+      const name = document.getElementById("regName").value.trim();
+      const email = document.getElementById("regEmail").value.trim();
+      const code = document.getElementById("emailCode").value.trim();
+      const password = document.getElementById("regPassword").value;
+      const confirm = document.getElementById("regConfirmPassword").value;
+      const payType = document.getElementById("payType").value;
+      const payName = document.getElementById("payName").value;
+      const payAccount = document.getElementById("payAccount").value;
+
+      if (!nickname || !name || !email || !password) {
+        return alert("请填写完整信息！");
+      }
+      if (password !== confirm) return alert("两次密码输入不一致！");
+      if (emailCodeSent && code !== emailCodeSent) return alert("邮箱验证码错误！");
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // ✅ 上传头像到 Firebase Storage
+        if (avatarFile) {
+          const fileRef = sRef(storage, "avatars/" + user.uid + ".jpg");
+          await uploadBytes(fileRef, avatarFile);
+          avatarURL = await getDownloadURL(fileRef);
+        } else {
+          avatarURL = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
+        }
+
+        // ✅ 保存用户数据
+        await set(ref(db, "users/" + user.uid), {
+          nickname, name, email,
+          avatar: avatarURL,
+          payType, payName, payAccount
+        });
+        await set(ref(db, "nicknames/" + nickname), { uid: user.uid });
+
+        alert("注册成功！");
+      } catch (err) {
+        alert("注册失败: " + err.message);
+      }
+    };
+  </script>
+
+  <!-- 导航加载 -->
+  <script>
+    fetch("https://htcb-12c7.github.io/htgov/nav/nav.html")
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById("sidebar-nav").innerHTML = html;
+      })
+      .catch(err => console.error("菜单加载失败：", err));
+  </script>
+</body>
+</html>
