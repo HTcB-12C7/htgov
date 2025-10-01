@@ -43,26 +43,13 @@
                 </button>
 
 <!-- 头像 + 弹出卡片 -->
-<!-- 未登录头像卡片 -->
-<div class="login-avatar" onclick="toggleAccountInfo()">
-  点这里登陆
-</div>
-<style>
-.login-avatar {
-  width: 80px;             /* 头像大小 */
-  height: 80px;
-  background: saddlebrown; /* 棕色背景 */
-  color: black;            /* 黑色文字 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;      /* 圆形 */
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 0 8px rgba(0,0,0,0.5);
-  user-select: none;       /* 防止文字被选中 */
-}
-</style>
+<div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
+  <img
+    id="userPhoto"
+    src="assets/login-placeholder.png"
+    alt="头像"
+    style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
+    onclick="toggleAccountInfo()" />
   
   <div class="account-popup" id="accountPopup" style="
     display: none;
