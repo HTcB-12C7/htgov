@@ -17,11 +17,20 @@ html, body {
 .content { 
   padding-top: 0 !important; 
 } 
-.video-container { 
-.main-container { 
-  margin-top: 0 !important; 
-  padding-top: 0 !important; 
-} 
+
+.main-container {
+  background: linear-gradient(160deg, #2e7d32 40%, #26a69a 100%);
+  padding: 60px 20px;
+  min-height: calc(100vh - 60px); /* header 高度是 60px */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
 .video-container h2 { 
   margin-top: 0 !important; /* 去掉 H2 默认外边距 */ 
 } 
@@ -97,19 +106,6 @@ video {
   font-size: 14px !important; /* 保证文字可见 */ 
   display: none; /* 初始隐藏，点击按钮再显示 */ 
 } 
-/* 主体区域背景（蓝绿渐变 + 叶子装饰） */
-.main-container {
-  background: linear-gradient(160deg, #2e7d32 40%, #26a69a 100%);
-  padding: 60px 20px;
-  min-height: calc(100vh - 70px); /* 减去 header 高度 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
 
 /* 半透明叶子纹理覆盖 */
 .main-container::before {
@@ -257,9 +253,10 @@ video {
     } 
   </script> 
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> 
-</div> 
+
 </body> 
 </html>
+
 
 
 
