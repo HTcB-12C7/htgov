@@ -106,19 +106,19 @@ video {
 
 .main-container { 
   background: linear-gradient(160deg, #2e7d32 40%, #26a69a 100%); 
-  width: 400px;      
-  height: 250px;     
-  padding: 15px;      
+  width: 600px;       /* ✅ 放大宽度 */
+  height: 350px;      /* ✅ 放大高度 */
+  padding: 20px;      
   display: flex; 
   justify-content: center; 
   align-items: center; 
-  position: absolute;       /* ✅ 改成绝对定位 */
-  top: 50%;                 /* 顶部居中 */
-  right: 5%;                /* 距离右边 5%，可调 */
-  transform: translateY(-50%); /* 垂直方向居中 */
+  position: absolute;       
+  top: 50%;                 
+  right: 20%;               /* ✅ 往左移 */
+  transform: translateY(-50%); 
   border-radius: 12px; 
   overflow: hidden; 
-  box-shadow: 0 0 8px rgba(0,0,0,0.4);
+  box-shadow: 0 0 12px rgba(0,0,0,0.5);
 }
 
 /* 内容卡片缩小 */
@@ -262,6 +262,7 @@ video {
 
 </body> 
 </html>
+
 
 
 
