@@ -42,19 +42,45 @@
                 🌐 Language
                 </button>
 
-                <!-- 头像 + 弹出卡片 -->
-<!-- 🔑 登录表单（初始显示） -->
-<div id="login-box" style="position:absolute;top:10px;right:10px;">
-  <input type="email" id="email" placeholder="邮箱" style="padding:5px;" />
-  <input type="password" id="password" placeholder="密码" style="padding:5px;" />
-  <button id="loginBtn">登录</button>
-</div>
+<!-- 头像 + 弹出卡片 -->
+<div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
+  <img
+    id="userPhoto"
+    src="assets/login-placeholder.png"
+    alt="头像"
+    style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
+    onclick="toggleAccountInfo()" />
+  
+  <div class="account-popup" id="accountPopup" style="
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: rgba(0,0,0,0.9);
+    padding: 10px 15px;
+    border-radius: 8px;
+    color: white;
+    z-index: 9999;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    white-space: nowrap;">
 
-<!-- 👤 登录后显示的用户区域 -->
-<div id="account-area" style="position:absolute;top:10px;right:10px;display:none;">
-  <img id="userPhoto" style="width:40px;height:40px;border-radius:50%;" />
-  <span id="userName" style="color:white;margin-left:5px;"></span>
-  <button id="logoutBtn">登出</button>
+    <!-- 未登录显示登录表单 -->
+    <div id="loginForm">
+      <input type="email" id="email" placeholder="邮箱" style="width: 150px; margin: 3px;" />
+      <input type="password" id="password" placeholder="密码" style="width: 150px; margin: 3px;" />
+      <button id="loginBtn">登录</button>
+    </div>
+
+    <!-- 登录后显示/修改用户信息 -->
+    <div id="userInfo" style="display:none;">
+      <div><strong>姓名：</strong><input id="userName" /></div>
+      <div><strong>身份证：</strong><input id="userId" /></div>
+      <div><strong>银行卡号：</strong><input id="userBank" /></div>
+      <div><strong>地址：</strong><input id="userAddress" /></div>
+      <button id="saveBtn">保存</button>
+      <button id="logoutBtn">退出登录</button>
+    </div>
+  </div>
 </div>
 
                 <!-- Google 翻译语言框（请放在最外面，不嵌套在上面的 div 中） -->
@@ -142,10 +168,13 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  import { getDatabase, ref, set, get } 
+    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
     authDomain: "ht-chat-91e5f.firebaseapp.com",
+    databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
     projectId: "ht-chat-91e5f",
     storageBucket: "ht-chat-91e5f.firebasestorage.app",
     messagingSenderId: "325331727527",
@@ -155,6 +184,13 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  // 切换弹窗显示
+  window.toggleAccountInfo = function () {
+    const popup = document.getElementById('accountPopup');
+    popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+  };
 
   // 登录
   document.getElementById("loginBtn").onclick = async () => {
@@ -167,23 +203,49 @@
     }
   };
 
-  // 监听登录状态
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      document.getElementById("login-box").style.display = "none";
-      document.getElementById("account-area").style.display = "block";
-      document.getElementById("userName").innerText = user.email;
-      document.getElementById("userPhoto").src = user.photoURL || "assets/HTgovIconV2.png";
-    } else {
-      document.getElementById("login-box").style.display = "block";
-      document.getElementById("account-area").style.display = "none";
-    }
-  });
+  // 保存用户信息
+  document.getElementById("saveBtn").onclick = async () => {
+    const user = auth.currentUser;
+    if (!user) return alert("请先登录");
+
+    const userRef = ref(db, "users/" + user.uid);
+    await set(userRef, {
+      name: document.getElementById("userName").value,
+      id: document.getElementById("userId").value,
+      bank: document.getElementById("userBank").value,
+      address: document.getElementById("userAddress").value
+    });
+    alert("保存成功！");
+  };
 
   // 登出
   document.getElementById("logoutBtn").onclick = () => {
     signOut(auth);
   };
+
+  // 监听登录状态
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("userInfo").style.display = "block";
+      document.getElementById("userPhoto").src = "assets/HTgovIconV2.png"; // 默认头像
+
+      // 从数据库加载信息
+      const userRef = ref(db, "users/" + user.uid);
+      const snapshot = await get(userRef);
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        document.getElementById("userName").value = data.name || "";
+        document.getElementById("userId").value = data.id || "";
+        document.getElementById("userBank").value = data.bank || "";
+        document.getElementById("userAddress").value = data.address || "";
+      }
+    } else {
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("userInfo").style.display = "none";
+      document.getElementById("userPhoto").src = "assets/login-placeholder.png";
+    }
+  });
 </script>
         
         </body>
