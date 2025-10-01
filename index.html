@@ -72,16 +72,26 @@
   <button id="googleLoginBtn" style="background:#fff; color:#000; margin-top:5px;">使用 Google 登录</button>
 </div>
 
-    <!-- 登录后显示/修改用户信息 -->
-    <div id="userInfo" style="display:none;">
-      <div><strong>姓名：</strong><input id="userName" /></div>
-      <div><strong>身份证：</strong><input id="userId" /></div>
-      <div><strong>银行卡号：</strong><input id="userBank" /></div>
-      <div><strong>地址：</strong><input id="userAddress" /></div>
-      <button id="saveBtn">保存</button>
-      <button id="logoutBtn">退出登录</button>
-    </div>
+<!-- 登录后显示/修改用户信息 -->
+<div id="userInfo" style="display:none;">
+  <div><strong>昵称：</strong><input id="userNickname" /></div>
+  
+  <div>
+    <strong>邮箱：</strong>
+    <input id="userEmail" style="width:200px;" />
+    <button id="sendVerifyBtn" style="margin-left:5px;">发送验证邮件</button>
   </div>
+  
+  <div><strong>支付方式：</strong><input id="userPayMethod" /></div>
+  <div><strong>支付账号：</strong><input id="userPayAccount" /></div>
+  
+  <button id="saveBtn">保存</button>
+  
+  <button id="bindGoogleBtn" style="margin-top:10px; background:#4285F4; color:white;">
+    绑定 Google 账号
+  </button>
+  
+  <button id="logoutBtn">退出登录</button>
 </div>
 
                 <!-- Google 翻译语言框（请放在最外面，不嵌套在上面的 div 中） -->
