@@ -18,19 +18,6 @@ html, body {
   padding-top: 0 !important; 
 } 
 
-.main-container { 
-  background: linear-gradient(160deg, #2e7d32 40%, #26a69a 100%); 
-  padding: 60px 20px; 
-  min-height: calc(100vh - 60px); 
-  /* header 高度是 60px */ display: flex; 
-  justify-content: center; 
-  align-items: center; 
-  flex-direction: column; 
-  text-align: center;
-  position: relative; 
-  overflow: hidden; 
-}
-
 .video-container h2 { 
   margin-top: 0 !important; /* 去掉 H2 默认外边距 */ 
 } 
@@ -117,18 +104,31 @@ video {
   pointer-events: none;
 }
 
-/* 内容卡片 */
+.main-container { 
+  background: linear-gradient(160deg, #2e7d32 40%, #26a69a 100%); 
+  padding: 20px;               /* 缩小内边距 */
+  display: flex; 
+  justify-content: flex-start; /* 顶部靠左，不要居中 */
+  align-items: flex-start;
+  text-align: left;            /* 文字左对齐，更紧凑 */
+  position: relative; 
+  overflow: hidden; 
+}
+
+/* 内容卡片缩小 */
 .contain p {
   background: rgba(0, 50, 30, 0.6);
-  padding: 25px 35px;
-  border-radius: 12px;
-  line-height: 1.8;
-  max-width: 800px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+  padding: 12px 18px;         /* 缩小内边距 */
+  border-radius: 8px;
+  line-height: 1.5;           /* 减小行距 */
+  max-width: 400px;           /* 限制宽度，不会太长 */
+  font-size: 14px;            /* 缩小字体 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   color: #e8f5e9;
   position: relative;
   z-index: 1;
 }
+
 
 /* 卡片边缘叶子小装饰 */
 .contain p::after {
@@ -256,6 +256,7 @@ video {
 
 </body> 
 </html>
+
 
 
 
