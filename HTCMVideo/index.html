@@ -97,6 +97,61 @@ video {
   font-size: 14px !important; /* 保证文字可见 */ 
   display: none; /* 初始隐藏，点击按钮再显示 */ 
 } 
+/* 主体区域背景（蓝绿渐变 + 叶子装饰） */
+.main-container {
+  background: linear-gradient(160deg, #2e7d32 40%, #26a69a 100%);
+  padding: 60px 20px;
+  min-height: calc(100vh - 70px); /* 减去 header 高度 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 半透明叶子纹理覆盖 */
+.main-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("https://www.transparenttextures.com/patterns/leaf.png");
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* 内容卡片 */
+.contain p {
+  background: rgba(0, 50, 30, 0.6);
+  padding: 25px 35px;
+  border-radius: 12px;
+  line-height: 1.8;
+  max-width: 800px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+  color: #e8f5e9;
+  position: relative;
+  z-index: 1;
+}
+
+/* 卡片边缘叶子小装饰 */
+.contain p::after {
+  content: "🍃";
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  font-size: 28px;
+  opacity: 0.9;
+}
+.contain p::before {
+  content: "🌿";
+  position: absolute;
+  bottom: -15px;
+  left: -15px;
+  font-size: 28px;
+  opacity: 0.9;
+}
+
 </style> 
 </head> 
 <body> 
@@ -200,3 +255,4 @@ video {
 </div> 
 </body> 
 </html>
+
