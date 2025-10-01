@@ -43,30 +43,19 @@
                 </button>
 
                 <!-- 头像 + 弹出卡片 -->
-                <div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
-                  <img
-                    src="assets/HTgovIconV2.png"
-                    alt="头像"
-                    style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
-                    onclick="toggleAccountInfo()" />
-                  <div class="account-popup" id="accountPopup" style="
-                    display: none;
-                    position: absolute;
-                    top: 45px;
-                    right: 0;
-                    background: rgba(0,0,0,0.9);
-                    padding: 10px 15px;
-                    border-radius: 8px;
-                    color: white;
-                    z-index: 9999;
-                    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-                    white-space: nowrap; /* ✅ 加这行：防止换行 */">
-                    <div><strong>姓名：</strong>HTc</div>
-                    <div><strong>身份证：</strong>HT10001</div>
-                    <div><strong>银行卡号：</strong>1530 0089 8607 2871</div>
-                    <div><strong>地址：</strong>上海市 徐汇县 川东新区 728弄 黑铁快递柜</div>
-                  </div>
-                </div>
+<!-- 🔑 登录表单（初始显示） -->
+<div id="login-box" style="position:absolute;top:10px;right:10px;">
+  <input type="email" id="email" placeholder="邮箱" style="padding:5px;" />
+  <input type="password" id="password" placeholder="密码" style="padding:5px;" />
+  <button id="loginBtn">登录</button>
+</div>
+
+<!-- 👤 登录后显示的用户区域 -->
+<div id="account-area" style="position:absolute;top:10px;right:10px;display:none;">
+  <img id="userPhoto" style="width:40px;height:40px;border-radius:50%;" />
+  <span id="userName" style="color:white;margin-left:5px;"></span>
+  <button id="logoutBtn">登出</button>
+</div>
 
                 <!-- Google 翻译语言框（请放在最外面，不嵌套在上面的 div 中） -->
                 <div id="google_translate_element" style="
@@ -148,6 +137,55 @@
           }
         </script>
 
+<!-- Firebase 登录逻辑 -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
+    authDomain: "ht-chat-91e5f.firebaseapp.com",
+    projectId: "ht-chat-91e5f",
+    storageBucket: "ht-chat-91e5f.firebasestorage.app",
+    messagingSenderId: "325331727527",
+    appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
+    measurementId: "G-VYV13LWP14"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // 登录
+  document.getElementById("loginBtn").onclick = async () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      alert("登录失败: " + err.message);
+    }
+  };
+
+  // 监听登录状态
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById("login-box").style.display = "none";
+      document.getElementById("account-area").style.display = "block";
+      document.getElementById("userName").innerText = user.email;
+      document.getElementById("userPhoto").src = user.photoURL || "assets/HTgovIconV2.png";
+    } else {
+      document.getElementById("login-box").style.display = "block";
+      document.getElementById("account-area").style.display = "none";
+    }
+  });
+
+  // 登出
+  document.getElementById("logoutBtn").onclick = () => {
+    signOut(auth);
+  };
+</script>
+        
         </body>
         </html>
 
