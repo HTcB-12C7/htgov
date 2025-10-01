@@ -19,14 +19,15 @@ html, body {
 } 
 
 .main-container {
-  flex: 1;  /* 占满剩余空间 */
   background: linear-gradient(160deg, #2e7d32 40%, #26a69a 100%);
-  margin: 0;   /* 去掉和 sidebar 的间距 */
-  padding: 20px; /* 缩小内边距，不再撑太大 */
+  flex: 1;                   /* 占满右侧剩余空间 */
+  margin: 0;                 /* 去掉外边距 */
+  padding: 20px;             /* 缩小内边距，不要 60px */
   display: flex;
-  justify-content: flex-start; /* 左上对齐 */
-  align-items: flex-start;
+  justify-content: flex-start; /* 内容顶对齐 */
+  align-items: flex-start;     /* 内容靠左 */
   position: relative;
+  overflow: hidden;
 }
 
 .video-container h2 { 
@@ -254,6 +255,7 @@ video {
 
 </body> 
 </html>
+
 
 
 
