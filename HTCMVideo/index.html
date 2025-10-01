@@ -106,14 +106,16 @@ video {
 
 .main-container { 
   background: linear-gradient(160deg, #2e7d32 40%, #26a69a 100%); 
-  width: 400px;       /* 固定宽度，自己调，比如 300px/400px */
-  height: 250px;      /* 固定高度，自己调，比如 200px/250px */
-  margin: 20px;       /* 给它和周围留点空隙 */
-  padding: 15px;      /* 内边距缩小 */
+  width: 400px;      
+  height: 250px;     
+  padding: 15px;      
   display: flex; 
   justify-content: center; 
   align-items: center; 
-  position: relative; 
+  position: absolute;       /* ✅ 改成绝对定位 */
+  top: 50%;                 /* 顶部居中 */
+  right: 5%;                /* 距离右边 5%，可调 */
+  transform: translateY(-50%); /* 垂直方向居中 */
   border-radius: 12px; 
   overflow: hidden; 
   box-shadow: 0 0 8px rgba(0,0,0,0.4);
@@ -260,6 +262,7 @@ video {
 
 </body> 
 </html>
+
 
 
 
