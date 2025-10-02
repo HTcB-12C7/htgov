@@ -182,6 +182,9 @@ import {
   signInWithEmailAndPassword, 
   signInWithPopup,
   GoogleAuthProvider,
+  updateEmail,
+  sendEmailVerification,
+  linkWithPopup,
   onAuthStateChanged, 
   signOut 
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -229,6 +232,33 @@ document.getElementById("googleLoginBtn").onclick = async () => {
   }
 };
 
+// ✅ 绑定 Google 账号
+document.getElementById("bindGoogleBtn").onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return alert("请先登录");
+  try {
+    await linkWithPopup(user, provider);
+    alert("Google 账号绑定成功！");
+  } catch (err) {
+    alert("绑定失败: " + err.message);
+  }
+};
+
+// ✅ 发送邮箱验证
+document.getElementById("sendVerifyBtn").onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return alert("请先登录");
+
+  const newEmail = document.getElementById("userEmail").value;
+  try {
+    await updateEmail(user, newEmail);
+    await sendEmailVerification(user);
+    alert("验证邮件已发送，请检查邮箱并确认");
+  } catch (err) {
+    alert("发送失败: " + err.message);
+  }
+};
+
 // ✅ 保存用户信息
 document.getElementById("saveBtn").onclick = async () => {
   const user = auth.currentUser;
@@ -236,10 +266,11 @@ document.getElementById("saveBtn").onclick = async () => {
 
   const userRef = ref(db, "users/" + user.uid);
   await set(userRef, {
-    name: document.getElementById("userName").value,
-    id: document.getElementById("userId").value,
-    bank: document.getElementById("userBank").value,
-    address: document.getElementById("userAddress").value
+    nickname: document.getElementById("userNickname").value,
+    email: document.getElementById("userEmail").value,
+    payMethod: document.getElementById("userPayMethod").value,
+    payAccount: document.getElementById("userPayAccount").value,
+    avatar: document.getElementById("userPhoto").src
   });
   alert("保存成功！");
 };
@@ -261,10 +292,10 @@ onAuthStateChanged(auth, async (user) => {
     const snapshot = await get(userRef);
     if (snapshot.exists()) {
       const data = snapshot.val();
-      document.getElementById("userName").value = data.name || "";
-      document.getElementById("userId").value = data.id || "";
-      document.getElementById("userBank").value = data.bank || "";
-      document.getElementById("userAddress").value = data.address || "";
+      document.getElementById("userNickname").value = data.nickname || "";
+      document.getElementById("userEmail").value = data.email || user.email || "";
+      document.getElementById("userPayMethod").value = data.payMethod || "";
+      document.getElementById("userPayAccount").value = data.payAccount || "";
     }
   } else {
     document.getElementById("loginForm").style.display = "block";
@@ -272,9 +303,7 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("userPhoto").src = "assets/login-placeholder.svg";
   }
 });
-
 </script>
         
         </body>
         </html>
-
