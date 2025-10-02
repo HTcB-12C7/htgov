@@ -265,13 +265,14 @@ document.getElementById("saveBtn").onclick = async () => {
   if (!user) return alert("请先登录");
 
   const userRef = ref(db, "users/" + user.uid);
-  await set(userRef, {
-    nickname: document.getElementById("userNickname").value,
-    email: document.getElementById("userEmail").value,
-    payMethod: document.getElementById("userPayMethod").value,
-    payAccount: document.getElementById("userPayAccount").value,
-    avatar: document.getElementById("userPhoto").src
-  });
+await set(userRef, {
+  nickname: document.getElementById("userNickname").value,
+  email: document.getElementById("userEmail").value,
+  payMethod: document.getElementById("userPayMethod").value,
+  payName: document.getElementById("userPayName").value,    // 新增
+  payAccount: document.getElementById("userPayAccount").value,
+  avatar: document.getElementById("userPhoto").src
+});
   alert("保存成功！");
 };
 
@@ -292,10 +293,11 @@ onAuthStateChanged(auth, async (user) => {
     const snapshot = await get(userRef);
     if (snapshot.exists()) {
       const data = snapshot.val();
-      document.getElementById("userNickname").value = data.nickname || "";
-      document.getElementById("userEmail").value = data.email || user.email || "";
-      document.getElementById("userPayMethod").value = data.payMethod || "";
-      document.getElementById("userPayAccount").value = data.payAccount || "";
+document.getElementById("userNickname").value = data.nickname || "";
+document.getElementById("userEmail").value = data.email || user.email || "";
+document.getElementById("userPayMethod").value = data.payMethod || "";
+document.getElementById("userPayName").value = data.payName || "";    // 新增
+document.getElementById("userPayAccount").value = data.payAccount || "";
     }
   } else {
     document.getElementById("loginForm").style.display = "block";
