@@ -158,8 +158,8 @@
     document.getElementById("avatarUpload").addEventListener("change", function(e) {
       const file = e.target.files[0];
       if (!file) return;
-      if (file.size > 2 * 1024 * 1024) {
-        alert("图片大小不能超过2MB！");
+      if (file.size > 27 * 1024 * 1024) {
+        alert("图片大小不能超过27MB！");
         return;
       }
       avatarFile = file;
@@ -174,7 +174,7 @@
       document.getElementById("nickStatus").innerText = snapshot.exists() ? "❌ 昵称已存在，请更换" : "✅ 昵称可用";
     };
 
-    // ✅ 邮箱验证码 Email JS
+
 // ✅ 邮箱验证码 Email JS
 let emailCodeSent = "";
 let emailCodeExpire = 0;   // 验证码过期时间戳
@@ -193,9 +193,9 @@ window.sendEmailCode = function () {
   if (isSendingCode) return alert("验证码发送中，请稍候...");
   isSendingCode = true;
 
-  // 生成验证码 + 设置过期时间（5分钟）
+  // 生成验证码 + 设置过期时间（7分钟）
   emailCodeSent = Math.floor(100000 + Math.random() * 900000).toString();
-  emailCodeExpire = Date.now() + 5 * 60 * 1000; // 当前时间+5分钟
+  emailCodeExpire = Date.now() + 7 * 60 * 1000; // 当前时间+7分钟
 
   // 调用 EmailJS 发送
   emailjs.send("htcoutlook01", "htgov_code", {
@@ -203,7 +203,7 @@ window.sendEmailCode = function () {
     code: emailCodeSent
   })
   .then(() => {
-    alert("验证码已发送到邮箱，请在5分钟内使用！");
+    alert("验证码已发送到邮箱，请在7分钟内使用！");
   })
   .catch((err) => {
     console.error("发送失败:", err);
