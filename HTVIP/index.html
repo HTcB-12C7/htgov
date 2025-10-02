@@ -173,7 +173,7 @@
     let emailCodeSent = "";
     window.sendEmailCode = function () {
       emailCodeSent = Math.floor(100000 + Math.random() * 900000).toString();
-      alert("验证码（测试用）: " + emailCodeSent);
+      alert("验证码（黑铁码）: " + emailCodeSent);
     };
 
     // ✅ 注册
@@ -240,13 +240,6 @@ document.getElementById("registerBtn").onclick = async () => {
     isRegistering = false; // 不管成功失败，最后解锁
   }
 };
-        await set(ref(db, "nicknames/" + nickname), { uid: user.uid });
-
-        alert("注册成功！");
-      } catch (err) {
-        alert("注册失败: " + err.message);
-      }
-    };
   </script>
 
   <!-- 导航加载 -->
