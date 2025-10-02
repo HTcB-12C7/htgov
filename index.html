@@ -6,16 +6,6 @@
   <title>黑铁工作室简介</title>
   <link rel="stylesheet" href="css/htgov.css" />
   <style>
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signInWithPopup,
-  GoogleAuthProvider, updateEmail, sendEmailVerification,
-  linkWithPopup, onAuthStateChanged, signOut } 
-  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getDatabase, ref, set, get } 
-  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-import { getStorage, ref as sRef, uploadBytes, getDownloadURL } 
-  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
-
     .logo {
       position: absolute;
       left: 0;
@@ -192,6 +182,16 @@ import { getStorage, ref as sRef, uploadBytes, getDownloadURL }
 
   <!-- Firebase 登录逻辑 -->
   <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signInWithPopup,
+  GoogleAuthProvider, updateEmail, sendEmailVerification,
+  linkWithPopup, onAuthStateChanged, signOut } 
+  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getDatabase, ref, set, get } 
+  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL } 
+  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
       authDomain: "ht-chat-91e5f.firebaseapp.com",
