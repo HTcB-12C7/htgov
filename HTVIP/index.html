@@ -208,11 +208,13 @@
         }
 
         // ✅ 保存用户数据
-        await set(ref(db, "users/" + user.uid), {
-          nickname, name, email,
-          avatar: avatarURL,
-          payType, payName, payAccount
-        });
+await set(ref(db, "users/" + user.uid), {
+  nickname, name, email,
+  avatar: avatarURL,
+  payMethod: payType,   // 改名
+  payName, 
+  payAccount
+});
         await set(ref(db, "nicknames/" + nickname), { uid: user.uid });
 
         alert("注册成功！");
