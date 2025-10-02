@@ -175,26 +175,42 @@
     };
 
     // ✅ 邮箱验证码 Email JS
+// ✅ 邮箱验证码 Email JS
 let emailCodeSent = "";
+let emailCodeExpire = 0;   // 验证码过期时间戳
+let isSendingCode = false; // 防止重复点击
 
 window.sendEmailCode = function () {
   const email = document.getElementById("regEmail").value.trim();
   if (!email) return alert("请输入邮箱");
 
-  // 生成验证码
+  // 邮箱格式校验
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return alert("请输入正确的邮箱格式");
+  }
+
+  // 防止重复点击
+  if (isSendingCode) return alert("验证码发送中，请稍候...");
+  isSendingCode = true;
+
+  // 生成验证码 + 设置过期时间（5分钟）
   emailCodeSent = Math.floor(100000 + Math.random() * 900000).toString();
+  emailCodeExpire = Date.now() + 5 * 60 * 1000; // 当前时间+5分钟
 
   // 调用 EmailJS 发送
   emailjs.send("htcoutlook01", "htgov_code", {
-    to_email: email,   // 模板里变量名
+    to_email: email,
     code: emailCodeSent
   })
   .then(() => {
-    alert("验证码已发送到邮箱，请查收！");
+    alert("验证码已发送到邮箱，请在5分钟内使用！");
   })
   .catch((err) => {
     console.error("发送失败:", err);
     alert("验证码发送失败，请稍后再试");
+  })
+  .finally(() => {
+    isSendingCode = false; // 无论成功失败，都解锁
   });
 };
 
@@ -223,10 +239,16 @@ document.getElementById("registerBtn").onclick = async () => {
     isRegistering = false;
     return alert("两次密码输入不一致！");
   }
-  if (emailCodeSent && code !== emailCodeSent) {
+if (emailCodeSent) {
+  if (Date.now() > emailCodeExpire) {
+    isRegistering = false;
+    return alert("验证码已过期，请重新获取！");
+  }
+  if (code !== emailCodeSent) {
     isRegistering = false;
     return alert("邮箱验证码错误！");
   }
+}
 
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
