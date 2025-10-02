@@ -73,6 +73,15 @@
 
         <!-- 登录后显示/修改用户信息 -->
         <div id="userInfo" style="display:none;">
+          
+  <!-- ✅ 新增头像上传 -->
+  <div>
+    <label>头像：</label>
+    <input type="file" id="updateAvatar" accept="image/*" />
+    <img id="userPhotoPreview" 
+         src="assets/login-placeholder.svg"
+         style="width:60px; height:60px; border-radius:50%; margin-top:5px;" />
+  </div>
           <div><strong>昵称：</strong><input id="userNickname" /></div>
           <div>
             <strong>邮箱：</strong>
@@ -247,20 +256,38 @@
     };
 
     // ✅ 保存用户信息
-    document.getElementById("saveBtn").onclick = async () => {
-      const user = auth.currentUser;
-      if (!user) return alert("请先登录");
-      const userRef = ref(db, "users/" + user.uid);
-      await set(userRef, {
-        nickname: document.getElementById("userNickname").value,
-        email: document.getElementById("userEmail").value,
-        payMethod: document.getElementById("userPayMethod").value,
-        payName: document.getElementById("userPayName").value, // 新增
-        payAccount: document.getElementById("userPayAccount").value,
-        avatar: document.getElementById("userPhoto").src
-      });
-      alert("保存成功！");
-    };
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL } 
+  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+
+const storage = getStorage(app);
+
+document.getElementById("saveBtn").onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return alert("请先登录");
+
+  let avatarURL = document.getElementById("userPhoto").src;
+
+  // 如果有新头像文件，上传并获取下载地址
+  if (newAvatarFile) {
+    const fileRef = sRef(storage, "avatars/" + user.uid + ".jpg");
+    await uploadBytes(fileRef, newAvatarFile);
+    avatarURL = await getDownloadURL(fileRef);
+    document.getElementById("userPhoto").src = avatarURL; // 更新头像
+  }
+
+  // 保存数据库信息
+  const userRef = ref(db, "users/" + user.uid);
+  await set(userRef, {
+    nickname: document.getElementById("userNickname").value,
+    email: document.getElementById("userEmail").value,
+    payMethod: document.getElementById("userPayMethod").value,
+    payName: document.getElementById("userPayName").value,
+    payAccount: document.getElementById("userPayAccount").value,
+    avatar: avatarURL
+  });
+
+  alert("信息已更新！");
+};
 
     // ✅ 登出
     document.getElementById("logoutBtn").onclick = () => {
@@ -284,6 +311,10 @@
           document.getElementById("userPayMethod").value = data.payMethod || "";
           document.getElementById("userPayName").value = data.payName || ""; // 新增
           document.getElementById("userPayAccount").value = data.payAccount || "";
+
+          // ✅ 在这里加头像预览同步
+      document.getElementById("userPhoto").src = data.avatar || user.photoURL || "assets/login-placeholder.svg";
+      document.getElementById("userPhotoPreview").src = data.avatar || user.photoURL || "assets/login-placeholder.svg";
         }
       } else {
         document.getElementById("loginForm").style.display = "block";
@@ -291,6 +322,20 @@
         document.getElementById("userPhoto").src = "assets/login-placeholder.svg";
       }
     });
+
+let newAvatarFile = null;
+
+document.getElementById("updateAvatar").addEventListener("change", function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    alert("图片大小不能超过2MB！");
+    return;
+  }
+  newAvatarFile = file;
+  document.getElementById("userPhotoPreview").src = URL.createObjectURL(file);
+});  
+    
   </script>
 </body>
 </html>
