@@ -177,44 +177,69 @@
     };
 
     // ✅ 注册
-    document.getElementById("registerBtn").onclick = async () => {
-      const nickname = document.getElementById("regNickname").value.trim();
-      const name = document.getElementById("regName").value.trim();
-      const email = document.getElementById("regEmail").value.trim();
-      const code = document.getElementById("emailCode").value.trim();
-      const password = document.getElementById("regPassword").value;
-      const confirm = document.getElementById("regConfirmPassword").value;
-      const payType = document.getElementById("payType").value;
-      const payName = document.getElementById("payName").value;
-      const payAccount = document.getElementById("payAccount").value;
+let isRegistering = false; // 防止重复点击
 
-      if (!nickname || !name || !email || !password) {
-        return alert("请填写完整信息！");
-      }
-      if (password !== confirm) return alert("两次密码输入不一致！");
-      if (emailCodeSent && code !== emailCodeSent) return alert("邮箱验证码错误！");
+document.getElementById("registerBtn").onclick = async () => {
+  if (isRegistering) return; // 已经在注册中，直接忽略
+  isRegistering = true;
 
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+  const nickname = document.getElementById("regNickname").value.trim();
+  const name = document.getElementById("regName").value.trim();
+  const email = document.getElementById("regEmail").value.trim();
+  const code = document.getElementById("emailCode").value.trim();
+  const password = document.getElementById("regPassword").value;
+  const confirm = document.getElementById("regConfirmPassword").value;
+  const payType = document.getElementById("payType").value;
+  const payName = document.getElementById("payName").value;
+  const payAccount = document.getElementById("payAccount").value;
 
-        // ✅ 上传头像到 Firebase Storage
-        if (avatarFile) {
-          const fileRef = sRef(storage, "avatars/" + user.uid + ".jpg");
-          await uploadBytes(fileRef, avatarFile);
-          avatarURL = await getDownloadURL(fileRef);
-        } else {
-          avatarURL = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
-        }
+  if (!nickname || !name || !email || !password) {
+    isRegistering = false;
+    return alert("请填写完整信息！");
+  }
+  if (password !== confirm) {
+    isRegistering = false;
+    return alert("两次密码输入不一致！");
+  }
+  if (emailCodeSent && code !== emailCodeSent) {
+    isRegistering = false;
+    return alert("邮箱验证码错误！");
+  }
 
-        // ✅ 保存用户数据
-await set(ref(db, "users/" + user.uid), {
-  nickname, name, email,
-  avatar: avatarURL,
-  payMethod: payType,   // 改名
-  payName, 
-  payAccount
-});
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // ✅ 上传头像
+    if (avatarFile) {
+      const fileRef = sRef(storage, "avatars/" + user.uid + ".jpg");
+      await uploadBytes(fileRef, avatarFile);
+      avatarURL = await getDownloadURL(fileRef);
+    } else {
+      avatarURL = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
+    }
+
+    // ✅ 保存用户数据
+    await set(ref(db, "users/" + user.uid), {
+      nickname, name, email,
+      avatar: avatarURL,
+      payMethod: payType,
+      payName,
+      payAccount
+    });
+    await set(ref(db, "nicknames/" + nickname), { uid: user.uid });
+
+    alert("🎉 注册成功！");
+  } catch (err) {
+    if (err.code === "auth/email-already-in-use") {
+      alert("该邮箱已注册，请直接登录");
+    } else {
+      alert("注册失败: " + err.message);
+    }
+  } finally {
+    isRegistering = false; // 不管成功失败，最后解锁
+  }
+};
         await set(ref(db, "nicknames/" + nickname), { uid: user.uid });
 
         alert("注册成功！");
