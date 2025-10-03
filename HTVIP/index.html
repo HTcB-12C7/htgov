@@ -127,165 +127,217 @@
       </div>
     </div>
   </div>
+<!-- 头像 + 弹出卡片 -->
+<div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
+  <img id="userPhoto" src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg" alt="头像"
+    style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
+    onclick="toggleAccountInfo()" />
 
-  <!-- Firebase 注册逻辑 -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+  <div class="account-popup" id="accountPopup" style="
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: rgba(0,0,0,0.9);
+    padding: 10px 15px;
+    border-radius: 8px;
+    color: white;
+    z-index: 9999;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    white-space: nowrap;
+  ">
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
-      authDomain: "ht-chat-91e5f.firebaseapp.com",
-      databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
-      projectId: "ht-chat-91e5f",
-      storageBucket: "ht-chat-91e5f.appspot.com",
-      messagingSenderId: "325331727527",
-      appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
-      measurementId: "G-VYV13LWP14"
-    };
+    <!-- 未登录显示登录表单 -->
+    <div id="loginForm">
+      <input type="email" id="email" placeholder="邮箱/用户名" style="width: 150px; margin: 3px;" />
+      <input type="password" id="password" placeholder="密码" style="width: 150px; margin: 3px;" />
+      <button id="loginBtn">登录</button>
+      <button id="googleLoginBtn" style="background:#fff; color:#000; margin-top:5px;">使用 Google 登录</button>
+    </div>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
-    const storage = getStorage(app);
-
-    let avatarFile = null;
-    let avatarURL = "";
-
-    // ✅ 实时预览头像
-    document.getElementById("avatarUpload").addEventListener("change", function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      if (file.size > 27 * 1024 * 1024) {
-        alert("图片大小不能超过27MB！");
-        return;
-      }
-      avatarFile = file;
-      document.getElementById("avatarPreview").src = URL.createObjectURL(file);
-    });
-
-    // ✅ 昵称检查
-    window.checkNickname = async function () {
-      const nick = document.getElementById("regNickname").value.trim();
-      if (!nick) return alert("请输入昵称");
-      const snapshot = await get(ref(db, "nicknames/" + nick));
-      document.getElementById("nickStatus").innerText = snapshot.exists() ? "❌ 昵称已存在，请更换" : "✅ 昵称可用";
-    };
-
-
-// ✅ 邮箱验证码 Email JS
-let emailCodeSent = "";
-let emailCodeExpire = 0;   // 验证码过期时间戳
-let isSendingCode = false; // 防止重复点击
-
-window.sendEmailCode = function () {
-  const email = document.getElementById("regEmail").value.trim();
-  if (!email) return alert("请输入邮箱");
-
-  // 邮箱格式校验
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return alert("请输入正确的邮箱格式");
+    <!-- 登录后显示/修改用户信息 -->
+    <div id="userInfo" style="display:none;">
+      <!-- 头像上传 -->
+      <div>
+        <label>头像：</label>
+        <input type="file" id="updateAvatar" accept="image/*" />
+        <img id="userPhotoPreview" 
+             src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg"
+             style="width:60px; height:60px; border-radius:50%; margin-top:5px;" />
+      </div>
+      <div><strong>昵称：</strong><input id="userNickname" /></div>
+      <div>
+        <strong>邮箱：</strong>
+        <input id="userEmail" style="width:200px;" />
+        <button id="sendVerifyBtn" style="margin-left:5px;">发送验证邮件</button>
+      </div>
+      <div><strong>支付方式：</strong><input id="userPayMethod" /></div>
+      <div><strong>支付名称：</strong><input id="userPayName" /></div>
+      <div><strong>支付账号：</strong><input id="userPayAccount" /></div>
+      <button id="saveBtn">保存</button>
+      <button id="bindGoogleBtn" style="margin-top:10px; background:#4285F4; color:white;">
+        绑定 Google 账号
+      </button>
+      <button id="logoutBtn">退出登录</button>
+    </div>
+  </div>
+</div>
+<!-- ✅ 头像弹出信息卡片逻辑 -->
+<script>
+  function toggleAccountInfo() {
+    const popup = document.getElementById('accountPopup');
+    popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
   }
+</script>
 
-  // 防止重复点击
-  if (isSendingCode) return alert("验证码发送中，请稍候...");
-  isSendingCode = true;
+<!-- Firebase 登录逻辑 -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, signInWithPopup,
+    GoogleAuthProvider, updateEmail, sendEmailVerification,
+    linkWithPopup, onAuthStateChanged, signOut } 
+    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  import { getDatabase, ref, set, get } 
+    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+  import { getStorage, ref as sRef, uploadBytes, getDownloadURL } 
+    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
-  // 生成验证码 + 设置过期时间（7分钟）
-  emailCodeSent = Math.floor(100000 + Math.random() * 900000).toString();
-  emailCodeExpire = Date.now() + 7 * 60 * 1000; // 当前时间+7分钟
+  const firebaseConfig = {
+    apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
+    authDomain: "ht-chat-91e5f.firebaseapp.com",
+    databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
+    projectId: "ht-chat-91e5f",
+    storageBucket: "ht-chat-91e5f.firebasestorage.app",
+    messagingSenderId: "325331727527",
+    appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
+    measurementId: "G-VYV13LWP14"
+  };
 
-  // 调用 EmailJS 发送
-  emailjs.send("htcoutlook01", "htgov_code", {
-    to_email: email,
-    code: emailCodeSent
-  })
-  .then(() => {
-    alert("验证码已发送到邮箱，请在7分钟内使用！");
-  })
-  .catch((err) => {
-    console.error("发送失败:", err);
-    alert("验证码发送失败，请稍后再试");
-  })
-  .finally(() => {
-    isSendingCode = false; // 无论成功失败，都解锁
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+  const provider = new GoogleAuthProvider();
+  const storage = getStorage(app);
+
+  // ✅ 登录
+  document.getElementById("loginBtn").onclick = async () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      alert("登录失败: " + err.message);
+    }
+  };
+
+  // ✅ Google 登录
+  document.getElementById("googleLoginBtn").onclick = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (err) {
+      alert("Google 登录失败: " + err.message);
+    }
+  };
+
+  // ✅ 绑定 Google
+  document.getElementById("bindGoogleBtn").onclick = async () => {
+    const user = auth.currentUser;
+    if (!user) return alert("请先登录");
+    try {
+      await linkWithPopup(user, provider);
+      alert("Google 账号绑定成功！");
+    } catch (err) {
+      alert("绑定失败: " + err.message);
+    }
+  };
+
+  // ✅ 邮箱验证
+  document.getElementById("sendVerifyBtn").onclick = async () => {
+    const user = auth.currentUser;
+    if (!user) return alert("请先登录");
+    const newEmail = document.getElementById("userEmail").value;
+    try {
+      await updateEmail(user, newEmail);
+      await sendEmailVerification(user);
+      alert("验证邮件已发送，请检查邮箱");
+    } catch (err) {
+      alert("发送失败: " + err.message);
+    }
+  };
+
+  // ✅ 保存用户信息 + 上传头像
+  let newAvatarFile = null;
+  document.getElementById("updateAvatar").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 27 * 1024 * 1024) {
+      alert("图片大小不能超过27MB！");
+      return;
+    }
+    newAvatarFile = file;
+    document.getElementById("userPhotoPreview").src = URL.createObjectURL(file);
   });
-};
 
-    // ✅ 注册
-let isRegistering = false; // 防止重复点击
+  document.getElementById("saveBtn").onclick = async () => {
+    const user = auth.currentUser;
+    if (!user) return alert("请先登录");
 
-document.getElementById("registerBtn").onclick = async () => {
-  if (isRegistering) return; // 已经在注册中，直接忽略
-  isRegistering = true;
+    let avatarURL = document.getElementById("userPhoto").src;
 
-  const nickname = document.getElementById("regNickname").value.trim();
-  const name = document.getElementById("regName").value.trim();
-  const email = document.getElementById("regEmail").value.trim();
-  const code = document.getElementById("emailCode").value.trim();
-  const password = document.getElementById("regPassword").value;
-  const confirm = document.getElementById("regConfirmPassword").value;
-  const payType = document.getElementById("payType").value;
-  const payName = document.getElementById("payName").value;
-  const payAccount = document.getElementById("payAccount").value;
-
-  if (!nickname || !name || !email || !password) {
-    isRegistering = false;
-    return alert("请填写完整信息！");
-  }
-  if (password !== confirm) {
-    isRegistering = false;
-    return alert("两次密码输入不一致！");
-  }
-if (emailCodeSent) {
-  if (Date.now() > emailCodeExpire) {
-    isRegistering = false;
-    return alert("验证码已过期，请重新获取！");
-  }
-  if (code !== emailCodeSent) {
-    isRegistering = false;
-    return alert("邮箱验证码错误！");
-  }
-}
-
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-
-    // ✅ 上传头像
-    if (avatarFile) {
+    if (newAvatarFile) {
       const fileRef = sRef(storage, "avatars/" + user.uid + ".jpg");
-      await uploadBytes(fileRef, avatarFile);
+      await uploadBytes(fileRef, newAvatarFile);
       avatarURL = await getDownloadURL(fileRef);
-    } else {
-      avatarURL = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
+      document.getElementById("userPhoto").src = avatarURL;
     }
 
-    // ✅ 保存用户数据
-    await set(ref(db, "users/" + user.uid), {
-      nickname, name, email,
-      avatar: avatarURL,
-      payMethod: payType,
-      payName,
-      payAccount
+    const userRef = ref(db, "users/" + user.uid);
+    await set(userRef, {
+      nickname: document.getElementById("userNickname").value,
+      email: document.getElementById("userEmail").value,
+      payMethod: document.getElementById("userPayMethod").value,
+      payName: document.getElementById("userPayName").value,
+      payAccount: document.getElementById("userPayAccount").value,
+      avatar: avatarURL
     });
-    await set(ref(db, "nicknames/" + nickname), { uid: user.uid });
 
-    alert("🎉 注册成功！");
-  } catch (err) {
-    if (err.code === "auth/email-already-in-use") {
-      alert("该邮箱已注册，请直接登录");
+    alert("信息已更新！");
+  };
+
+  // ✅ 登出
+  document.getElementById("logoutBtn").onclick = () => {
+    signOut(auth);
+  };
+
+  // ✅ 登录状态监听
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("userInfo").style.display = "block";
+      document.getElementById("userPhoto").src = user.photoURL || "https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png";
+
+      const userRef = ref(db, "users/" + user.uid);
+      const snapshot = await get(userRef);
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        document.getElementById("userNickname").value = data.nickname || "";
+        document.getElementById("userEmail").value = data.email || user.email || "";
+        document.getElementById("userPayMethod").value = data.payMethod || "";
+        document.getElementById("userPayName").value = data.payName || "";
+        document.getElementById("userPayAccount").value = data.payAccount || "";
+
+	const defaultAvatar = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
+	document.getElementById("userPhoto").src = data.avatar || user.photoURL || defaultAvatar;
+	document.getElementById("userPhotoPreview").src = data.avatar || user.photoURL || defaultAvatar;
+
+      }
     } else {
-      alert("注册失败: " + err.message);
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("userInfo").style.display = "none";
+      document.getElementById("userPhoto").src = defaultAvatar;
     }
-  } finally {
-    isRegistering = false; // 不管成功失败，最后解锁
-  }
-};
-  </script>
-
+  });
+</script>
   <!-- 导航加载 -->
   <script>
     fetch("https://htcb-12c7.github.io/htgov/nav/nav.html")
