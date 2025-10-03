@@ -71,8 +71,64 @@
     </a>
     HT Cookie转换器  <span>免费使用</span>
     <button id="lang-toggle">🌐 Language</button>
-
     <div id="google_translate_element" style="position: absolute; top: 50px; right: 0; display: none;"></div>
+
+	<!-- 头像 + 弹出卡片 -->
+<div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
+  <img id="userPhoto" src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg" alt="头像"
+    style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
+    onclick="toggleAccountInfo()" />
+
+  <div class="account-popup" id="accountPopup" style="
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: rgba(0,0,0,0.9);
+    padding: 10px 15px;
+    border-radius: 8px;
+    color: white;
+    z-index: 9999;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    white-space: nowrap;
+  ">
+
+    <!-- 未登录显示登录表单 -->
+    <div id="loginForm">
+      <input type="email" id="email" placeholder="邮箱/用户名" style="width: 150px; margin: 3px;" />
+      <input type="password" id="password" placeholder="密码" style="width: 150px; margin: 3px;" />
+      <button id="loginBtn">登录</button>
+      <button id="googleLoginBtn" style="background:#fff; color:#000; margin-top:5px;">使用 Google 登录</button>
+    </div>
+
+    <!-- 登录后显示/修改用户信息 -->
+    <div id="userInfo" style="display:none;">
+      <!-- 头像上传 -->
+      <div>
+        <label>头像：</label>
+        <input type="file" id="updateAvatar" accept="image/*" />
+        <img id="userPhotoPreview" 
+             src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg"
+             style="width:60px; height:60px; border-radius:50%; margin-top:5px;" />
+      </div>
+      <div><strong>昵称：</strong><input id="userNickname" /></div>
+      <div>
+        <strong>邮箱：</strong>
+        <input id="userEmail" style="width:200px;" />
+        <button id="sendVerifyBtn" style="margin-left:5px;">发送验证邮件</button>
+      </div>
+      <div><strong>支付方式：</strong><input id="userPayMethod" /></div>
+      <div><strong>支付名称：</strong><input id="userPayName" /></div>
+      <div><strong>支付账号：</strong><input id="userPayAccount" /></div>
+      <button id="saveBtn">保存</button>
+      <button id="bindGoogleBtn" style="margin-top:10px; background:#4285F4; color:white;">
+        绑定 Google 账号
+      </button>
+      <button id="logoutBtn">退出登录</button>
+    </div>
+  </div>
+</div>
+	  
   </div>
 
   <!-- ✅ 正确结构：sidebar 与 content 同级，均在 main-container 内 -->
@@ -130,62 +186,6 @@
       const el = document.getElementById("google_translate_element");
       el.style.display = (el.style.display === "none" || el.style.display === "") ? "block" : "none";
     };
-
-<!-- 头像 + 弹出卡片 -->
-<div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
-  <img id="userPhoto" src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg" alt="头像"
-    style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
-    onclick="toggleAccountInfo()" />
-
-  <div class="account-popup" id="accountPopup" style="
-    display: none;
-    position: absolute;
-    top: 45px;
-    right: 0;
-    background: rgba(0,0,0,0.9);
-    padding: 10px 15px;
-    border-radius: 8px;
-    color: white;
-    z-index: 9999;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    white-space: nowrap;
-  ">
-
-    <!-- 未登录显示登录表单 -->
-    <div id="loginForm">
-      <input type="email" id="email" placeholder="邮箱/用户名" style="width: 150px; margin: 3px;" />
-      <input type="password" id="password" placeholder="密码" style="width: 150px; margin: 3px;" />
-      <button id="loginBtn">登录</button>
-      <button id="googleLoginBtn" style="background:#fff; color:#000; margin-top:5px;">使用 Google 登录</button>
-    </div>
-
-    <!-- 登录后显示/修改用户信息 -->
-    <div id="userInfo" style="display:none;">
-      <!-- 头像上传 -->
-      <div>
-        <label>头像：</label>
-        <input type="file" id="updateAvatar" accept="image/*" />
-        <img id="userPhotoPreview" 
-             src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg"
-             style="width:60px; height:60px; border-radius:50%; margin-top:5px;" />
-      </div>
-      <div><strong>昵称：</strong><input id="userNickname" /></div>
-      <div>
-        <strong>邮箱：</strong>
-        <input id="userEmail" style="width:200px;" />
-        <button id="sendVerifyBtn" style="margin-left:5px;">发送验证邮件</button>
-      </div>
-      <div><strong>支付方式：</strong><input id="userPayMethod" /></div>
-      <div><strong>支付名称：</strong><input id="userPayName" /></div>
-      <div><strong>支付账号：</strong><input id="userPayAccount" /></div>
-      <button id="saveBtn">保存</button>
-      <button id="bindGoogleBtn" style="margin-top:10px; background:#4285F4; color:white;">
-        绑定 Google 账号
-      </button>
-      <button id="logoutBtn">退出登录</button>
-    </div>
-  </div>
-</div>
 
     // Cookie 转换
     function convertCookies() {
@@ -393,4 +393,5 @@
 </script>
 </body>
 </html>
+
 
