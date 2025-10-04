@@ -698,6 +698,48 @@ input, textarea, select {
       document.getElementById("userPhoto").src = defaultAvatar;
     }
   });
-</script>                        
+</script>
+<script type="module">
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
+  authDomain: "ht-chat-91e5f.firebaseapp.com",
+  databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
+  projectId: "ht-chat-91e5f",
+  storageBucket: "ht-chat-91e5f.appspot.com",   // ✅ 修正后的地址
+  messagingSenderId: "325331727527",
+  appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
+  measurementId: "G-VYV13LWP14"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+// ✅ 自动填充登录用户信息
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return;  // 未登录不做事
+
+  const userRef = ref(db, "users/" + user.uid);
+  const snapshot = await get(userRef);
+  if (snapshot.exists()) {
+    const data = snapshot.val();
+
+    // 自动填充表单
+    document.getElementById("name").value = data.payName || data.nickname || "";
+    document.getElementById("email").value = data.email || user.email || "";
+    document.getElementById("message").value = 
+      `支付方式：${data.payMethod || ""}\n账号：${data.payAccount || ""}\n\n` +
+      `【请在此处补充购买内容或备注】`;
+  } else {
+    // 没有记录时至少填邮箱
+    document.getElementById("email").value = user.email || "";
+  }
+});
+</script>
+
             </body>
             </html>
