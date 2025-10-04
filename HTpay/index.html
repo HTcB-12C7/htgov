@@ -475,8 +475,8 @@ input, textarea, select {
     <form id="vip-form" onsubmit="sendEmail(event)">
       <label for="name">正式名字：</label>
       <input type="text" id="name" name="name" required>
-      <label for="email">联系邮箱：</label>
-      <input type="email" id="email" name="email" required>
+	<label for="vipEmail">联系邮箱：</label>
+	<input type="email" id="vipEmail" name="email" required>
       <label for="message">支付方式【凭证】/购买内容：</label>
       <textarea id="message" name="message" rows="4" required></textarea>
       <button type="submit">提交</button>
@@ -696,7 +696,7 @@ onAuthStateChanged(auth, async (user) => {
 
       // 🔹 自动填充 VIP 表单
       const vipName = document.getElementById("name");
-      const vipEmail = document.getElementById("email");
+      const vipEmail = document.getElementById("vipEmail");
       const vipMsg = document.getElementById("message");
 
       if (vipName && !vipName.value)
@@ -707,7 +707,7 @@ onAuthStateChanged(auth, async (user) => {
         vipMsg.value = `支付方式：${data.payMethod || ""}\n账号：${data.payAccount || ""}\n\n【请在此处补充购买内容或备注】`;
     } else {
       // 用户数据库里没存资料，只填邮箱
-      const vipEmail = document.getElementById("email");
+      const vipEmail = document.getElementById("vipEmail");
       if (vipEmail && !vipEmail.value)
         vipEmail.value = user.email || "";
     }
