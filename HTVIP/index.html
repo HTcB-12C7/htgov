@@ -14,48 +14,9 @@
   right: 10px !important;
   z-index: 10010 !important;
 }
-
-/* 保证输入框和按钮不超过背景框 */
-.register-box input,
-.register-box select,
-.register-box button {
-  width: 100%;            /* 占满容器，但不会超过容器宽度 */
-  box-sizing: border-box; /* 包含内边距和边框 */
-  max-width: 100%;        /* 防止撑破 */
-}
-  .register-box {
-    max-width: 400px;
-    margin: 40px auto;
-    padding: 20px;
-    background: #222;
-    color: white;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
-  }
   .register-box h2 {
     text-align: center;
     margin-bottom: 20px;
-  }
-  .register-box input, 
-  .register-box select {
-    width: 100%;              /* ✅ 统一长度 */
-    box-sizing: border-box;   /* ✅ 包含内边距和边框 */
-    margin: 6px 0;
-    padding: 10px;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  .register-box button {
-    width: 100%;              /* ✅ 按钮也统一 */
-    padding: 10px;
-    background: orange;
-    border: none;
-    border-radius: 5px;
-    color: black;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
   }
   .small-btn {
     width: 100%;              /* ✅ 独占一行 */
@@ -79,21 +40,29 @@
     background: #444;
   }
 /* 防止被外部样式覆盖：保证所有表单控件不超出 .register-box */
-.register-box { 
-  width: min(92vw, 420px); 
-  margin: 40px auto; 
-  min-width: 0; 
-  overflow-wrap: anywhere;
+.register-box {
+  width: 100%;
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #222;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  overflow: hidden;   /* 防止子元素撑破 */
 }
-.register-box * { 
-  box-sizing: border-box; 
-}
+
 .register-box input,
 .register-box select,
-.register-box button{
-  display: block;
+.register-box button {
   width: 100% !important;
   max-width: 100% !important;
+  box-sizing: border-box;
+  display: block;
+}
+
+.register-box * { 
+  box-sizing: border-box; 
 }
 
 /* 某些浏览器 file 输入容易超出，收敛一下 */
@@ -172,7 +141,7 @@
     </div>
   </div>
 <!-- 头像 + 弹出卡片 -->
-<div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
+<div class="account-toggle">
   <img id="userPhoto" src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg" alt="头像"
     style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
     onclick="toggleAccountInfo()" />
