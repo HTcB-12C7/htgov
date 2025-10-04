@@ -29,6 +29,7 @@
                         }
                     }
                 </script>
+			
                 <style>
                     body {
                         margin: 0;
@@ -287,6 +288,40 @@ font-size: 16px;
   margin: 0 auto;
 }
 
+.account-toggle {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 10010 !important;
+}
+
+#userPhoto {
+  display: block;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.register-box {
+  width: 100%;
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #222;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  overflow: hidden;   /* 防止子元素撑破 */
+}
+
+.register-box input,
+.register-box select,
+.register-box button {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+  display: block;
+}
 
                 </style>
             </head>
