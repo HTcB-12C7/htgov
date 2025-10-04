@@ -670,73 +670,51 @@ input, textarea, select {
     signOut(auth);
   };
 
-  // ✅ 登录状态监听
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("userInfo").style.display = "block";
-      document.getElementById("userPhoto").src = user.photoURL || "https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png";
-
-      const userRef = ref(db, "users/" + user.uid);
-      const snapshot = await get(userRef);
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        document.getElementById("userNickname").value = data.nickname || "";
-        document.getElementById("userEmail").value = data.email || user.email || "";
-        document.getElementById("userPayMethod").value = data.payMethod || "";
-        document.getElementById("userPayName").value = data.payName || "";
-        document.getElementById("userPayAccount").value = data.payAccount || "";
-
-	const defaultAvatar = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
-	document.getElementById("userPhoto").src = data.avatar || user.photoURL || defaultAvatar;
-	document.getElementById("userPhotoPreview").src = data.avatar || user.photoURL || defaultAvatar;
-
-      }
-    } else {
-      document.getElementById("loginForm").style.display = "block";
-      document.getElementById("userInfo").style.display = "none";
-      document.getElementById("userPhoto").src = defaultAvatar;
-    }
-  });
-</script>
-<script type="module">
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
-  authDomain: "ht-chat-91e5f.firebaseapp.com",
-  databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
-  projectId: "ht-chat-91e5f",
-  storageBucket: "ht-chat-91e5f.appspot.com",   // ✅ 修正后的地址
-  messagingSenderId: "325331727527",
-  appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
-  measurementId: "G-VYV13LWP14"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
-
-// ✅ 自动填充登录用户信息
+// ✅ 登录状态监听 + 自动填充VIP表单
 onAuthStateChanged(auth, async (user) => {
-  if (!user) return;  // 未登录不做事
+  const defaultAvatar = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
 
-  const userRef = ref(db, "users/" + user.uid);
-  const snapshot = await get(userRef);
-  if (snapshot.exists()) {
-    const data = snapshot.val();
+  if (user) {
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("userInfo").style.display = "block";
+    document.getElementById("userPhoto").src = user.photoURL || defaultAvatar;
 
-    // 自动填充表单
-    document.getElementById("name").value = data.payName || data.nickname || "";
-    document.getElementById("email").value = data.email || user.email || "";
-    document.getElementById("message").value = 
-      `支付方式：${data.payMethod || ""}\n账号：${data.payAccount || ""}\n\n` +
-      `【请在此处补充购买内容或备注】`;
+    const userRef = ref(db, "users/" + user.uid);
+    const snapshot = await get(userRef);
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+
+      // 🔹 填充“用户资料”卡片
+      document.getElementById("userNickname").value = data.nickname || "";
+      document.getElementById("userEmail").value = data.email || user.email || "";
+      document.getElementById("userPayMethod").value = data.payMethod || "";
+      document.getElementById("userPayName").value = data.payName || "";
+      document.getElementById("userPayAccount").value = data.payAccount || "";
+
+      document.getElementById("userPhoto").src = data.avatar || user.photoURL || defaultAvatar;
+      document.getElementById("userPhotoPreview").src = data.avatar || user.photoURL || defaultAvatar;
+
+      // 🔹 自动填充 VIP 表单
+      const vipName = document.getElementById("name");
+      const vipEmail = document.getElementById("email");
+      const vipMsg = document.getElementById("message");
+
+      if (vipName && !vipName.value)
+        vipName.value = data.payName || data.nickname || "";
+      if (vipEmail && !vipEmail.value)
+        vipEmail.value = data.email || user.email || "";
+      if (vipMsg && !vipMsg.value)
+        vipMsg.value = `支付方式：${data.payMethod || ""}\n账号：${data.payAccount || ""}\n\n【请在此处补充购买内容或备注】`;
+    } else {
+      // 用户数据库里没存资料，只填邮箱
+      const vipEmail = document.getElementById("email");
+      if (vipEmail && !vipEmail.value)
+        vipEmail.value = user.email || "";
+    }
   } else {
-    // 没有记录时至少填邮箱
-    document.getElementById("email").value = user.email || "";
+    document.getElementById("loginForm").style.display = "block";
+    document.getElementById("userInfo").style.display = "none";
+    document.getElementById("userPhoto").src = defaultAvatar;
   }
 });
 </script>
