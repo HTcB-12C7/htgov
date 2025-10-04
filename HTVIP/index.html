@@ -8,12 +8,20 @@
 <style>
 	/* 右上角固定 + 最高层，保证不被 iframe 挡住 */
 /* 头像固定右上角，层级更高 */
-.account-toggle{
+.account-toggle {
   position: fixed !important;
-  top: 0px !important;
-  right: 0px !important;
+  top: 0 !important;
+  right: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
   z-index: 10010 !important;
 }
+#userPhoto {
+  display: block;      /* 避免 inline 留白 */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
   .register-box h2 {
     text-align: center;
     margin-bottom: 20px;
