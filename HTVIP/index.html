@@ -6,6 +6,21 @@
   <title>黑铁VIP 注册</title>
   <link rel="stylesheet" href="https://htcb-12c7.github.io/htgov/css/htgov.css" />
 <style>
+	/* 右上角固定 + 最高层，保证不被 iframe 挡住 */
+.account-toggle{
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 10010;
+}
+/* 保证输入框和按钮不超过背景框 */
+.register-box input,
+.register-box select,
+.register-box button {
+  width: 100%;            /* 占满容器，但不会超过容器宽度 */
+  box-sizing: border-box; /* 包含内边距和边框 */
+  max-width: 100%;        /* 防止撑破 */
+}
   .register-box {
     max-width: 400px;
     margin: 40px auto;
