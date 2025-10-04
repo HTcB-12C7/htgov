@@ -16,6 +16,47 @@
       cursor: pointer;
       z-index: 10;
     }
+        /* 深色按钮样式（黑底金边） */
+    button {
+      background-color: #000000;
+      color: #ffd700;
+      border: 1px solid #ffd700;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    /* 悬停时更亮 */
+    button:hover {
+      background-color: #2b2b2b;
+      color: #fff8dc;
+    }
+/* 深色输入框样式（渐变+内阴影） */
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="file"] {
+  background: linear-gradient(145deg, #1e1e1e, #2b2b2b);
+  color: #f5deb3; /* 浅米黄色文字 */
+  border: 1px solid #8b6914; /* 金棕色边框 */
+  padding: 6px 10px;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.8),
+              inset -2px -2px 5px rgba(255,255,255,0.05);
+  transition: all 0.3s ease;
+}
+
+/* 聚焦时更亮 */
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+  border-color: #ffd700; /* 金色边框 */
+  box-shadow: 0 0 6px #ffd700, inset 1px 1px 3px rgba(0,0,0,0.6);
+  background: linear-gradient(145deg, #252525, #333);
+}
   </style>
 </head>
 <body>
