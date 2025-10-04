@@ -271,8 +271,8 @@ document.addEventListener('touchstart', enableBgm, { once: true });
   document.getElementById("updateAvatar").addEventListener("change", function(e) {
     const file = e.target.files[0];
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) {
-      alert("图片大小不能超过2MB！");
+    if (file.size > 7 * 1024 * 1024) {
+      alert("图片大小不能超过27MB！");
       return;
     }
     newAvatarFile = file;
@@ -340,3 +340,4 @@ document.addEventListener('touchstart', enableBgm, { once: true });
 
 </body>
 </html>
+
