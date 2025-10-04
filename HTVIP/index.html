@@ -7,12 +7,14 @@
   <link rel="stylesheet" href="https://htcb-12c7.github.io/htgov/css/htgov.css" />
 <style>
 	/* 右上角固定 + 最高层，保证不被 iframe 挡住 */
+/* 头像固定右上角，层级更高 */
 .account-toggle{
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  z-index: 10010;
+  position: fixed !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 10010 !important;
 }
+
 /* 保证输入框和按钮不超过背景框 */
 .register-box input,
 .register-box select,
@@ -76,6 +78,33 @@
     border: 2px solid #666;
     background: #444;
   }
+/* 防止被外部样式覆盖：保证所有表单控件不超出 .register-box */
+.register-box { 
+  width: min(92vw, 420px); 
+  margin: 40px auto; 
+  min-width: 0; 
+  overflow-wrap: anywhere;
+}
+.register-box * { 
+  box-sizing: border-box; 
+}
+.register-box input,
+.register-box select,
+.register-box button{
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* 某些浏览器 file 输入容易超出，收敛一下 */
+.register-box input[type="file"]{
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 父级若是 flex，默认 min-width:auto 会导致溢出，这里兜底 */
+.content, .container { min-width: 0; }
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
@@ -202,6 +231,13 @@
   function toggleAccountInfo() {
     const popup = document.getElementById('accountPopup');
     popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+  }
+</script>
+<script>
+  const DEFAULT_AVATAR = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
+  function toggleAccountInfo(){
+    const p = document.getElementById('accountPopup');
+    p.style.display = (p.style.display === 'none' || !p.style.display) ? 'block' : 'none';
   }
 </script>
 
