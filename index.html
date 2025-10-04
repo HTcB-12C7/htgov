@@ -6,58 +6,27 @@
   <title>黑铁工作室简介</title>
   <link rel="stylesheet" href="css/htgov.css" />
   <style>
-    .logo {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 60px;
-      width: 60px;
-      object-fit: cover;
-      cursor: pointer;
-      z-index: 10;
-    }
-        /* 深色按钮样式（黑底金边） */
-    button {
-      background-color: #000000;
-      color: #ffd700;
-      border: 1px solid #ffd700;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-    /* 悬停时更亮 */
-    button:hover {
-      background-color: #2b2b2b;
-      color: #fff8dc;
-    }
-/* 深色输入框样式（渐变+内阴影） */
-input[type="email"],
-input[type="password"],
-input[type="text"],
-input[type="file"] {
-  background: linear-gradient(145deg, #1e1e1e, #2b2b2b);
-  color: #f5deb3; /* 浅米黄色文字 */
-  border: 1px solid #8b6914; /* 金棕色边框 */
-  padding: 6px 10px;
-  border-radius: 6px;
-  outline: none;
-  font-size: 14px;
-  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.8),
-              inset -2px -2px 5px rgba(255,255,255,0.05);
-  transition: all 0.3s ease;
+ /* 深色按钮样式（黑底金边） */
+.account-popup button {
+  background-color: #000000;
+  color: #ffd700;
+  border: 1px solid #ffd700;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+.account-popup button:hover {
+  background-color: #2b2b2b;
+  color: #fff8dc;
 }
 
-/* 聚焦时更亮 */
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="text"]:focus {
-  border-color: #ffd700; /* 金色边框 */
-  box-shadow: 0 0 6px #ffd700, inset 1px 1px 3px rgba(0,0,0,0.6);
-  background: linear-gradient(145deg, #252525, #333);
-}
-    .account-popup input {
+/* 深色输入框样式（渐变+内阴影）——只在头像弹窗里生效 */
+.account-popup input[type="email"],
+.account-popup input[type="password"],
+.account-popup input[type="text"],
+.account-popup input[type="file"] {
   background: linear-gradient(145deg, #1e1e1e, #2b2b2b);
   color: #f5deb3;
   border: 1px solid #8b6914;
@@ -70,12 +39,15 @@ input[type="text"]:focus {
   transition: all 0.3s ease;
 }
 
-.account-popup input:focus {
+/* 聚焦时更亮 */
+.account-popup input[type="email"]:focus,
+.account-popup input[type="password"]:focus,
+.account-popup input[type="text"]:focus,
+.account-popup input[type="file"]:focus {
   border-color: #ffd700;
   box-shadow: 0 0 6px #ffd700, inset 1px 1px 3px rgba(0,0,0,0.6);
   background: linear-gradient(145deg, #252525, #333);
 }
-
   </style>
 </head>
 <body>
