@@ -704,7 +704,7 @@ onAuthStateChanged(auth, async (user) => {
       if (vipEmail && !vipEmail.value)
         vipEmail.value = data.email || user.email || "";
       if (vipMsg && !vipMsg.value)
-        vipMsg.value = `支付方式：${data.payMethod || ""}\n账号：${data.payAccount || ""}\n\n【请在此处补充购买内容或备注】`;
+        vipMsg.value = `支付方式：${data.payMethod || ""}\n账号：${data.payAccount || ""}\n\n【请务必在此处补充购买内容或备注】`;
     } else {
       // 用户数据库里没存资料，只填邮箱
       const vipEmail = document.getElementById("vipEmail");
@@ -717,6 +717,29 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("userPhoto").src = defaultAvatar;
   }
 });
+	// 🔹 自动填充完成后显示提示
+const tip = document.createElement("div");
+tip.textContent = "✅ 已自动填入账户信息";
+tip.style.position = "fixed";
+tip.style.bottom = "40px";
+tip.style.left = "50%";
+tip.style.transform = "translateX(-50%)";
+tip.style.background = "rgba(0,150,0,0.85)";
+tip.style.color = "#fff";
+tip.style.padding = "10px 20px";
+tip.style.borderRadius = "10px";
+tip.style.fontSize = "16px";
+tip.style.fontWeight = "bold";
+tip.style.zIndex = "99999";
+tip.style.transition = "opacity 1s ease";
+document.body.appendChild(tip);
+
+// 3 秒后淡出并删除
+setTimeout(() => {
+  tip.style.opacity = "0";
+  setTimeout(() => tip.remove(), 1000);
+}, 3000);
+
 </script>
 
             </body>
