@@ -315,7 +315,7 @@ document.addEventListener('touchstart', enableBgm, { once: true });
     if (user) {
       document.getElementById("loginForm").style.display = "none";
       document.getElementById("userInfo").style.display = "block";
-      document.getElementById("userPhoto").src = user.photoURL || "assets/HTgovIconV2.png";
+      document.getElementById("userPhoto").src = user.photoURL || "https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png";
 
       const userRef = ref(db, "users/" + user.uid);
       const snapshot = await get(userRef);
@@ -333,11 +333,12 @@ document.addEventListener('touchstart', enableBgm, { once: true });
     } else {
       document.getElementById("loginForm").style.display = "block";
       document.getElementById("userInfo").style.display = "none";
-      document.getElementById("userPhoto").src = "assets/login-placeholder.svg";
+      document.getElementById("userPhoto").src = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
     }
   });
 </script>
 
 </body>
 </html>
+
 
