@@ -3,377 +3,381 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>黑铁VIP 注册</title>
-  <link rel="stylesheet" href="https://htcb-12c7.github.io/htgov/css/htgov.css" />
-<style>
-	/* 右上角固定 + 最高层，保证不被 iframe 挡住 */
-/* 头像固定右上角，层级更高 */
-.account-toggle {
-  position: fixed !important;
-  top: 10 !important;
-  right: 10 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  z-index: 10010 !important;
+  <title>黑铁工作室简介</title>
+  <link rel="stylesheet" href="css/htgov.css" />
+  <style>
+/* 深色按钮样式（黑底金边）——只在头像弹窗里生效 */
+.account-popup button {
+  background-color: #000000;
+  color: #ffd700;
+  border: 1px solid #ffd700;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
 }
-#userPhoto {
-  display: block;      /* 避免 inline 留白 */
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-  .register-box h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .small-btn {
-    width: 100%;              /* ✅ 独占一行 */
-    background: #03a9f4;
-    color: white;
-    padding: 8px 10px;
-    font-size: 12px;
-    margin: 5px 0;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-  }
-  .avatar-preview {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin: 10px auto;
-    display: block;
-    object-fit: cover;
-    border: 2px solid #666;
-    background: #444;
-  }
-/* 防止被外部样式覆盖：保证所有表单控件不超出 .register-box */
-.register-box {
-  width: 100%;
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #222;
-  color: white;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5);
-  overflow: hidden;   /* 防止子元素撑破 */
+.account-popup button:hover {
+  background-color: #2b2b2b;
+  color: #fff8dc;
 }
 
-.register-box input,
-.register-box select,
-.register-box button {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box;
-  display: block;
+/* 深色输入框样式（渐变+内阴影）——只在头像弹窗里生效 */
+.account-popup input {
+  background: linear-gradient(145deg, #1e1e1e, #2b2b2b);
+  color: #f5deb3;  /* 浅米黄色文字 */
+  border: 1px solid #8b6914; /* 金棕色边框 */
+  padding: 6px 10px;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.8),
+              inset -2px -2px 5px rgba(255,255,255,0.05);
+  transition: all 0.3s ease;
 }
 
-.register-box * { 
-  box-sizing: border-box; 
+/* 聚焦时更亮 */
+.account-popup input:focus {
+  border-color: #ffd700;
+  box-shadow: 0 0 6px #ffd700, inset 1px 1px 3px rgba(0,0,0,0.6);
+  background: linear-gradient(145deg, #252525, #333);
 }
-
-/* 某些浏览器 file 输入容易超出，收敛一下 */
-.register-box input[type="file"]{
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* 父级若是 flex，默认 min-width:auto 会导致溢出，这里兜底 */
-.content, .container { min-width: 0; }
-
-</style>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script>
-  (function(){
-    emailjs.init("sbFx6huxFVrhXPqr5"); // 你的 Public Key
-  })();
-</script>
+  </style>
 </head>
 <body>
   <div class="header">
     <a href="https://htcb-12c7.github.io/htgov/">
-      <img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png" alt="返回主页">
+      <img class="logo" src="assets/HTgovIconV2.png" alt="返回主页">
     </a>
-    黑铁VIP 注册 <span></span>
+    黑铁工作室官网 <span>【#2552 正式开放】</span>
+
+    <!-- Language 按钮 -->
+    <button id="lang-toggle" style="
+      position: absolute;
+      top: 10px;
+      right: 70px;
+      padding: 8px 16px;
+      font-size: 16px;
+      /* 字体大小 */
+      background: black;
+      color: #03a9f4;
+      border: 1px solid #03a9f4;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    ">
+      🌐 Language
+    </button>
+
+    <!-- 头像 + 弹出卡片 -->
+    <div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
+      <img id="userPhoto" src="assets/login-placeholder.svg" alt="头像"
+        style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
+        onclick="toggleAccountInfo()" />
+
+      <div class="account-popup" id="accountPopup" style="
+        display: none;
+        position: absolute;
+        top: 45px;
+        right: 0;
+        background: rgba(0,0,0,0.9);
+        padding: 10px 15px;
+        border-radius: 8px;
+        color: white;
+        z-index: 9999;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        white-space: nowrap;
+      ">
+
+        <!-- 未登录显示登录表单 -->
+        <div id="loginForm">
+          <input type="email" id="email" placeholder="邮箱/用户名" style="width: 150px; margin: 3px;" />
+          <input type="password" id="password" placeholder="密码" style="width: 150px; margin: 3px;" />
+          <button id="loginBtn">登录</button>
+          <button id="googleLoginBtn" style="background:#fff; color:#000; margin-top:5px;">使用 Google 登录</button>
+        </div>
+
+        <!-- 登录后显示/修改用户信息 -->
+        <div id="userInfo" style="display:none;">
+          
+  <!-- ✅ 新增头像上传 -->
+  <div>
+    <label>头像：</label>
+    <input type="file" id="updateAvatar" accept="image/*" />
+    <img id="userPhotoPreview" 
+         src="assets/login-placeholder.svg"
+         style="width:60px; height:60px; border-radius:50%; margin-top:5px;" />
+  </div>
+          <div><strong>昵称：</strong><input id="userNickname" /></div>
+          <div>
+            <strong>邮箱：</strong>
+            <input id="userEmail" style="width:200px;" />
+            <button id="sendVerifyBtn" style="margin-left:5px;">发送验证邮件</button>
+          </div>
+          <div><strong>支付方式：</strong><input id="userPayMethod" /></div>
+          <div><strong>支付名称：</strong><input id="userPayName" /></div>
+          <div><strong>支付账号：</strong><input id="userPayAccount" /></div>
+          <button id="saveBtn">保存</button>
+          <button id="bindGoogleBtn" style="margin-top:10px; background:#4285F4; color:white;">
+            绑定 Google 账号
+          </button>
+          <button id="logoutBtn">退出登录</button>
+        </div>
+
+        <!-- Google 翻译语言框（请放在最外面，不嵌套在上面的 div 中） -->
+        <div id="google_translate_element" style="
+          position: absolute;
+          top: 50px;
+          right: 0px;
+          display: none;
+          background: rgba(0, 0, 0, 0.8);
+          padding: 8px;
+          border-radius: 5px;
+          z-index: 9999;
+        "></div>
+      </div>
+    </div>
   </div>
 
   <div class="main-container">
+    <!-- 左侧导航 -->
     <div class="sidebar">
       <h3>黑铁工作室</h3>
       <ul id="sidebar-nav"></ul>
     </div>
 
-    <div class="content">
-      <div class="container">
-        <div class="register-box">
-          <h2>注册黑铁VIP账号</h2>
-
-          <!-- 昵称 -->
-          <input type="text" id="regNickname" placeholder="昵称" />
-          <button type="button" class="small-btn" onclick="checkNickname()">检查昵称</button>
-          <div id="nickStatus" style="font-size:12px;color:orange;"></div>
-
-          <!-- 真实姓名 -->
-          <input type="text" id="regName" placeholder="真实姓名（中文/英文）" />
-
-          <!-- 邮箱 -->
-          <input type="email" id="regEmail" placeholder="邮箱" />
-          <button type="button" class="small-btn" onclick="sendEmailCode()">发送验证码</button>
-          <input type="text" id="emailCode" placeholder="输入邮箱验证码" />
-
-          <!-- 密码 -->
-          <input type="password" id="regPassword" placeholder="密码" />
-          <input type="password" id="regConfirmPassword" placeholder="确认密码" />
-
-          <!-- ✅ 上传头像 -->
-          <label style="margin-top:10px; display:block;">上传头像 (jpg/png, ≤2MB)</label>
-          <input type="file" id="avatarUpload" accept="image/*" />
-          <img id="avatarPreview" class="avatar-preview" src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg" alt="预览头像" />
-
-          <!-- 支付方式 -->
-          <select id="payType">
-            <option value="">支付方式（可选）</option>
-            <option value="bank">银行卡</option>
-            <option value="wechat">微信</option>
-            <option value="alipay">支付宝</option>
-            <option value="zelle">Zelle</option>
-            <option value="other">其他（请填写名称）</option>
-          </select>
-          <input type="text" id="payName" placeholder="名称（例：银行名称/微信名称/其他）" />
-          <input type="text" id="payAccount" placeholder="账号（例：银行卡号/微信号）" />
-
-          <button id="registerBtn">注册</button>
-        </div>
+    <div class="content" style="display:flex; justify-content:center; align-items:flex-start; padding:40px;">
+      <div class="container" style="max-width:800px;">
+        <h2>黑铁工作室简介</h2>
+        <p>黑铁工作室（HT Studio）是一个集创意开发、极客技术与独立项目实践为一体的自由团队。我们致力于打造具有实战价值与娱乐性的项目，包括但不限于：</p>
+        <ul>
+          <li>红帽 / 白帽黑客工具</li>
+          <li>EXE 软件 & 网页交互工具</li>
+          <li>和平精英等游戏辅助、模拟飞行体验</li>
+          <li>自媒体内容运营、AI 脚本研究</li>
+        </ul>
+        <p>我们崇尚自由探索、技术美学和极致细节。欢迎有志者加入，共建黑铁宇宙！</p>
+        <h2>黑铁官网（HTgov）教程</h2>
+        
+          <p>1.左上角图标 —— 返回主页</p>
+          <p>2.右上角图标 —— 登录/账户信息</p>
+          <p>3.统一导航栏点击跳转，大家都知道（除了特殊页面以及【黑铁二维码工具】页面）</p>
+          <p>4.带下滑线/蓝色 文字是超链接，点击即可跳转</p>
+          <p>5.没有设置，有事联系（按优先顺序排序）：</p>
+        
+        <ul>
+          <li>邮箱：b_HTc@outlook.com/1114878@lwsd.org/sh_cqxipadyx@163.com</li>
+          <li>电话：+1 4254712471</li>
+          <li>短信：+86 15317842061</li>
+        </ul>
+        
       </div>
     </div>
   </div>
-<!-- 头像 + 弹出卡片 -->
-<div class="account-toggle">
-  <img id="userPhoto" src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg" alt="头像"
-    style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
-    onclick="toggleAccountInfo()" />
 
-  <div class="account-popup" id="accountPopup" style="
-    display: none;
-    position: absolute;
-    top: 45px;
-    right: 0;
-    background: rgba(0,0,0,0.9);
-    padding: 10px 15px;
-    border-radius: 8px;
-    color: white;
-    z-index: 9999;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    white-space: nowrap;
-  ">
-
-    <!-- 未登录显示登录表单 -->
-    <div id="loginForm">
-      <input type="email" id="email" placeholder="邮箱/用户名" style="width: 150px; margin: 3px;" />
-      <input type="password" id="password" placeholder="密码" style="width: 150px; margin: 3px;" />
-      <button id="loginBtn">登录</button>
-      <button id="googleLoginBtn" style="background:#fff; color:#000; margin-top:5px;">使用 Google 登录</button>
-    </div>
-
-    <!-- 登录后显示/修改用户信息 -->
-    <div id="userInfo" style="display:none;">
-      <!-- 头像上传 -->
-      <div>
-        <label>头像：</label>
-        <input type="file" id="updateAvatar" accept="image/*" />
-        <img id="userPhotoPreview" 
-             src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg"
-             style="width:60px; height:60px; border-radius:50%; margin-top:5px;" />
-      </div>
-      <div><strong>昵称：</strong><input id="userNickname" /></div>
-      <div>
-        <strong>邮箱：</strong>
-        <input id="userEmail" style="width:200px;" />
-        <button id="sendVerifyBtn" style="margin-left:5px;">发送验证邮件</button>
-      </div>
-      <div><strong>支付方式：</strong><input id="userPayMethod" /></div>
-      <div><strong>支付名称：</strong><input id="userPayName" /></div>
-      <div><strong>支付账号：</strong><input id="userPayAccount" /></div>
-      <button id="saveBtn">保存</button>
-      <button id="bindGoogleBtn" style="margin-top:10px; background:#4285F4; color:white;">
-        绑定 Google 账号
-      </button>
-      <button id="logoutBtn">退出登录</button>
-    </div>
-  </div>
-</div>
-<!-- ✅ 头像弹出信息卡片逻辑 -->
-<script>
-  function toggleAccountInfo() {
-    const popup = document.getElementById('accountPopup');
-    popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
-  }
-</script>
-<script>
-  const DEFAULT_AVATAR = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
-  function toggleAccountInfo(){
-    const p = document.getElementById('accountPopup');
-    p.style.display = (p.style.display === 'none' || !p.style.display) ? 'block' : 'none';
-  }
-</script>
-
-<!-- Firebase 登录逻辑 -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, signInWithPopup,
-    GoogleAuthProvider, updateEmail, sendEmailVerification,
-    linkWithPopup, onAuthStateChanged, signOut } 
-    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-  import { getDatabase, ref, set, get } 
-    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-  import { getStorage, ref as sRef, uploadBytes, getDownloadURL } 
-    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
-    authDomain: "ht-chat-91e5f.firebaseapp.com",
-    databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
-    projectId: "ht-chat-91e5f",
-    storageBucket: "ht-chat-91e5f.firebasestorage.app",
-    messagingSenderId: "325331727527",
-    appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
-    measurementId: "G-VYV13LWP14"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getDatabase(app);
-  const provider = new GoogleAuthProvider();
-  const storage = getStorage(app);
-
-  // ✅ 登录
-  document.getElementById("loginBtn").onclick = async () => {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-    } catch (err) {
-      alert("登录失败: " + err.message);
-    }
-  };
-
-  // ✅ Google 登录
-  document.getElementById("googleLoginBtn").onclick = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (err) {
-      alert("Google 登录失败: " + err.message);
-    }
-  };
-
-  // ✅ 绑定 Google
-  document.getElementById("bindGoogleBtn").onclick = async () => {
-    const user = auth.currentUser;
-    if (!user) return alert("请先登录");
-    try {
-      await linkWithPopup(user, provider);
-      alert("Google 账号绑定成功！");
-    } catch (err) {
-      alert("绑定失败: " + err.message);
-    }
-  };
-
-  // ✅ 邮箱验证
-  document.getElementById("sendVerifyBtn").onclick = async () => {
-    const user = auth.currentUser;
-    if (!user) return alert("请先登录");
-    const newEmail = document.getElementById("userEmail").value;
-    try {
-      await updateEmail(user, newEmail);
-      await sendEmailVerification(user);
-      alert("验证邮件已发送，请检查邮箱");
-    } catch (err) {
-      alert("发送失败: " + err.message);
-    }
-  };
-
-  // ✅ 保存用户信息 + 上传头像
-  let newAvatarFile = null;
-  document.getElementById("updateAvatar").addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (file.size > 27 * 1024 * 1024) {
-      alert("图片大小不能超过27MB！");
-      return;
-    }
-    newAvatarFile = file;
-    document.getElementById("userPhotoPreview").src = URL.createObjectURL(file);
-  });
-
-  document.getElementById("saveBtn").onclick = async () => {
-    const user = auth.currentUser;
-    if (!user) return alert("请先登录");
-
-    let avatarURL = document.getElementById("userPhoto").src;
-
-    if (newAvatarFile) {
-      const fileRef = sRef(storage, "avatars/" + user.uid + ".jpg");
-      await uploadBytes(fileRef, newAvatarFile);
-      avatarURL = await getDownloadURL(fileRef);
-      document.getElementById("userPhoto").src = avatarURL;
-    }
-
-    const userRef = ref(db, "users/" + user.uid);
-    await set(userRef, {
-      nickname: document.getElementById("userNickname").value,
-      email: document.getElementById("userEmail").value,
-      payMethod: document.getElementById("userPayMethod").value,
-      payName: document.getElementById("userPayName").value,
-      payAccount: document.getElementById("userPayAccount").value,
-      avatar: avatarURL
-    });
-
-    alert("信息已更新！");
-  };
-
-  // ✅ 登出
-  document.getElementById("logoutBtn").onclick = () => {
-    signOut(auth);
-  };
-
-  // ✅ 登录状态监听
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("userInfo").style.display = "block";
-      document.getElementById("userPhoto").src = user.photoURL || "https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png";
-
-      const userRef = ref(db, "users/" + user.uid);
-      const snapshot = await get(userRef);
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        document.getElementById("userNickname").value = data.nickname || "";
-        document.getElementById("userEmail").value = data.email || user.email || "";
-        document.getElementById("userPayMethod").value = data.payMethod || "";
-        document.getElementById("userPayName").value = data.payName || "";
-        document.getElementById("userPayAccount").value = data.payAccount || "";
-
-	const defaultAvatar = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
-	document.getElementById("userPhoto").src = data.avatar || user.photoURL || defaultAvatar;
-	document.getElementById("userPhotoPreview").src = data.avatar || user.photoURL || defaultAvatar;
-
-      }
-    } else {
-      document.getElementById("loginForm").style.display = "block";
-      document.getElementById("userInfo").style.display = "none";
-      document.getElementById("userPhoto").src = defaultAvatar;
-    }
-  });
-</script>
-  <!-- 导航加载 -->
+  <!-- 动态加载 nav.html -->
   <script>
-    fetch("https://htcb-12c7.github.io/htgov/nav/nav.html")
+    fetch("nav/nav.html")
       .then(r => r.text())
       .then(html => {
         document.getElementById("sidebar-nav").innerHTML = html;
       })
       .catch(err => console.error("菜单加载失败：", err));
+  </script>
+
+  <!-- ✅ Google 语言选择初始化 -->
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'zh-CN',
+        includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+
+  <!-- ✅ Google 提供的翻译组件 -->
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <!-- ✅ 控制 Language 按钮点击时显示/隐藏语言框 -->
+  <script>
+    window.addEventListener('load', function () {
+      const toggle = document.getElementById("lang-toggle");
+      const box = document.getElementById("google_translate_element");
+      if (toggle && box) {
+        toggle.addEventListener("click", () => {
+          box.style.display = box.style.display === "none" ? "block" : "none";
+        });
+      }
+    });
+  </script>
+
+  <!-- ✅ 头像弹出信息卡片逻辑 -->
+  <script>
+    function toggleAccountInfo() {
+      const popup = document.getElementById('accountPopup');
+      popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+    }
+  </script>
+
+  <!-- Firebase 登录逻辑 -->
+  <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signInWithPopup,
+  GoogleAuthProvider, updateEmail, sendEmailVerification,
+  linkWithPopup, onAuthStateChanged, signOut } 
+  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getDatabase, ref, set, get } 
+  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL } 
+  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
+      authDomain: "ht-chat-91e5f.firebaseapp.com",
+      databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
+      projectId: "ht-chat-91e5f",
+      storageBucket: "ht-chat-91e5f.firebasestorage.app",
+      messagingSenderId: "325331727527",
+      appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
+      measurementId: "G-VYV13LWP14"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+    const provider = new GoogleAuthProvider();
+
+    // ✅ 切换弹窗显示
+    window.toggleAccountInfo = function () {
+      const popup = document.getElementById('accountPopup');
+      popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+    };
+
+    // ✅ 邮箱/用户名 登录
+    document.getElementById("loginBtn").onclick = async () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        alert("登录失败: " + err.message);
+      }
+    };
+
+    // ✅ Google 登录
+    document.getElementById("googleLoginBtn").onclick = async () => {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (err) {
+        alert("Google 登录失败: " + err.message);
+      }
+    };
+
+    // ✅ 绑定 Google 账号
+    document.getElementById("bindGoogleBtn").onclick = async () => {
+      const user = auth.currentUser;
+      if (!user) return alert("请先登录");
+      try {
+        await linkWithPopup(user, provider);
+        alert("Google 账号绑定成功！");
+      } catch (err) {
+        alert("绑定失败: " + err.message);
+      }
+    };
+
+    // ✅ 发送邮箱验证
+    document.getElementById("sendVerifyBtn").onclick = async () => {
+      const user = auth.currentUser;
+      if (!user) return alert("请先登录");
+      const newEmail = document.getElementById("userEmail").value;
+      try {
+        await updateEmail(user, newEmail);
+        await sendEmailVerification(user);
+        alert("验证邮件已发送，请检查邮箱并确认");
+      } catch (err) {
+        alert("发送失败: " + err.message);
+      }
+    };
+
+    // ✅ 保存用户信息
+const storage = getStorage(app);
+
+document.getElementById("saveBtn").onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return alert("请先登录");
+
+  let avatarURL = document.getElementById("userPhoto").src;
+
+  // 如果有新头像文件，上传并获取下载地址
+  if (newAvatarFile) {
+    const fileRef = sRef(storage, "avatars/" + user.uid + ".jpg");
+    await uploadBytes(fileRef, newAvatarFile);
+    avatarURL = await getDownloadURL(fileRef);
+    document.getElementById("userPhoto").src = avatarURL; // 更新头像
+  }
+
+  // 保存数据库信息
+  const userRef = ref(db, "users/" + user.uid);
+  await set(userRef, {
+    nickname: document.getElementById("userNickname").value,
+    email: document.getElementById("userEmail").value,
+    payMethod: document.getElementById("userPayMethod").value,
+    payName: document.getElementById("userPayName").value,  // ✅ 现在不会报错了
+    payAccount: document.getElementById("userPayAccount").value,
+    avatar: avatarURL
+  });
+
+  alert("信息已更新！");
+};
+
+    // ✅ 登出
+    document.getElementById("logoutBtn").onclick = () => {
+      signOut(auth);
+    };
+
+    // ✅ 登录状态监听
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("userInfo").style.display = "block";
+        document.getElementById("userPhoto").src = user.photoURL || "assets/HTgovIconV2.png";
+
+        // 从数据库加载用户信息
+        const userRef = ref(db, "users/" + user.uid);
+        const snapshot = await get(userRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          document.getElementById("userNickname").value = data.nickname || "";
+          document.getElementById("userEmail").value = data.email || user.email || "";
+          document.getElementById("userPayMethod").value = data.payMethod || "";
+          document.getElementById("userPayName").value = data.payName || ""; // 新增
+          document.getElementById("userPayAccount").value = data.payAccount || "";
+
+          // ✅ 在这里加头像预览同步
+      document.getElementById("userPhoto").src = data.avatar || user.photoURL || "assets/login-placeholder.svg";
+      document.getElementById("userPhotoPreview").src = data.avatar || user.photoURL || "assets/login-placeholder.svg";
+        }
+      } else {
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("userInfo").style.display = "none";
+        document.getElementById("userPhoto").src = "assets/login-placeholder.svg";
+      }
+    });
+
+let newAvatarFile = null;
+
+document.getElementById("updateAvatar").addEventListener("change", function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    alert("图片大小不能超过2MB！");
+    return;
+  }
+  newAvatarFile = file;
+  document.getElementById("userPhotoPreview").src = URL.createObjectURL(file);
+});  
+    
   </script>
 </body>
 </html>
