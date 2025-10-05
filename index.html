@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -221,109 +221,135 @@
   </script>
 
   <!-- Firebase 登录逻辑 -->
-  <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signInWithPopup,
   GoogleAuthProvider, updateEmail, sendEmailVerification,
   linkWithPopup, onAuthStateChanged, signOut } 
   from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 import { getDatabase, ref, set, get } 
   from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-import { getStorage, ref as sRef, uploadBytes, getDownloadURL } 
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL, listAll, getMetadata } 
   from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
-      authDomain: "ht-chat-91e5f.firebaseapp.com",
-      databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
-      projectId: "ht-chat-91e5f",
-      storageBucket: "ht-chat-91e5f.firebasestorage.app",
-      messagingSenderId: "325331727527",
-      appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
-      measurementId: "G-VYV13LWP14"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
+  authDomain: "ht-chat-91e5f.firebaseapp.com",
+  databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
+  projectId: "ht-chat-91e5f",
+  // ✅ 修正为正确存储桶域名
+  storageBucket: "ht-chat-91e5f.appspot.com",
+  messagingSenderId: "325331727527",
+  appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
+  measurementId: "G-VYV13LWP14"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
-    const provider = new GoogleAuthProvider();
-
-    // ✅ 切换弹窗显示
-    window.toggleAccountInfo = function () {
-      const popup = document.getElementById('accountPopup');
-      popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
-    };
-
-    // ✅ 邮箱/用户名 登录
-    document.getElementById("loginBtn").onclick = async () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-      } catch (err) {
-        alert("登录失败: " + err.message);
-      }
-    };
-
-    // ✅ Google 登录
-    document.getElementById("googleLoginBtn").onclick = async () => {
-      try {
-        await signInWithPopup(auth, provider);
-      } catch (err) {
-        alert("Google 登录失败: " + err.message);
-      }
-    };
-
-    // ✅ 绑定 Google 账号
-    document.getElementById("bindGoogleBtn").onclick = async () => {
-      const user = auth.currentUser;
-      if (!user) return alert("请先登录");
-      try {
-        await linkWithPopup(user, provider);
-        alert("Google 账号绑定成功！");
-      } catch (err) {
-        alert("绑定失败: " + err.message);
-      }
-    };
-
-    // ✅ 发送邮箱验证
-    document.getElementById("sendVerifyBtn").onclick = async () => {
-      const user = auth.currentUser;
-      if (!user) return alert("请先登录");
-      const newEmail = document.getElementById("userEmail").value;
-      try {
-        await updateEmail(user, newEmail);
-        await sendEmailVerification(user);
-        alert("验证邮件已发送，请检查邮箱并确认");
-      } catch (err) {
-        alert("发送失败: " + err.message);
-      }
-    };
-
-    // ✅ 保存用户信息
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+const provider = new GoogleAuthProvider();
 const storage = getStorage(app);
 
+window.toggleAccountInfo = function () {
+  const popup = document.getElementById('accountPopup');
+  popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+};
+
+// ✅ 登录逻辑
+document.getElementById("loginBtn").onclick = async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (err) {
+    alert("登录失败: " + err.message);
+  }
+};
+
+// ✅ Google 登录
+document.getElementById("googleLoginBtn").onclick = async () => {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    alert("Google 登录失败: " + err.message);
+  }
+};
+
+// ✅ 绑定 Google
+document.getElementById("bindGoogleBtn").onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return alert("请先登录");
+  try {
+    await linkWithPopup(user, provider);
+    alert("Google 账号绑定成功！");
+  } catch (err) {
+    alert("绑定失败: " + err.message);
+  }
+};
+
+// ✅ 邮箱验证
+document.getElementById("sendVerifyBtn").onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return alert("请先登录");
+  const newEmail = document.getElementById("userEmail").value;
+  try {
+    await updateEmail(user, newEmail);
+    await sendEmailVerification(user);
+    alert("验证邮件已发送，请检查邮箱并确认");
+  } catch (err) {
+    alert("发送失败: " + err.message);
+  }
+};
+
+// ✅ 检查 Firebase Storage 当前占用
+async function checkStorageUsageAndUploadLimit() {
+  const rootRef = sRef(storage, "avatars/");
+  let totalBytes = 0;
+  try {
+    const result = await listAll(rootRef);
+    for (const itemRef of result.items) {
+      const meta = await getMetadata(itemRef);
+      totalBytes += meta.size || 0;
+    }
+    const totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
+    const totalGB = (totalBytes / (1024 * 1024 * 1024)).toFixed(3);
+    console.log(`当前 Firebase Storage 占用：${totalMB} MB (${totalGB} GB)`);
+
+    if (totalBytes > 1 * 1024 * 1024 * 1024) {
+      alert("⚠️ 已达到 Firebase 免费存储上限 (1GB)，请等待下个月再上传头像。");
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("检查存储空间出错：", err);
+    return true;
+  }
+}
+
+// ✅ 保存用户信息（含头像上传）
 document.getElementById("saveBtn").onclick = async () => {
   const user = auth.currentUser;
   if (!user) return alert("请先登录");
 
   let avatarURL = document.getElementById("userPhoto").src;
 
-  // 如果有新头像文件，上传并获取下载地址
+  // 检查剩余空间
+  const canUpload = await checkStorageUsageAndUploadLimit();
+  if (!canUpload) return;
+
   if (newAvatarFile) {
     const fileRef = sRef(storage, "avatars/" + user.uid + ".jpg");
     await uploadBytes(fileRef, newAvatarFile);
     avatarURL = await getDownloadURL(fileRef);
-    document.getElementById("userPhoto").src = avatarURL; // 更新头像
+    document.getElementById("userPhoto").src = avatarURL;
   }
 
-  // 保存数据库信息
   const userRef = ref(db, "users/" + user.uid);
   await set(userRef, {
     nickname: document.getElementById("userNickname").value,
     email: document.getElementById("userEmail").value,
     payMethod: document.getElementById("userPayMethod").value,
-    payName: document.getElementById("userPayName").value,  // ✅ 现在不会报错了
+    payName: document.getElementById("userPayName").value,
     payAccount: document.getElementById("userPayAccount").value,
     avatar: avatarURL
   });
@@ -331,53 +357,49 @@ document.getElementById("saveBtn").onclick = async () => {
   alert("信息已更新！");
 };
 
-    // ✅ 登出
-    document.getElementById("logoutBtn").onclick = () => {
-      signOut(auth);
-    };
+// ✅ 登出
+document.getElementById("logoutBtn").onclick = () => {
+  signOut(auth);
+};
 
-    // ✅ 登录状态监听
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("userInfo").style.display = "block";
-        document.getElementById("userPhoto").src = user.photoURL || "assets/HTgovIconV2.png";
+// ✅ 登录状态监听
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("userInfo").style.display = "block";
+    document.getElementById("userPhoto").src = user.photoURL || "assets/HTgovIconV2.png";
 
-        // 从数据库加载用户信息
-        const userRef = ref(db, "users/" + user.uid);
-        const snapshot = await get(userRef);
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          document.getElementById("userNickname").value = data.nickname || "";
-          document.getElementById("userEmail").value = data.email || user.email || "";
-          document.getElementById("userPayMethod").value = data.payMethod || "";
-          document.getElementById("userPayName").value = data.payName || ""; // 新增
-          document.getElementById("userPayAccount").value = data.payAccount || "";
-
-          // ✅ 在这里加头像预览同步
+    const userRef = ref(db, "users/" + user.uid);
+    const snapshot = await get(userRef);
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      document.getElementById("userNickname").value = data.nickname || "";
+      document.getElementById("userEmail").value = data.email || user.email || "";
+      document.getElementById("userPayMethod").value = data.payMethod || "";
+      document.getElementById("userPayName").value = data.payName || "";
+      document.getElementById("userPayAccount").value = data.payAccount || "";
       document.getElementById("userPhoto").src = data.avatar || user.photoURL || "assets/login-placeholder.svg";
       document.getElementById("userPhotoPreview").src = data.avatar || user.photoURL || "assets/login-placeholder.svg";
-        }
-      } else {
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("userInfo").style.display = "none";
-        document.getElementById("userPhoto").src = "assets/login-placeholder.svg";
-      }
-    });
+    }
+  } else {
+    document.getElementById("loginForm").style.display = "block";
+    document.getElementById("userInfo").style.display = "none";
+    document.getElementById("userPhoto").src = "assets/login-placeholder.svg";
+  }
+});
 
 let newAvatarFile = null;
-
 document.getElementById("updateAvatar").addEventListener("change", function(e) {
   const file = e.target.files[0];
   if (!file) return;
-  if (file.size > 2 * 1024 * 1024) {
-    alert("图片大小不能超过2MB！");
+  if (file.size > 27 * 1024 * 1024) {
+    alert("图片大小不能超过27MB！");
     return;
   }
   newAvatarFile = file;
   document.getElementById("userPhotoPreview").src = URL.createObjectURL(file);
-});  
-    
-  </script>
+});
+</script>
+
 </body>
 </html>
