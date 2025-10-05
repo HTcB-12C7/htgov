@@ -249,7 +249,18 @@ const auth = getAuth(app);
 const db = getDatabase(app);
 const provider = new GoogleAuthProvider();
 const storage = getStorage(app);
-
+  
+let newAvatarFile = null;
+document.getElementById("updateAvatar").addEventListener("change", function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 27 * 1024 * 1024) {
+    alert("图片大小不能超过27MB！");
+    return;
+  }
+  newAvatarFile = file;
+  document.getElementById("userPhotoPreview").src = URL.createObjectURL(file);
+});
 window.toggleAccountInfo = function () {
   const popup = document.getElementById('accountPopup');
   popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
@@ -337,12 +348,21 @@ document.getElementById("saveBtn").onclick = async () => {
   const canUpload = await checkStorageUsageAndUploadLimit();
   if (!canUpload) return;
 
-  if (newAvatarFile) {
+if (newAvatarFile) {
+  try {
+    console.log("开始上传头像：", newAvatarFile.name);
     const fileRef = sRef(storage, "avatars/" + user.uid + ".jpg");
     await uploadBytes(fileRef, newAvatarFile);
+    console.log("✅ 上传成功，获取下载链接...");
     avatarURL = await getDownloadURL(fileRef);
     document.getElementById("userPhoto").src = avatarURL;
+    console.log("✅ 下载链接已获取：", avatarURL);
+  } catch (err) {
+    console.error("❌ 上传头像失败：", err);
+    alert("上传头像失败：" + err.message);
+    return;
   }
+}
 
   const userRef = ref(db, "users/" + user.uid);
   await set(userRef, {
@@ -388,17 +408,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-let newAvatarFile = null;
-document.getElementById("updateAvatar").addEventListener("change", function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 27 * 1024 * 1024) {
-    alert("图片大小不能超过27MB！");
-    return;
-  }
-  newAvatarFile = file;
-  document.getElementById("userPhotoPreview").src = URL.createObjectURL(file);
-});
 </script>
 
 </body>
