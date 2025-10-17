@@ -187,39 +187,140 @@
     .catch(err => console.error("菜单加载失败：", err));
 </script>
 
-        <div class="content">
-            <div class="video-container">
-                <h2 style="color: gold; border-bottom: 2px solid gold; padding-bottom: 10px;">
-                    放松阴乐
-                </h2>
-                
-                <div class="video-gallery">
-                    <!-- 视频卡片1 -->
-                    <div class="video-card">
-                        <video controls poster="NE/v1.jpg">
-                            <source src="https://htcb-12c7.github.io/htgov/HTCMVideo/MU/On My Way  [itXOwCAShFU].mp4" type="video/mp4">
-                            您的浏览器不支持视频播放
-                        </video>
-                        <div class="video-info">
-                            <h3 class="video-title">ON MY WAY</h3>
-                            <p class="video-desc">出现在S2赛季以及夏日海滩！我第二团体入坑，夏日海滩的清爽，主题玩法的海水·新富，仿佛还回荡在耳边和新中</p>
-                        </div>
-                    </div>
-                    
-                    <!-- 视频卡片2 -->
-                    <div class="video-card">
-                        <video controls poster="NE/v2.jpg">
-                            <source src="https://htcb-12c7.github.io/htgov/HTCMVideo/MU/My Heart Full Of Flames ｜｜ PUBG Mobile Update 2.2 Song [J4ZCJKzqzS0].mp4" type="video/mp4">
-                            您的浏览器不支持视频播放
-                        </video>
-                        <div class="video-info">
-                            <h3 class="video-title">My Heart Full o Flames</h3>
-                            <p class="video-desc">出现在第二大更[Update 2.2],是我入坑的赛季，金沙传奇，时光回溯！第一个连续吃鸡27天2500时光币换的实力金沙DISICO车皮！！万分怀念！！！</p>
-                        </div>
-                    </div>
+<div class="content">
+    <div class="audio-container">
+        <h2 style="color: gold; border-bottom: 2px solid gold; padding-bottom: 10px;">
+            放松音乐
+        </h2>
+        
+        <div class="audio-gallery">
+            <!-- 音频卡片1 -->
+            <div class="audio-card">
+                <div class="audio-player">
+                    <img src="cover1.jpg" alt="音频封面" class="audio-cover">
+                    <audio controls>
+                        <source src="song1.mp3" type="audio/mp3">
+                        您的浏览器不支持音频播放
+                    </audio>
+                </div>
+                <div class="audio-info">
+                    <h3 class="audio-title">1</h3>
+                    <p class="audio-desc">1</p>
+                </div>
+            </div>
+            
+            <!-- 音频卡片2 -->
+            <div class="audio-card">
+                <div class="audio-player">
+                    <img src="cover2.jpg" alt="音频封面" class="audio-cover">
+                    <audio controls>
+                        <source src="song2.mp3" type="audio/mp3">
+                        您的浏览器不支持音频播放
+                    </audio>
+                </div>
+                <div class="audio-info">
+                    <h3 class="audio-title">2</h3>
+                    <p class="audio-desc">2</p>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<style>
+.audio-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.audio-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.audio-card {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.audio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+    border-color: gold;
+}
+
+.audio-player {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.audio-cover {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2px solid gold;
+}
+
+.audio-player audio {
+    flex: 1;
+    height: 40px;
+    border-radius: 20px;
+}
+
+.audio-player audio::-webkit-media-controls-panel {
+    background: linear-gradient(145deg, #1e1e1e, #2b2b2b);
+}
+
+.audio-player audio::-webkit-media-controls-play-button {
+    background-color: gold;
+    border-radius: 50%;
+}
+
+.audio-info {
+    color: #f5deb3;
+}
+
+.audio-title {
+    color: gold;
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.audio-desc {
+    margin: 0;
+    line-height: 1.5;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .audio-gallery {
+        grid-template-columns: 1fr;
+    }
+    
+    .audio-player {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .audio-cover {
+        width: 100px;
+        height: 100px;
+    }
+}
+</style>
     </div>
 
     <script src="HTCMVideo.js"></script>
