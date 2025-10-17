@@ -155,6 +155,65 @@ video {
 }
 
 </style> 
+<audio id="bgm" autoplay muted playsinline></audio>
+
+<script>
+const songs = [
+  "https://htcb-12c7.github.io/htgov/assets/小美满.mp4"
+];
+
+const bgm = document.getElementById("bgm");
+const titleBox = document.createElement("div");
+titleBox.style.cssText = `
+  position: fixed; bottom: 8px; right: 12px;
+  color: gold; font-size: 14px; font-weight: bold;
+  text-shadow: 0 0 5px black; z-index: 9999;
+`;
+document.body.appendChild(titleBox);
+
+// ✅ 随机选择并播放一首
+function playRandomSong() {
+  const randomIndex = Math.floor(Math.random() * songs.length);
+  const song = songs[randomIndex];
+  bgm.src = song;
+  bgm.play().catch(err => console.log("播放失败：", err));
+  titleBox.textContent = "🎵 正在播放：" + decodeURIComponent(song.split("/").pop());
+}
+
+// ✅ 点击或按键解除静音
+function enableBgm() {
+  bgm.muted = false;
+  bgm.play().catch(err => console.log("播放失败：", err));
+}
+
+document.addEventListener('click', enableBgm, { once: true });
+document.addEventListener('keydown', enableBgm, { once: true });
+document.addEventListener('touchstart', enableBgm, { once: true });
+
+// ✅ 每首歌播完自动切换下一首随机
+bgm.addEventListener("ended", playRandomSong);
+
+// ✅ 页面加载时随机播一首
+window.addEventListener("load", playRandomSong);
+</script>	
+
+<script>
+  // 用户点击后解除静音
+function enableBgm() {
+  const bgm = document.getElementById('bgm');
+  if (bgm) {
+    bgm.muted = false;
+    bgm.play().catch(err => console.log("播放失败：", err));
+  }
+}
+
+// 监听整个文档
+document.addEventListener('click', enableBgm, { once: true });
+// 监听键盘按键
+document.addEventListener('keydown', enableBgm, { once: true });
+// 监听触摸（手机用）
+document.addEventListener('touchstart', enableBgm, { once: true });
+</script>
 </head> 
 <body> 
 <div class="header"> 
@@ -452,4 +511,5 @@ video {
 
 </body> 
 </html>
+
 
