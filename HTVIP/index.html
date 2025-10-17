@@ -249,17 +249,17 @@ document.addEventListener('DOMContentLoaded', initAvatarUpload);
     let avatarFile = null;
     let avatarURL = "";
 
-    // ✅ 实时预览头像
-    document.getElementById("avatarUpload").addEventListener("change", function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      if (file.size > 27 * 1024 * 1024) {
-        alert("图片大小不能超过27MB！");
-        return;
-      }
-      avatarFile = file;
-      document.getElementById("avatarPreview").src = URL.createObjectURL(file);
-    });
+// ✅ 实时预览头像 - 使用新的头像上传组件
+document.getElementById("updateAvatar").addEventListener("change", function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 27 * 1024 * 1024) {
+    alert("图片大小不能超过27MB！");
+    return;
+  }
+  avatarFile = file;
+  document.getElementById("userPhotoPreview").src = URL.createObjectURL(file);
+});
 
     // ✅ 昵称检查
     window.checkNickname = async function () {
