@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑铁华夏每日视频 - HTCMVideo</title>
+    <link rel="stylesheet" href="https://htcb-12c7.github.io/htgov/css/htgov.css">
+    <style>
+      html, body {
+      margin: 0!important;
+      padding: 0!important;
+}
+
+.header span {
+    pointer-events: none;
+    cursor: default;
+}
+.content {
+    padding-top: 0 !important;
+}
+.video-container {
+.main-container {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.video-container {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.video-container h2 {
+    margin-top: 0 !important;   /* 去掉 H2 默认外边距 */
+}
+
+
+        /* 修复header定位问题 */
+        .header {
+            position: relative;
+            width: 100%;
+            height: 60px;
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 视频页面专属样式 */
+        .video-container {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .video-card {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        video {
+            width: 100%;
+            display: block;
+            background: #000;
+        }
+        
+        .video-info {
+            padding: 15px;
+            color: #e0e0e0;
+        }
+        
+        .video-title {
+            color: gold;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .video-desc {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+#google_translate_element {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background: rgba(0,0,0,0.9);
+    z-index: 9999;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 14px !important;  /* 保证文字可见 */
+    display: none;               /* 初始隐藏，点击按钮再显示 */
+}
+    </style>
+</head>
+<body>
+<div class="header">
+  <!-- 左上角 logo -->
+<a href="https://htcb-12c7.github.io/htgov/">
+<img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png" alt="返回主页">
+</a>
+  黑铁华夏轻松视频 - HTCMVideo<span>上新洗脑神曲</span>
+
+  <!-- Language 按钮（必须放 header 里面，才会绝对定位在右上角） -->
+  <button id="lang-toggle" style="
+      position: absolute;
+      top: 10px;
+      right: 70px;
+      padding: 8px 16px;
+      font-size: 16px;
+      background: black;
+      color: #03a9f4;
+      border: 1px solid #03a9f4;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;">
+      🌐 Language
+  </button>
+
+  <!-- 头像 + 弹出卡片（也放 header 里，路径用绝对 URL） -->
+  <div class="account-toggle" style="position: absolute; top: 10px; right: 10px; z-index:10000;">
+    <img src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png"
+         alt="头像"
+         style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
+         onclick="toggleAccountInfo()" />
+    <div class="account-popup" id="accountPopup" style="
+        display: none;
+        position: absolute;
+        top: 45px;
+        right: 0;
+        background: rgba(0,0,0,0.9);
+        padding: 10px 15px;
+        border-radius: 8px;
+        color: white;
+        z-index: 9999;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        white-space: nowrap;">
+      <div><strong>姓名：</strong>HTc</div>
+      <div><strong>身份证：</strong>HT10001</div>
+      <div><strong>银行卡号：</strong>1530 0089 8607 2871</div>
+      <div><strong>地址：</strong>上海市 徐汇县 川东新区 728弄 黑铁快递柜</div>
+    </div>
+  </div>
+
+  <!-- Google 翻译语言框（一样放 header 里） -->
+  <div id="google_translate_element" style="
+      position: absolute;
+      top: 50px;
+      right: 10px;
+      display: none;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 8px;
+      border-radius: 5px;
+      z-index: 9999;">
+  </div>
+</div> <!-- ✅ header 真正结束 -->
+
+
+<div class="main-container">
+  <div class="sidebar">
+    <h3>视频分类</h3>
+    <ul id="sidebar-nav"></ul>
+  </div>  <!-- 动态加载 nav.html -->
+<script>
+  fetch("../nav/nav.html")
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById("sidebar-nav").innerHTML = html;
+    })
+    .catch(err => console.error("菜单加载失败：", err));
+</script>
+
+<div class="content">
+    <div class="audio-container">
+        <h2 style="color: gold; border-bottom: 2px solid gold; padding-bottom: 10px;">
+            放松音乐
+        </h2>
+        
+        <div class="audio-gallery">
+            <!-- 音频卡片1 -->
+            <div class="audio-card">
+                <div class="audio-player">
+                    <img src="cover1.jpg" alt="音频封面" class="audio-cover">
+                    <audio controls>
+                        <source src="song1.mp3" type="audio/mp3">
+                        您的浏览器不支持音频播放
+                    </audio>
+                </div>
+                <div class="audio-info">
+                    <h3 class="audio-title">1</h3>
+                    <p class="audio-desc">1</p>
+                </div>
+            </div>
+            
+            <!-- 音频卡片2 -->
+            <div class="audio-card">
+                <div class="audio-player">
+                    <img src="cover2.jpg" alt="音频封面" class="audio-cover">
+                    <audio controls>
+                        <source src="song2.mp3" type="audio/mp3">
+                        您的浏览器不支持音频播放
+                    </audio>
+                </div>
+                <div class="audio-info">
+                    <h3 class="audio-title">2</h3>
+                    <p class="audio-desc">2</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.audio-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.audio-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.audio-card {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.audio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+    border-color: gold;
+}
+
+.audio-player {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.audio-cover {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2px solid gold;
+}
+
+.audio-player audio {
+    flex: 1;
+    height: 40px;
+    border-radius: 20px;
+}
+
+.audio-player audio::-webkit-media-controls-panel {
+    background: linear-gradient(145deg, #1e1e1e, #2b2b2b);
+}
+
+.audio-player audio::-webkit-media-controls-play-button {
+    background-color: gold;
+    border-radius: 50%;
+}
+
+.audio-info {
+    color: #f5deb3;
+}
+
+.audio-title {
+    color: gold;
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.audio-desc {
+    margin: 0;
+    line-height: 1.5;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .audio-gallery {
+        grid-template-columns: 1fr;
+    }
+    
+    .audio-player {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .audio-cover {
+        width: 100px;
+        height: 100px;
+    }
+}
+</style>
+    </div>
+
+    <script src="HTCMVideo.js"></script>
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'zh-CN',
+                includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+
+        document.getElementById("lang-toggle").onclick = () => {
+            const el = document.getElementById("google_translate_element");
+            el.style.display = el.style.display === "none" ? "block" : "none";
+        };
+
+        function toggleAccountInfo() {
+            const popup = document.getElementById('accountPopup');
+            popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
