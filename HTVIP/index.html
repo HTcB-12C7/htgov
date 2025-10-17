@@ -106,9 +106,104 @@
           <input type="password" id="regConfirmPassword" placeholder="确认密码" />
 
           <!-- ✅ 上传头像 -->
-          <label style="margin-top:10px; display:block;">上传头像 (jpg/png, ≤2MB)</label>
-          <input type="file" id="avatarUpload" accept="image/*" />
-          <img id="avatarPreview" class="avatar-preview" src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg" alt="预览头像" />
+<!-- 头像上传组件 -->
+<div class="avatar-upload-section">
+  <label>头像：</label>
+  <input type="file" id="updateAvatar" accept="image/*" />
+  <img id="userPhotoPreview" 
+       src="assets/login-placeholder.svg"
+       style="width:60px; height:60px; border-radius:50%; margin-top:5px;" />
+</div>
+
+<style>
+/* 头像上传组件样式 */
+.avatar-upload-section {
+  margin: 10px 0;
+}
+
+.avatar-upload-section label {
+  color: #f5deb3;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.avatar-upload-section input[type="file"] {
+  background: linear-gradient(145deg, #1e1e1e, #2b2b2b);
+  color: #f5deb3;
+  border: 1px solid #8b6914;
+  padding: 6px 10px;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.8),
+              inset -2px -2px 5px rgba(255,255,255,0.05);
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 250px;
+}
+
+.avatar-upload-section input[type="file"]:focus {
+  border-color: #ffd700;
+  box-shadow: 0 0 6px #ffd700, inset 1px 1px 3px rgba(0,0,0,0.6);
+  background: linear-gradient(145deg, #252525, #333);
+}
+
+.avatar-upload-section img {
+  display: block;
+  border: 2px solid #ffd700;
+}
+</style>
+
+<script>
+// 头像上传功能
+let newAvatarFile = null;
+
+// 初始化头像上传功能
+function initAvatarUpload() {
+  const avatarInput = document.getElementById("updateAvatar");
+  const previewImg = document.getElementById("userPhotoPreview");
+  
+  if (avatarInput) {
+    avatarInput.addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      // 检查文件大小 (27MB限制)
+      if (file.size > 27 * 1024 * 1024) {
+        alert("图片大小不能超过27MB！");
+        return;
+      }
+      
+      newAvatarFile = file;
+      
+      // 预览图片
+      previewImg.src = URL.createObjectURL(file);
+    });
+  }
+}
+
+// 获取选中的头像文件
+function getAvatarFile() {
+  return newAvatarFile;
+}
+
+// 重置头像上传状态
+function resetAvatarUpload() {
+  newAvatarFile = null;
+  const previewImg = document.getElementById("userPhotoPreview");
+  if (previewImg) {
+    previewImg.src = "assets/login-placeholder.svg";
+  }
+  const avatarInput = document.getElementById("updateAvatar");
+  if (avatarInput) {
+    avatarInput.value = "";
+  }
+}
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', initAvatarUpload);
+</script>
 
           <!-- 支付方式 -->
           <select id="payType">
