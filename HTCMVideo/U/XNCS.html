@@ -7,73 +7,208 @@
 <link rel="stylesheet" href="https://htcb-12c7.github.io/htgov/css/htgov.css">
 <style>
 body {
-  margin: 0; background: radial-gradient(circle at center, #001018 30%, #000 90%);
-  color: white; font-family: "Microsoft YaHei", sans-serif;
+  margin: 0;
+  background: radial-gradient(circle at center, #100000 30%, #000 90%);
+  color: white;
+  font-family: "Microsoft YaHei", sans-serif;
   overflow-x: hidden;
 }
 .header {
   position: relative; height: 60px; background: black; color: gold;
   display: flex; align-items: center; justify-content: center;
-  font-size: 22px; font-weight: bold; box-shadow: 0 2px 5px rgba(255,255,255,0.1);
+  font-size: 22px; font-weight: bold; box-shadow: 0 2px 5px rgba(255,255,255,0.2);
 }
 .logo {position:absolute;left:10px;top:10px;width:40px;height:40px;border-radius:50%;cursor:pointer;}
 .main-container {padding:40px;text-align:center;}
-/* 🌍 环球背景动画 */
-@keyframes spinEarth { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
-.earth {
-  margin: 20px auto; width: 150px; height:150px;
+
+/* ------------------------------------ */
+/* 环球主展示区 */
+.global-section {
+  text-align: center;
+  padding: 30px 10px;
+  background: linear-gradient(to bottom, #300000, #000);
+  color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+}
+.global-section h2 {
+  color: gold;
+  font-size: 28px;
+  margin-bottom: 20px;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px red;
+}
+/* 🌏 平面地球 */
+.earth-container {
+  margin: 30px auto;
+  width: 350px; height: 350px;
+  border-radius: 50%;
   background: url('https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg') no-repeat center/cover;
-  border-radius: 50%; animation: spinEarth 20s linear infinite; box-shadow: 0 0 20px cyan;
+  animation: spinEarth 35s linear infinite;
+  position: relative;
+  box-shadow: 0 0 50px rgba(255,0,0,0.8);
 }
-/* 🎀 红领巾装饰 */
-.ribbon {
-  width: 100px; height: 100px; margin: 0 auto; position: relative;
+@keyframes spinEarth { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
+/* 标记 */
+.marker {
+  position: absolute;
+  width: 16px; height: 16px;
+  background: gold; border-radius: 50%; border: 2px solid red; cursor: pointer;
 }
-.ribbon::before, .ribbon::after {
-  content: ""; position: absolute; top: 0; width: 50px; height: 100px; background: red;
+.marker:hover::after {
+  content: attr(data-name);
+  position: absolute;
+  bottom: 25px; left: -20px;
+  background: rgba(0,0,0,0.85);
+  color: white; font-size: 14px; padding: 4px 8px; border-radius: 5px;
+  white-space: nowrap;
 }
-.ribbon::before { left: 0; transform: skew(-20deg);}
-.ribbon::after { right: 0; transform: skew(20deg);}
-.intro {
-  max-width: 700px; margin: 20px auto; font-size: 18px; color: #f5f5f5; line-height: 1.7;
-  border: 2px solid gold; border-radius: 10px; padding: 15px; background: rgba(0,0,0,0.4);
+.intro-box {
+  margin: 20px auto;
+  max-width: 800px;
+  background: rgba(255,255,255,0.05);
+  border: 2px solid red;
+  border-radius: 12px;
+  padding: 20px;
+  line-height: 1.8;
+  font-size: 16px;
 }
-/* 等级按钮 */
+
+/* 🇨🇳 八个中国元素 */
+.decorations {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 30px;
+}
+.deco {
+  width: 120px; height: 120px; border-radius: 10px;
+  overflow: hidden; border: 2px solid gold; background: rgba(255,0,0,0.2);
+  box-shadow: 0 0 10px rgba(255,0,0,0.6); transition: 0.3s;
+}
+.deco:hover {transform: scale(1.1);}
+.deco img {width: 100%; height: 100%; object-fit: cover;}
+.deco p {font-size: 14px; margin: 4px 0; color: gold;}
+
+/* ------------------------------------ */
+/* 三个洗脑等级按钮区 */
 .levels {
-  display: flex; justify-content: center; gap: 20px; margin-top: 30px;
+  display: flex; justify-content: center; gap: 20px; margin: 40px 0;
 }
 .level-btn {
-  padding: 20px 40px; font-size: 20px; border-radius: 15px; border: 2px solid gold;
-  color: gold; background: rgba(0,0,0,0.7); cursor: pointer;
+  padding: 20px 40px;
+  font-size: 20px;
+  border-radius: 15px;
+  border: 2px solid gold;
+  color: gold;
+  background: rgba(0,0,0,0.7);
+  cursor: pointer;
   transition: 0.3s;
 }
 .level-btn:hover {background: gold; color: black;}
-.hidden {display: none;}
+.hidden {display:none;}
 .question-box {
-  background: rgba(0,0,0,0.8); padding: 30px; border-radius: 15px; width: 90%; max-width: 600px;
+  background: rgba(0,0,0,0.8);
+  padding: 30px; border-radius: 15px; width: 90%; max-width: 600px;
   margin: 0 auto; font-size: 18px; border: 2px solid gold;
 }
 video {
   width: 100vw; height: 100vh; object-fit: cover;
-  position: fixed; top: 0; left: 0; display: none; z-index: 9999;
+  position: fixed; top:0; left:0; display:none; z-index:9999;
 }
+
+/* ------------------------------------ */
+/* 3D 地球部分 */
+#earth-container {
+  width: 100%;
+  height: 600px;
+  margin: 20px auto;
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(255,0,0,0.8);
+  background: radial-gradient(circle at center, #300000, #000);
+  position: relative;
+}
+.tooltip {
+  position: absolute;
+  background: rgba(0,0,0,0.85);
+  color: gold;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  pointer-events: none;
+  display: none;
+  white-space: nowrap;
+  z-index: 999;
+}
+.ally-intro {
+  max-width: 800px;
+  margin: 20px auto;
+  background: rgba(255,255,255,0.05);
+  border: 2px solid red;
+  border-radius: 12px;
+  padding: 20px;
+  line-height: 1.8;
+  font-size: 16px;
+  color: white;
+}
+.ally-intro h3 {color:gold;text-align:center;}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <a href="https://htcb-12c7.github.io/htgov/"><img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png"></a>
+  <a href="https://htcb-12c7.github.io/htgov/">
+    <img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png" alt="HT-logo">
+  </a>
   🌍 黑铁环球洗脑实验室
 </div>
 
 <div class="main-container">
-  <div class="earth"></div>
-  <div class="ribbon"></div>
-  <div class="intro">
-    <h2>环球系列介绍（你来填写）</h2>
-    <p>此处为介绍文本预留区，可写“增强磁场原理”、“洗脑曲分析”、“防洗脑系统”等说明。</p>
+  <!-- 🌏 环球系列展示 -->
+  <div class="global-section">
+    <h2>🌏 环球系列 · 八十周年荣耀特展</h2>
+    <p style="color:#ffaaaa;">纪念中国人民抗日战争暨世界反法西斯战争胜利80周年</p>
+
+    <div class="earth-container">
+      <div class="marker" style="top:48%; left:63%;" data-name="🇨🇳 中国（核心）"></div>
+      <div class="marker" style="top:38%; left:60%;" data-name="🇷🇺 俄罗斯（战略伙伴）"></div>
+      <div class="marker" style="top:58%; left:70%;" data-name="🇵🇰 巴基斯坦（全天候盟友）"></div>
+      <div class="marker" style="top:68%; left:55%;" data-name="🇰🇵 朝鲜（友好邻邦）"></div>
+      <div class="marker" style="top:62%; left:75%;" data-name="🇮🇷 伊朗（合作伙伴）"></div>
+      <div class="marker" style="top:35%; left:45%;" data-name="🇧🇾 白俄罗斯（欧亚伙伴）"></div>
+      <div class="marker" style="top:75%; left:65%;" data-name="🇨🇺 古巴（传统友邦）"></div>
+      <div class="marker" style="top:50%; left:35%;" data-name="🇻🇪 委内瑞拉（战略合作）"></div>
+    </div>
+
+    <div class="intro-box">
+      <h3 style="color:gold;">中国及其盟友简介（可自行扩写）</h3>
+      <p>中国与多国保持紧密合作关系，共同推动多极化与全球发展倡议。从欧亚大陆到拉美地区，这些国家在经贸、能源、防务、科技领域展开全方位合作，共筑命运共同体。</p>
+      <p>本页面后续将进入三阶段任务：<strong>增强磁场 → 洗脑体验 → 防洗脑平衡</strong>。你可以从下方选择等级进入。</p>
+    </div>
+
+    <div class="decorations">
+      <div class="deco"><img src="https://upload.wikimedia.org/wikipedia/commons/0/0d/Flag_of_China.png"><p>五星红旗</p></div>
+      <div class="deco"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Chinese_Lanterns.jpg"><p>红灯笼</p></div>
+      <div class="deco"><img src="https://upload.wikimedia.org/wikipedia/commons/1/10/Great_Wall_of_China_June_2007.jpg"><p>长城</p></div>
+      <div class="deco"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Tiananmen_Gate_2019.jpg"><p>天安门</p></div>
+      <div class="deco"><img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Red_scarf.jpg"><p>红领巾</p></div>
+      <div class="deco"><img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Dove_symbol_of_peace.svg"><p>和平鸽</p></div>
+      <div class="deco"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Type99A_MBTTank_Parade.jpg"><p>阅兵坦克</p></div>
+      <div class="deco"><img src="https://upload.wikimedia.org/wikipedia/commons/4/47/Chinese_cloud_pattern.svg"><p>祥云纹饰</p></div>
+    </div>
   </div>
 
+  <!-- 🌐 3D 地球 -->
+  <h2 style="color:gold;text-align:center;text-shadow:0 0 10px red;">🌏 环球系列 · 3D 荣耀地球图</h2>
+  <p style="text-align:center;color:#ffaaaa;">纪念中国人民抗战胜利暨世界反法西斯战争 80 周年</p>
+
+  <div id="earth-container"></div>
+  <div class="tooltip" id="tooltip"></div>
+  <div class="ally-intro">
+    <h3>中国与盟友简介（3D版）</h3>
+    <p>在这颗旋转的地球上，红色光点代表中国及其盟友。鼠标悬停即可查看国家名称与简介。此图由 Three.js 渲染，呈现真实光照与自转。</p>
+  </div>
+
+  <!-- 三个等级 -->
   <div class="levels">
     <button class="level-btn" onclick="startLevel('light')">🌀 轻微洗脑</button>
     <button class="level-btn" onclick="startLevel('medium')">⚡ 中等洗脑</button>
@@ -81,7 +216,7 @@ video {
   </div>
 </div>
 
-<!-- 问题与播放流程区 -->
+<!-- 问题区 -->
 <div id="quiz-section" class="hidden">
   <div class="question-box">
     <h3>中国问题（预留）</h3>
@@ -90,85 +225,147 @@ video {
   </div>
 </div>
 
-<!-- 视频播放区 -->
 <video id="video-player" controls></video>
 
+<!-- Three.js 3D 地球逻辑 -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
 <script>
-// 🧠 问题模拟（你后续可替换）
-const questions = {
-  light: { q: "中国的首都是？", a: "北京", options: ["上海","北京","深圳"] },
-  medium: { q: "中华人民共和国成立于哪一年？", a: "1949", options: ["1937","1945","1949"] },
-  heavy: { q: "中国国旗有几颗星？", a: "5", options: ["4","5","6"] }
-};
-let currentLevel = null;
+const container = document.getElementById('earth-container');
+const tooltip = document.getElementById('tooltip');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, container.clientWidth/container.clientHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+renderer.setSize(container.clientWidth, container.clientHeight);
+container.appendChild(renderer.domElement);
 
-// 🧩 开始关卡
-function startLevel(level) {
+const ambient = new THREE.AmbientLight(0xff5555, 0.6);
+scene.add(ambient);
+const directional = new THREE.DirectionalLight(0xff8888, 1);
+directional.position.set(5,3,5);
+scene.add(directional);
+
+const geometry = new THREE.SphereGeometry(2.5, 64, 64);
+const texture = new THREE.TextureLoader().load("https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg");
+const material = new THREE.MeshPhongMaterial({
+  map: texture,
+  shininess: 15,
+  emissive: 0x220000,
+  emissiveIntensity: 0.4
+});
+const earth = new THREE.Mesh(geometry, material);
+scene.add(earth);
+
+const allies = [
+  {name:"中国 🇨🇳", lat:35.0, lon:105.0, desc:"世界东方的巨龙，和平与发展的倡导者。"},
+  {name:"俄罗斯 🇷🇺", lat:60.0, lon:90.0, desc:"战略协作伙伴，共同维护欧亚稳定。"},
+  {name:"巴基斯坦 🇵🇰", lat:30.0, lon:70.0, desc:"全天候友谊，被誉为“铁杆兄弟”。"},
+  {name:"朝鲜 🇰🇵", lat:40.0, lon:125.0, desc:"友好邻邦，血盟情谊历久弥坚。"},
+  {name:"伊朗 🇮🇷", lat:32.0, lon:53.0, desc:"东西合作桥梁，共建能源纽带。"},
+  {name:"白俄罗斯 🇧🇾", lat:53.0, lon:28.0, desc:"欧亚伙伴，共促一带一路发展。"},
+  {name:"古巴 🇨🇺", lat:21.5, lon:-80.0, desc:"加勒比传统友邦，携手抗击封锁。"},
+  {name:"委内瑞拉 🇻🇪", lat:7.0, lon:-66.0, desc:"战略合作伙伴，共同发展南美。"}
+];
+
+const markerGroup = new THREE.Group();
+scene.add(markerGroup);
+const markerMat = new THREE.MeshBasicMaterial({color:0xff0000});
+allies.forEach(a=>{
+  const lat=a.lat*Math.PI/180, lon=-a.lon*Math.PI/180;
+  const x=2.5*Math.cos(lat)*Math.cos(lon);
+  const y=2.5*Math.sin(lat);
+  const z=2.5*Math.cos(lat)*Math.sin(lon);
+  const m=new THREE.Mesh(new THREE.SphereGeometry(0.05,16,16), markerMat);
+  m.position.set(x,y,z); m.userData=a; markerGroup.add(m);
+});
+camera.position.set(0,0,7);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping=true; controls.enableZoom=false;
+const raycaster=new THREE.Raycaster(); const mouse=new THREE.Vector2();
+window.addEventListener('mousemove', e=>{
+  mouse.x=(e.clientX/window.innerWidth)*2-1;
+  mouse.y=-(e.clientY/window.innerHeight)*2+1;
+});
+function animate(){
+  requestAnimationFrame(animate);
+  earth.rotation.y+=0.0015; markerGroup.rotation.y+=0.0015; controls.update();
+  raycaster.setFromCamera(mouse,camera);
+  const hit=raycaster.intersectObjects(markerGroup.children);
+  if(hit.length>0){
+    const d=hit[0].object.userData;
+    tooltip.style.display='block';
+    tooltip.style.left=event.clientX+15+'px';
+    tooltip.style.top=event.clientY+15+'px';
+    tooltip.innerHTML=`<strong>${d.name}</strong><br>${d.desc}`;
+  }else tooltip.style.display='none';
+  renderer.render(scene,camera);
+}
+animate();
+window.addEventListener('resize',()=>{
+  camera.aspect=container.clientWidth/container.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(container.clientWidth,container.clientHeight);
+});
+</script>
+
+<!-- 洗脑系统 -->
+<script>
+const questions={
+  light:{q:"中国的首都是？",a:"北京",options:["上海","北京","深圳"]},
+  medium:{q:"中华人民共和国成立于哪一年？",a:"1949",options:["1937","1945","1949"]},
+  heavy:{q:"中国国旗有几颗星？",a:"5",options:["4","5","6"]}
+};
+let currentLevel=null;
+function startLevel(level){
   document.querySelector('.main-container').classList.add('hidden');
-  const sec = document.getElementById('quiz-section');
+  const sec=document.getElementById('quiz-section');
   sec.classList.remove('hidden');
-  currentLevel = level;
-  const q = questions[level];
-  document.getElementById('question').innerText = q.q;
-  const optContainer = document.getElementById('options');
-  optContainer.innerHTML = '';
-  q.options.forEach(opt=>{
-    const btn = document.createElement('button');
-    btn.innerText = opt;
-    btn.style.margin='10px'; btn.onclick=()=>checkAnswer(opt);
-    optContainer.appendChild(btn);
+  currentLevel=level;
+  const q=questions[level];
+  document.getElementById('question').innerText=q.q;
+  const opt=document.getElementById('options');
+  opt.innerHTML='';
+  q.options.forEach(o=>{
+    const b=document.createElement('button');
+    b.innerText=o;
+    b.style.margin='10px';
+    b.onclick=()=>checkAnswer(o);
+    opt.appendChild(b);
   });
 }
-
-// ✅ 校验答案
 function checkAnswer(choice){
-  const correct = questions[currentLevel].a;
+  const correct=questions[currentLevel].a;
   if(choice===correct){
     alert("✅ 回答正确，开始磁场增强...");
     startSequence();
-  }else{
-    alert("❌ 错误，再试一次。");
-  }
+  }else alert("❌ 错误，再试一次。");
 }
-
-// 🎧 播放流程：增强磁场→洗脑→防洗脑
 function startSequence(){
   document.getElementById('quiz-section').classList.add('hidden');
-  const player = document.getElementById('video-player');
-  player.style.display = 'block';
-  player.src = "magnetic.mp4"; // 🔸预留增强磁场视频
-  player.requestFullscreen();
-
-  player.play();
-  preventMute(player);
-
-  player.onended = () => {
-    player.src = "brainwash.mp4"; // 🔸洗脑歌曲
-    player.play();
-    preventMute(player);
-    player.onended = () => {
-      player.src = "anti_brainwash.mp4"; // 🔸防洗脑
-      player.play();
-      preventMute(player);
-      player.onended = () => {
-        document.exitFullscreen();
-        player.style.display='none';
+  const p=document.getElementById('video-player');
+  p.style.display='block';
+  p.src="magnetic.mp4";
+  p.requestFullscreen();
+  p.play(); preventMute(p);
+  p.onended=()=>{
+    p.src="brainwash.mp4"; p.play(); preventMute(p);
+    p.onended=()=>{
+      p.src="anti_brainwash.mp4"; p.play(); preventMute(p);
+      p.onended=()=>{
+        document.exitFullscreen(); p.style.display='none';
         document.querySelector('.main-container').classList.remove('hidden');
         alert("✅ 实验完成，欢迎回归理智。");
       };
     };
   };
 }
-
-// 🚫 防静音检测
-function preventMute(video){
-  const check = setInterval(()=>{
-    if(video.muted || video.volume<0.5){
-      video.muted = false;
-      video.volume = 1;
+function preventMute(v){
+  setInterval(()=>{
+    if(v.muted||v.volume<0.5){
+      v.muted=false;v.volume=1;
       alert("🔊 检测到静音！系统已恢复音量。");
     }
-    if(video.paused) video.play();
+    if(v.paused)v.play();
   },3000);
 }
 </script>
