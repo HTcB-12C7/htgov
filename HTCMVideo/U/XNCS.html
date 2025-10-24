@@ -1,19 +1,19 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>黑铁环球洗脑音乐 - HTCMVideo</title>
+<title>黑铁环球洗脑音乐 - 思想状态检查</title>
 <link rel="stylesheet" href="https://htcb-12c7.github.io/htgov/css/htgov.css">
 <style>
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden; /* 禁止滚动 */
+  overflow: hidden;
   font-family: "Microsoft YaHei", sans-serif;
-  background: linear-gradient(180deg, #ff0000 0%, #ff6600 50%, #ffd700 100%); /* ✅ 纯鲜红+金色 */
-  color: #fff;
+  background: linear-gradient(180deg, #ff0000 0%, #ff6600 50%, #ffd700 100%);
+  color: #400000; /* ✅ 深红文字，清晰 */
   position: relative;
 }
 
@@ -42,7 +42,7 @@ html, body {
   cursor: pointer;
 }
 
-/* 主体容器居中 */
+/* 主体 */
 .main-container {
   position: absolute;
   top: 60px;
@@ -54,8 +54,6 @@ html, body {
   align-items: center;
   flex-direction: column;
 }
-
-/* 主视觉区 */
 .section-flex {
   display: flex;
   align-items: center;
@@ -68,11 +66,9 @@ html, body {
   border-radius: 50%;
   box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
 }
-
-/* 信息区 */
 .info-box {
   width: 420px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.2);
   border: 2px solid gold;
   border-radius: 15px;
   padding: 20px;
@@ -80,13 +76,14 @@ html, body {
   box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
 }
 .info-box h2 {
-  color: gold;
-  text-shadow: 0 0 10px #ff0000;
+  color: #990000;
+  text-shadow: 0 0 10px #ffcc00;
   font-size: 22px;
 }
 .info-box p {
-  color: #fff;
+  color: #400000;
   font-size: 15px;
+  font-weight: bold;
 }
 .levels {
   display: flex;
@@ -97,14 +94,13 @@ html, body {
 .level-btn {
   padding: 12px 20px;
   border: 2px solid gold;
-  color: gold;
-  background: rgba(255,0,0,0.3);
+  color: #400000;
+  background: rgba(255,255,255,0.5);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s;
   font-weight: bold;
   font-size: 14px;
-  text-shadow: 0 0 5px #ff0;
 }
 .level-btn:hover {
   background: gold;
@@ -112,7 +108,7 @@ html, body {
   box-shadow: 0 0 20px gold;
 }
 
-/* 背景装饰（固定位置） */
+/* 背景装饰 */
 .decor {
   position: absolute;
   width: 120px;
@@ -129,48 +125,63 @@ html, body {
   border: none;
 }
 
-/* 问答区：默认隐藏 */
-#quiz-section {
+/* 第二页 - 思想状态检查 */
+#check-page {
   position: absolute;
-  bottom: 70px;
-  width: 100%;
+  inset: 0;
+  background: linear-gradient(180deg, #ff0000 0%, #ff6600 50%, #ffd700 100%);
+  display: none; /* 初始隐藏 */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 20;
   text-align: center;
-  display: none;
-  z-index: 10;
 }
-.question-box {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 20px;
+#check-page h1 {
+  font-size: 32px;
+  color: #600000;
+  text-shadow: 0 0 10px #ffd700;
+  margin-bottom: 20px;
+}
+.question-area {
+  background: rgba(255, 255, 255, 0.3);
   border: 2px solid gold;
   border-radius: 10px;
-  color: gold;
-  box-shadow: 0 0 15px gold;
+  padding: 25px;
+  max-width: 500px;
+  box-shadow: 0 0 20px gold;
 }
-.question-box button {
-  background: rgba(255,0,0,0.6);
-  color: gold;
-  border: 1px solid gold;
-  margin: 6px;
-  padding: 8px 14px;
-  cursor: pointer;
-  border-radius: 6px;
+.question-area p {
+  font-size: 18px;
+  color: #400000;
   font-weight: bold;
 }
-.question-box button:hover {
+.option-btn {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 15px;
+  width: 80%;
+  border: 2px solid gold;
+  background: rgba(255,255,255,0.7);
+  color: #400000;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.option-btn:hover {
   background: gold;
   color: red;
 }
+.feedback {
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
 
-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: none;
-  z-index: 9999;
+/* 预留音乐播放位置 */
+#magnetic-music {
+  display: none; /* 可在此嵌入增强磁场音乐 */
 }
 </style>
 </head>
@@ -182,36 +193,40 @@ video {
   🌍 黑铁环球洗脑音乐
 </div>
 
-<div class="main-container">
+<div class="main-container" id="main-page">
   <div class="section-flex">
     <div id="earth-container"></div>
     <div class="info-box">
       <h2>🌏 环球系列 · 八十周年荣耀特展</h2>
-      <p>纪念中国人民抗日战争暨世界反法西斯战争胜利80周年。展示中国与各国音乐文化交流，探索“洗脑旋律”的节奏魅力。</p>
+      <p>纪念中国人民抗日战争暨世界反法西斯战争胜利80周年。探索“洗脑旋律”的节奏力量。</p>
       <div class="levels">
-        <button class="level-btn" onclick="startLevel('light')">🌀 轻微洗脑</button>
-        <button class="level-btn" onclick="startLevel('medium')">⚡ 中等洗脑</button>
-        <button class="level-btn" onclick="startLevel('heavy')">🔥 重度洗脑</button>
+        <button class="level-btn" onclick="openCheckPage('light')">🌀 轻微洗脑</button>
+        <button class="level-btn" onclick="openCheckPage('medium')">⚡ 中等洗脑</button>
+        <button class="level-btn" onclick="openCheckPage('heavy')">🔥 重度洗脑</button>
       </div>
     </div>
   </div>
 </div>
 
-<div id="quiz-section">
-  <div class="question-box">
-    <h3>🎵 音乐问答 🎵</h3>
-    <p id="question">这里显示问题</p>
-    <div id="options"></div>
+<!-- 第二页：思想状态检查 -->
+<div id="check-page">
+  <h1>🧠 思想状态检查</h1>
+  <div class="question-area">
+    <p id="question-text">题目加载中...</p>
+    <div id="options-container"></div>
+    <div class="feedback" id="feedback"></div>
   </div>
-</div>
 
-<video id="video-player" controls></video>
+  <!-- 预留音乐播放区 -->
+  <audio id="magnetic-music" src="enhanced_field.mp3" loop></audio>
+</div>
 
 <!-- Three.js -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+
 <script>
-// --- 3D地球 ---
+// 背景地球 (简化旋转)
 const container = document.getElementById('earth-container');
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
@@ -225,12 +240,10 @@ light.position.set(5, 3, 5);
 scene.add(light);
 const geometry = new THREE.SphereGeometry(2.5, 64, 64);
 const texture = new THREE.TextureLoader().load("https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg");
-const material = new THREE.MeshPhongMaterial({ map: texture, emissive: 0xff0000, emissiveIntensity: 0.4 });
+const material = new THREE.MeshPhongMaterial({ map: texture, emissive: 0xaa0000, emissiveIntensity: 0.5 });
 const earth = new THREE.Mesh(geometry, material);
 scene.add(earth);
 camera.position.set(0, 0, 7);
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableZoom = false;
 function animate() {
   requestAnimationFrame(animate);
   earth.rotation.y += 0.002;
@@ -238,7 +251,7 @@ function animate() {
 }
 animate();
 
-// --- 背景装饰固定位置 ---
+// 固定装饰
 const decoImgs = [
   "https://upload.wikimedia.org/wikipedia/commons/0/0d/Flag_of_China.png",
   "https://upload.wikimedia.org/wikipedia/commons/d/d6/Chinese_Lanterns.jpg",
@@ -250,8 +263,8 @@ const decoImgs = [
   "https://upload.wikimedia.org/wikipedia/commons/4/47/Chinese_cloud_pattern.svg"
 ];
 const positions = [
-  {top:"10%", left:"5%"},
-  {top:"20%", left:"80%"},
+  {top:"8%", left:"5%"},
+  {top:"25%", left:"80%"},
   {top:"70%", left:"10%"},
   {top:"75%", left:"75%"},
   {top:"50%", left:"50%"},
@@ -270,54 +283,51 @@ for (let i=0;i<decoImgs.length;i++){
   document.body.appendChild(d);
 }
 
-// --- 问答逻辑 ---
+// 问题模板（你可修改内容）
 const questions = {
-  light: { q: "哪种节奏最容易让人记住？", a: "重复旋律", options: ["长音符", "重复旋律", "复杂节奏"] },
-  medium: { q: "常见的‘洗脑歌’节奏多为几拍？", a: "4/4拍", options: ["3/4拍", "4/4拍", "5/4拍"] },
-  heavy: { q: "哪种元素最容易造成音乐上瘾？", a: "短句循环", options: ["节奏变化", "短句循环", "转调"] }
+  light: { q: "轻度题示例：节奏让人记住的原因是？", options: ["重复", "节拍", "旋律复杂"], a: "重复" },
+  medium: { q: "中度题示例：常见节奏拍号？", options: ["3/4拍", "4/4拍", "6/8拍"], a: "4/4拍" },
+  heavy: { q: "重度题示例：哪种元素最洗脑？", options: ["短句循环", "多段变奏", "弱节奏"], a: "短句循环" }
 };
+
 let currentLevel = null;
-function startLevel(l) {
-  const quiz = document.getElementById('quiz-section');
-  quiz.style.display = 'block'; // ✅ 修复：确保显示
-  currentLevel = l;
-  const q = questions[l];
-  document.getElementById('question').innerText = q.q;
-  const opt = document.getElementById('options');
-  opt.innerHTML = '';
+
+function openCheckPage(level) {
+  document.getElementById("main-page").style.display = "none";
+  const page = document.getElementById("check-page");
+  page.style.display = "flex";
+  currentLevel = level;
+
+  const q = questions[level];
+  document.getElementById("question-text").innerText = q.q;
+  const opt = document.getElementById("options-container");
+  opt.innerHTML = "";
+  document.getElementById("feedback").innerText = "";
+
   q.options.forEach(o => {
-    const b = document.createElement('button');
+    const b = document.createElement("button");
+    b.className = "option-btn";
     b.innerText = o;
     b.onclick = () => checkAnswer(o);
     opt.appendChild(b);
   });
+
+  // ✅ 预留播放增强磁场音乐
+  // const audio = document.getElementById("magnetic-music");
+  // audio.play();
 }
-function checkAnswer(c) {
-  if (c === questions[currentLevel].a) {
-    playSequence();
-  } else alert("❌ 答错啦，再试一次！");
-}
-function playSequence() {
-  document.getElementById('quiz-section').style.display = 'none';
-  const v = document.getElementById('video-player');
-  v.style.display = 'block';
-  v.src = "magnetic.mp4";
-  v.requestFullscreen();
-  v.play();
-  v.onended = () => {
-    v.src = "brainwash.mp4";
-    v.play();
-    v.onended = () => {
-      v.src = "anti_brainwash.mp4";
-      v.play();
-      v.onended = () => {
-        document.exitFullscreen();
-        v.style.display = 'none';
-      };
-    };
-  };
+
+function checkAnswer(choice) {
+  const correct = questions[currentLevel].a;
+  const feedback = document.getElementById("feedback");
+  if (choice === correct) {
+    feedback.innerHTML = "✅ 正确！思想磁场稳定。";
+    feedback.style.color = "#008000";
+  } else {
+    feedback.innerHTML = "❌ 错误，思想波动检测中...";
+    feedback.style.color = "#800000";
+  }
 }
 </script>
 </body>
 </html>
-
