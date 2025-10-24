@@ -3,159 +3,333 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>红金艺术地球展示</title>
+<title>红金庆典风 - 环球洗脑音乐</title>
 <style>
-html,body{
-  margin:0;
-  padding:0;
-  height:100%;
-  overflow:hidden;
-  background:#d40000; /* ✅ 鲜红纯色背景 */
-  color:#ffd700;
-  font-family:"Microsoft YaHei",sans-serif;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Microsoft YaHei", sans-serif;
+  background: linear-gradient(180deg, #ff0000 0%, #ff6600 50%, #ffd700 100%);
+  color: #400000;
 }
-.header{
-  height:60px;
-  border-bottom:2px solid #ffd700;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#ffd700;
-  font-weight:bold;
-  font-size:22px;
-  text-shadow:0 0 8px #ff0;
+
+/* 顶部栏 */
+.header {
+  height: 60px;
+  background: linear-gradient(90deg, #ff0000, #ffd700);
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  text-shadow: 0 0 6px #fff;
+  box-shadow: 0 2px 10px rgba(255, 255, 0, 0.6);
+  position: relative;
+  z-index: 10;
 }
-.main{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:calc(100% - 60px);
+.logo {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
 }
-#earth-container{
-  width:420px;
-  height:420px;
-  margin-right:60px;
-  border:2px solid #ffd700;
-  border-radius:50%;
-  box-shadow:0 0 40px rgba(255,215,0,0.8);
+
+/* 主体 */
+.main-container {
+  position: absolute;
+  top: 60px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
-.info{
-  width:380px;
-  background:rgba(255,255,255,0.1);
-  border:2px solid #ffd700;
-  border-radius:12px;
-  padding:20px;
-  color:#fff;
+
+/* 地球与信息框 */
+.section-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
 }
-.info h2{
-  color:#ffd700;
-  text-align:center;
+#earth-container {
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  box-shadow: 0 0 60px rgba(255, 215, 0, 0.9);
 }
-.levels{
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  margin-top:20px;
+
+/* 信息区 */
+.info-box {
+  width: 420px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid gold;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
 }
-button{
-  padding:10px 16px;
-  border:2px solid #ffd700;
-  border-radius:6px;
-  background:transparent;
-  color:#ffd700;
-  font-weight:bold;
-  cursor:pointer;
+.info-box h2 {
+  color: #990000;
+  text-shadow: 0 0 10px #ffcc00;
+  font-size: 22px;
 }
-button:hover{
-  background:#ffd700;
-  color:#d40000;
+.info-box p {
+  color: #400000;
+  font-size: 15px;
+  font-weight: bold;
+}
+.levels {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+.level-btn {
+  padding: 12px 20px;
+  border: 2px solid gold;
+  color: #400000;
+  background: rgba(255,255,255,0.6);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: bold;
+}
+.level-btn:hover {
+  background: gold;
+  color: red;
+  box-shadow: 0 0 20px gold;
+}
+
+/* 左上五颗闪烁星星 */
+.star {
+  position: absolute;
+  color: gold;
+  font-size: 32px;
+  animation: blink 2s infinite ease-in-out;
+  text-shadow: 0 0 10px gold, 0 0 20px gold;
+}
+@keyframes blink {
+  0%,100%{opacity:0.4; transform:scale(0.9);}
+  50%{opacity:1; transform:scale(1);}
+}
+/* 星星分布（艺术化） */
+.star:nth-child(1){top:80px;left:60px;font-size:40px;}
+.star:nth-child(2){top:120px;left:120px;}
+.star:nth-child(3){top:150px;left:90px;}
+.star:nth-child(4){top:90px;left:150px;}
+.star:nth-child(5){top:170px;left:150px;}
+
+/* 粒子流光背景 */
+@keyframes float {
+  from {transform: translateY(100vh) scale(0);}
+  to {transform: translateY(-10vh) scale(1);}
+}
+.sparkle {
+  position: absolute;
+  background: gold;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: float linear infinite;
+}
+
+/* 第二页 */
+#check-page {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #ff0000 0%, #ff6600 50%, #ffd700 100%);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 20;
+  text-align: center;
+}
+#check-page h1 {
+  font-size: 32px;
+  color: #600000;
+  text-shadow: 0 0 10px #ffd700;
+  margin-bottom: 20px;
+}
+.question-area {
+  background: rgba(255, 255, 255, 0.3);
+  border: 2px solid gold;
+  border-radius: 10px;
+  padding: 25px;
+  max-width: 500px;
+  box-shadow: 0 0 20px gold;
+}
+.option-btn {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 15px;
+  width: 80%;
+  border: 2px solid gold;
+  background: rgba(255,255,255,0.7);
+  color: #400000;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.option-btn:hover {
+  background: gold;
+  color: red;
+}
+.feedback {
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
 }
 </style>
 </head>
 <body>
-<div class="header">🌍 红金艺术·高清地球展示</div>
-<div class="main">
-  <div id="earth-container"></div>
-  <div class="info">
-    <h2>旋转地球艺术展示</h2>
-    <p>展示红金风格与地球视觉效果。左侧为平滑旋转的高清地球，带有多个金色光点。</p>
-    <div class="levels">
-      <button>轻度模式</button>
-      <button>中度模式</button>
-      <button>重度模式</button>
+<div class="header">🌍 红金庆典 · 环球洗脑音乐</div>
+
+<!-- 五颗星 -->
+<div class="star">★</div>
+<div class="star">★</div>
+<div class="star">★</div>
+<div class="star">★</div>
+<div class="star">★</div>
+
+<!-- 主体 -->
+<div class="main-container" id="main-page">
+  <div class="section-flex">
+    <div id="earth-container"></div>
+    <div class="info-box">
+      <h2>🌏 环球系列 · 荣耀特展</h2>
+      <p>展示红金文化艺术与音乐的节奏魅力。</p>
+      <div class="levels">
+        <button class="level-btn" onclick="openCheckPage('light')">🌀 轻微洗脑</button>
+        <button class="level-btn" onclick="openCheckPage('medium')">⚡ 中等洗脑</button>
+        <button class="level-btn" onclick="openCheckPage('heavy')">🔥 重度洗脑</button>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- 第二页 -->
+<div id="check-page">
+  <h1>🧠 思想状态检查</h1>
+  <div class="question-area">
+    <p id="question-text">题目加载中...</p>
+    <div id="options-container"></div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+</div>
+
+<!-- Three.js -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
 <script>
-// === 创建 Three.js 地球 ===
+// 创建流光粒子
+for(let i=0;i<20;i++){
+  const s=document.createElement('div');
+  s.className='sparkle';
+  const size=Math.random()*6+3;
+  s.style.width=size+'px';
+  s.style.height=size+'px';
+  s.style.left=Math.random()*100+'%';
+  s.style.animationDuration=(6+Math.random()*6)+'s';
+  s.style.animationDelay=(Math.random()*5)+'s';
+  document.body.appendChild(s);
+}
+
+// 创建地球
 const container=document.getElementById('earth-container');
 const scene=new THREE.Scene();
 const camera=new THREE.PerspectiveCamera(45,1,0.1,1000);
 const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
-renderer.setSize(420,420);
+renderer.setSize(400,400);
 container.appendChild(renderer.domElement);
-
-// 光照
-const ambient=new THREE.AmbientLight(0xffffff,0.7);
+const ambient=new THREE.AmbientLight(0xff5555,0.8);
 scene.add(ambient);
-const dir=new THREE.DirectionalLight(0xffd700,1);
-dir.position.set(3,2,5);
-scene.add(dir);
+const light=new THREE.DirectionalLight(0xffdd00,1);
+light.position.set(5,3,5);
+scene.add(light);
 
-// 地球球体
-const geometry=new THREE.SphereGeometry(2.3,64,64);
-const textureURL="https://eoimages.gsfc.nasa.gov/images/imagerecords/74000/74492/world.topo.200412.3x21600x10800.jpg";
-const texture=new THREE.TextureLoader().load(textureURL);
-const material=new THREE.MeshPhongMaterial({
-  map:texture,
-  shininess:8
-});
+const geometry=new THREE.SphereGeometry(2.5,64,64);
+const texture=new THREE.TextureLoader().load("https://eoimages.gsfc.nasa.gov/images/imagerecords/74000/74492/world.topo.200412.3x21600x10800.jpg");
+const material=new THREE.MeshPhongMaterial({map:texture,emissive:0xaa0000,emissiveIntensity:0.4});
 const earth=new THREE.Mesh(geometry,material);
 scene.add(earth);
+camera.position.set(0,0,7);
 
-// 金色光点
-const coords=[
-  {lat:35,lon:105},
-  {lat:60,lon:90},
-  {lat:30,lon:70},
-  {lat:40,lon:125},
-  {lat:32,lon:53},
-  {lat:53,lon:28},
-  {lat:21.5,lon:-80},
-  {lat:7,lon:-66}
+// 加入闪光点
+const allies=[
+  {lat:35,lon:105},{lat:60,lon:90},{lat:30,lon:70},
+  {lat:40,lon:125},{lat:32,lon:53},{lat:53,lon:28},
+  {lat:21.5,lon:-80},{lat:7,lon:-66}
 ];
 const pointMat=new THREE.MeshBasicMaterial({color:0xffd700});
-const points=[];
-coords.forEach(c=>{
-  const lat=c.lat*Math.PI/180, lon=-c.lon*Math.PI/180;
-  const x=2.3*Math.cos(lat)*Math.cos(lon);
-  const y=2.3*Math.sin(lat);
-  const z=2.3*Math.cos(lat)*Math.sin(lon);
-  const sphere=new THREE.Mesh(new THREE.SphereGeometry(0.05,12,12),pointMat);
-  sphere.position.set(x,y,z);
-  scene.add(sphere);
-  points.push(sphere);
+allies.forEach(a=>{
+  const lat=a.lat*Math.PI/180,lon=-a.lon*Math.PI/180;
+  const x=2.5*Math.cos(lat)*Math.cos(lon);
+  const y=2.5*Math.sin(lat);
+  const z=2.5*Math.cos(lat)*Math.sin(lon);
+  const m=new THREE.Mesh(new THREE.SphereGeometry(0.05,16,16),pointMat);
+  m.position.set(x,y,z);
+  scene.add(m);
 });
 
-camera.position.set(0,0,6);
-const controls=new THREE.OrbitControls(camera,renderer.domElement);
-controls.enableZoom=false;
-
-let t=0;
+let flash=0;
 function animate(){
   requestAnimationFrame(animate);
-  earth.rotation.y+=0.002;  // ✅ 缓慢旋转
-  t+=0.05;
-  const glow=(Math.sin(t)+1)/2*0.6+0.4;
-  points.forEach(p=>{
-    p.material.color.setHSL(0.15,1,glow);
-  });
+  earth.rotation.y+=0.002;
+  flash+=0.02;
+  const intensity=(Math.sin(flash)+1)/2*0.6+0.4;
+  pointMat.color.setHSL(0.15,1,intensity);
   renderer.render(scene,camera);
 }
 animate();
+
+// 问题数据与逻辑
+const questions={
+  light:{q:"轻度题示例：旋律洗脑的主要原因？",options:["重复旋律","复杂和弦","节奏随机"],a:"重复旋律"},
+  medium:{q:"中度题示例：常见节奏拍号？",options:["3/4拍","4/4拍","5/8拍"],a:"4/4拍"},
+  heavy:{q:"重度题示例：哪种音乐元素最易上瘾？",options:["短句循环","多变旋律","慢速节奏"],a:"短句循环"}
+};
+
+let currentLevel=null;
+function openCheckPage(level){
+  document.getElementById('main-page').style.display='none';
+  const page=document.getElementById('check-page');
+  page.style.display='flex';
+  currentLevel=level;
+  const q=questions[level];
+  document.getElementById('question-text').innerText=q.q;
+  const opt=document.getElementById('options-container');
+  opt.innerHTML='';
+  document.getElementById('feedback').innerText='';
+  q.options.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='option-btn';
+    b.innerText=o;
+    b.onclick=()=>checkAnswer(o);
+    opt.appendChild(b);
+  });
+}
+
+function checkAnswer(c){
+  const correct=questions[currentLevel].a;
+  const feedback=document.getElementById('feedback');
+  if(c===correct){
+    feedback.innerHTML="✅ 正确！";
+    feedback.style.color="green";
+  }else{
+    feedback.innerHTML="❌ 错误，请再试。";
+    feedback.style.color="darkred";
+  }
+}
 </script>
 </body>
 </html>
