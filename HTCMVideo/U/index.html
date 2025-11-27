@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑铁华夏每日视频 - HTCMVideo</title>
+    <link rel="stylesheet" href="https://htcb-12c7.github.io/htgov/css/htgov.css">
+    <style>
+      html, body {
+      margin: 0!important;
+      padding: 0!important;
+}
+
+.header span {
+    pointer-events: none;
+    cursor: default;
+}
+.content {
+    color: black;
+    padding-top: 0 !important;
+    color: black;
+}
+.video-container {
+.main-container {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.video-container {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.video-container h2 {
+    margin-top: 0 !important;   /* 去掉 H2 默认外边距 */
+}
+
+
+        /* 修复header定位问题 */
+        .header {
+            position: relative;
+            width: 100%;
+            height: 60px;
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 视频页面专属样式 */
+        .video-container {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .video-card {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        video {
+            width: 100%;
+            display: block;
+            background: #000;
+        }
+        
+        .video-info {
+            padding: 15px;
+            color: #e0e0e0;
+        }
+        
+        .video-title {
+            color: gold;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .video-desc {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+#google_translate_element {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background: rgba(0,0,0,0.9);
+    z-index: 9999;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 14px !important;  /* 保证文字可见 */
+    display: none;               /* 初始隐藏，点击按钮再显示 */
+}
+    </style>
+</head>
+<body>
+<div class="header">
+  <!-- 左上角 logo -->
+<a href="https://htcb-12c7.github.io/htgov/">
+<img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png" alt="返回主页">
+</a>
+  黑铁华夏轻松视频 - HTCMVideo<span>上新洗脑神曲</span>
+
+  <!-- Language 按钮（必须放 header 里面，才会绝对定位在右上角） -->
+  <button id="lang-toggle" style="
+      position: absolute;
+      top: 10px;
+      right: 70px;
+      padding: 8px 16px;
+      font-size: 16px;
+      background: black;
+      color: #03a9f4;
+      border: 1px solid #03a9f4;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;">
+      🌐 Language
+  </button>
+
+<!-- 头像 + 弹出卡片 -->
+<div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
+  <img id="userPhoto" src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg" alt="头像"
+    style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
+    onclick="toggleAccountInfo()" />
+
+  <div class="account-popup" id="accountPopup" style="
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: rgba(0,0,0,0.9);
+    padding: 10px 15px;
+    border-radius: 8px;
+    color: white;
+    z-index: 9999;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    white-space: nowrap;
+  ">
+
+    <!-- 未登录显示登录表单 -->
+    <div id="loginForm">
+      <input type="email" id="email" placeholder="邮箱/用户名" style="width: 150px; margin: 3px;" />
+      <input type="password" id="password" placeholder="密码" style="width: 150px; margin: 3px;" />
+      <button id="loginBtn">登录</button>
+      <button id="googleLoginBtn" style="background:#fff; color:#000; margin-top:5px;">使用 Google 登录</button>
+    </div>
+
+    <!-- 登录后显示/修改用户信息 -->
+    <div id="userInfo" style="display:none;">
+      <!-- 头像上传 -->
+      <div>
+        <label>头像：</label>
+        <input type="file" id="updateAvatar" accept="image/*" />
+        <img id="userPhotoPreview" 
+             src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg"
+             style="width:60px; height:60px; border-radius:50%; margin-top:5px;" />
+      </div>
+      <div><strong>昵称：</strong><input id="userNickname" /></div>
+      <div>
+        <strong>邮箱：</strong>
+        <input id="userEmail" style="width:200px;" />
+        <button id="sendVerifyBtn" style="margin-left:5px;">发送验证邮件</button>
+      </div>
+      <div><strong>支付方式：</strong><input id="userPayMethod" /></div>
+      <div><strong>支付名称：</strong><input id="userPayName" /></div>
+      <div><strong>支付账号：</strong><input id="userPayAccount" /></div>
+      <button id="saveBtn">保存</button>
+      <button id="bindGoogleBtn" style="margin-top:10px; background:#4285F4; color:white;">
+        绑定 Google 账号
+      </button>
+      <button id="logoutBtn">退出登录</button>
+    </div>
+  </div>
+</div>
+
+<!-- 控制弹出卡片显示/隐藏的脚本 -->
+<script>
+  function toggleAccountInfo() {
+    const popup = document.getElementById('accountPopup');
+    popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+  }
+</script>
+
+<!-- Firebase 登录逻辑 -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, signInWithPopup,
+    GoogleAuthProvider, updateEmail, sendEmailVerification,
+    linkWithPopup, onAuthStateChanged, signOut } 
+    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  import { getDatabase, ref, set, get } 
+    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+  import { getStorage, ref as sRef, uploadBytes, getDownloadURL } 
+    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
+    authDomain: "ht-chat-91e5f.firebaseapp.com",
+    databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
+    projectId: "ht-chat-91e5f",
+    storageBucket: "ht-chat-91e5f.firebasestorage.app",
+    messagingSenderId: "325331727527",
+    appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
+    measurementId: "G-VYV13LWP14"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+  const provider = new GoogleAuthProvider();
+  const storage = getStorage(app);
+
+  // ✅ 登录
+  document.getElementById("loginBtn").onclick = async () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      alert("登录失败: " + err.message);
+    }
+  };
+
+  // ✅ Google 登录
+  document.getElementById("googleLoginBtn").onclick = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (err) {
+      alert("Google 登录失败: " + err.message);
+    }
+  };
+
+  // ✅ 绑定 Google
+  document.getElementById("bindGoogleBtn").onclick = async () => {
+    const user = auth.currentUser;
+    if (!user) return alert("请先登录");
+    try {
+      await linkWithPopup(user, provider);
+      alert("Google 账号绑定成功！");
+    } catch (err) {
+      alert("绑定失败: " + err.message);
+    }
+  };
+
+  // ✅ 邮箱验证
+  document.getElementById("sendVerifyBtn").onclick = async () => {
+    const user = auth.currentUser;
+    if (!user) return alert("请先登录");
+    const newEmail = document.getElementById("userEmail").value;
+    try {
+      await updateEmail(user, newEmail);
+      await sendEmailVerification(user);
+      alert("验证邮件已发送，请检查邮箱");
+    } catch (err) {
+      alert("发送失败: " + err.message);
+    }
+  };
+
+  // ✅ 保存用户信息 + 上传头像
+  let newAvatarFile = null;
+  document.getElementById("updateAvatar").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 27 * 1024 * 1024) {
+      alert("图片大小不能超过27MB！");
+      return;
+    }
+    newAvatarFile = file;
+    document.getElementById("userPhotoPreview").src = URL.createObjectURL(file);
+  });
+
+  document.getElementById("saveBtn").onclick = async () => {
+    const user = auth.currentUser;
+    if (!user) return alert("请先登录");
+
+    let avatarURL = document.getElementById("userPhoto").src;
+
+    if (newAvatarFile) {
+      const fileRef = sRef(storage, "avatars/" + user.uid + ".jpg");
+      await uploadBytes(fileRef, newAvatarFile);
+      avatarURL = await getDownloadURL(fileRef);
+      document.getElementById("userPhoto").src = avatarURL;
+    }
+
+    const userRef = ref(db, "users/" + user.uid);
+    await set(userRef, {
+      nickname: document.getElementById("userNickname").value,
+      email: document.getElementById("userEmail").value,
+      payMethod: document.getElementById("userPayMethod").value,
+      payName: document.getElementById("userPayName").value,
+      payAccount: document.getElementById("userPayAccount").value,
+      avatar: avatarURL
+    });
+
+    alert("信息已更新！");
+  };
+
+  // ✅ 登出
+  document.getElementById("logoutBtn").onclick = () => {
+    signOut(auth);
+  };
+
+  // ✅ 登录状态监听
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("userInfo").style.display = "block";
+      document.getElementById("userPhoto").src = user.photoURL || "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
+
+      const userRef = ref(db, "users/" + user.uid);
+      const snapshot = await get(userRef);
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        document.getElementById("userNickname").value = data.nickname || "";
+        document.getElementById("userEmail").value = data.email || user.email || "";
+        document.getElementById("userPayMethod").value = data.payMethod || "";
+        document.getElementById("userPayName").value = data.payName || "";
+        document.getElementById("userPayAccount").value = data.payAccount || "";
+
+	const defaultAvatar = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
+	document.getElementById("userPhoto").src = data.avatar || user.photoURL || defaultAvatar;
+	document.getElementById("userPhotoPreview").src = data.avatar || user.photoURL || defaultAvatar;
+
+      }
+    } else {
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("userInfo").style.display = "none";
+      document.getElementById("userPhoto").src = defaultAvatar;
+    }
+  });
+</script>
+
+  <!-- Google 翻译语言框（一样放 header 里） -->
+  <div id="google_translate_element" style="
+      position: absolute;
+      top: 50px;
+      right: 10px;
+      display: none;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 8px;
+      border-radius: 5px;
+      z-index: 9999;">
+  </div>
+</div> <!-- ✅ header 真正结束 -->
+
+
+<div class="main-container">
+  <div class="sidebar">
+    <h3>视频分类</h3>
+    <ul id="sidebar-nav"></ul>
+  </div>  <!-- 动态加载 nav.html -->
+<script>
+  fetch("../nav/nav.html")
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById("sidebar-nav").innerHTML = html;
+    })
+    .catch(err => console.error("菜单加载失败：", err));
+</script>
+
+        <div class="content">
+          <p>自己去微信——视频号看，你的号最好不是全都是美奴，是的话把青少年模式开了再关</p>
+    </div>
+
+    <script src="HTCMVideo.js"></script>
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'zh-CN',
+                includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+
+        document.getElementById("lang-toggle").onclick = () => {
+            const el = document.getElementById("google_translate_element");
+            el.style.display = el.style.display === "none" ? "block" : "none";
+        };
+
+        function toggleAccountInfo() {
+            const popup = document.getElementById('accountPopup');
+            popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
