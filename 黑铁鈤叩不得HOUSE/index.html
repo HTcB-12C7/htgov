@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑铁鈤叩不得HOUSE - 便签管理</title>
+    <link rel="stylesheet" href="https://htcb-12c7.github.io/htgov/css/htgov.css" />
+    <style>
+        .logo {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 60px;
+            width: 60px;
+            object-fit: cover;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        /* 便签样式 */
+        .notes-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+        
+        .note {
+            width: 280px;
+            min-height: 200px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 5px solid #d4af37;
+        }
+        
+        .note:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .note.completed {
+            background: rgba(240, 240, 240, 0.9);
+            border-left-color: #4CAF50;
+        }
+        
+        .note.overdue {
+            border-left-color: #f44336;
+        }
+        
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .note-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+            flex: 1;
+        }
+        
+        .note-date {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .note-content {
+            color: #444;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .note-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .note-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .tag-completed {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .tag-overdue {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .tag-ko {
+            background-color: #333;
+            color: white;
+        }
+        
+        .add-note-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #d4af37;
+            color: white;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 100;
+        }
+        
+        .add-note-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .date-row {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .date-row .form-group {
+            flex: 1;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #d4af37;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-danger {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .gold-text {
+            color: #d4af37;
+        }
+        
+        .black-text {
+            color: #333;
+        }
+        
+        .login-required {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666;
+        }
+        
+        .section-title {
+            color: #d4af37;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        
+        /* 背景样式 */
+        body {
+            background: linear-gradient(to bottom, #87CEEB, #E0F7FF);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="https://htcb-12c7.github.io/htgov/">
+            <img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png" alt="返回主页">
+        </a>
+        黑铁鈤叩不得HOUSE  <span></span>
+        
+        <!-- Language 按钮 -->
+        <button id="lang-toggle" style="
+            position: absolute;
+            top: 10px;
+            right: 70px;
+            padding: 8px 16px;
+            font-size: 16px;           /* 字体大小 */
+            background: black;
+            color: #03a9f4;
+            border: 1px solid #03a9f4;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        ">
+        🌐 Language
+        </button>
+
+        <!-- 头像 + 弹出卡片 -->
+        <div class="account-toggle" style="position: absolute; top: 10px; right: 10px;">
+          <img id="userPhoto" src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg" alt="头像"
+            style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"
+            onclick="toggleAccountInfo()" />
+
+          <div class="account-popup" id="accountPopup" style="
+            display: none;
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background: rgba(0,0,0,0.9);
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: white;
+            z-index: 9999;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            white-space: nowrap;
+          ">
+
+            <!-- 未登录显示登录表单 -->
+            <div id="loginForm">
+              <input type="email" id="email" placeholder="邮箱/用户名" style="width: 150px; margin: 3px;" />
+              <input type="password" id="password" placeholder="密码" style="width: 150px; margin: 3px;" />
+              <button id="loginBtn">登录</button>
+              <button id="googleLoginBtn" style="background:#fff; color:#000; margin-top:5px;">使用 Google 登录</button>
+            </div>
+
+            <!-- 登录后显示/修改用户信息 -->
+            <div id="userInfo" style="display:none;">
+              <!-- 头像上传 -->
+              <div>
+                <label>头像：</label>
+                <input type="file" id="updateAvatar" accept="image/*" />
+                <img id="userPhotoPreview" 
+                     src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg"
+                     style="width:60px; height:60px; border-radius:50%; margin-top:5px;" />
+              </div>
+              <div><strong>昵称：</strong><input id="userNickname" /></div>
+              <div>
+                <strong>邮箱：</strong>
+                <input id="userEmail" style="width:200px;" />
+                <button id="sendVerifyBtn" style="margin-left:5px;">发送验证邮件</button>
+              </div>
+              <div><strong>支付方式：</strong><input id="userPayMethod" /></div>
+              <div><strong>支付名称：</strong><input id="userPayName" /></div>
+              <div><strong>支付账号：</strong><input id="userPayAccount" /></div>
+              <button id="saveBtn">保存</button>
+              <button id="bindGoogleBtn" style="margin-top:10px; background:#4285F4; color:white;">
+                绑定 Google 账号
+              </button>
+              <button id="logoutBtn">退出登录</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Google 翻译语言框（请放在最外面，不嵌套在上面的 div 中） -->
+        <div id="google_translate_element" style="
+            position: absolute;
+            top: 50px;
+            right: 0px;
+            display: none;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px;
+            border-radius: 5px;
+            z-index: 9999;
+        "></div>
+    </div>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <h3>黑铁工作室</h3>
+            <ul id="sidebar-nav"></ul>
+        </div>
+        <div class="content">
+            <div class="container">
+                <h2 class="gold-text">黑铁鈤叩不得HOUSE</h2>
+                <p class="black-text">管理您的日常任务和便签</p>
+                
+                <!-- 未登录提示 -->
+                <div id="loginRequired" class="login-required">
+                    <h3>请先登录以使用便签功能</h3>
+                    <p>登录后您可以创建、编辑和管理您的便签</p>
+                </div>
+                
+                <!-- 便签区域 -->
+                <div id="notesArea" style="display: none;">
+                    <h3 class="section-title">进行中的任务</h3>
+                    <div id="activeNotes" class="notes-container"></div>
+                    
+                    <h3 class="section-title">已完成的任务</h3>
+                    <div id="completedNotes" class="notes-container"></div>
+                    
+                    <h3 class="section-title">已过期任务</h3>
+                    <div id="overdueNotes" class="notes-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加便签按钮 -->
+    <button id="addNoteBtn" class="add-note-btn" style="display: none;">+</button>
+
+    <!-- 便签编辑模态框 -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle" class="gold-text">添加新便签</h3>
+            <form id="noteForm">
+                <div class="form-group">
+                    <label for="noteTitle">标题</label>
+                    <input type="text" id="noteTitle" required>
+                </div>
+                
+                <div class="date-row">
+                    <div class="form-group">
+                        <label for="startDate">开始日期</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="dueDate">预计完成日期</label>
+                        <input type="date" id="dueDate">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="finalDueDate">最晚截止日期</label>
+                    <input type="date" id="finalDueDate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="noteContent">内容</label>
+                    <textarea id="noteContent"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="reminder"> 到期提醒
+                    </label>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" id="cancelNote" class="btn btn-secondary">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ✅ Google 语言选择初始化 -->
+    <script>
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'zh-CN',
+          includedLanguages: 'zh-CN,en,ja,ko,fr,es,de,ru',
+          layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+      }
+    </script>
+
+    <!-- ✅ Google 提供的翻译组件脚本（只保留一条） -->
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- ✅ 控制 Language 按钮点击时显示/隐藏语言框 -->
+    <script>
+      window.addEventListener('load', function () {
+        const toggle = document.getElementById("lang-toggle");
+        const box = document.getElementById("google_translate_element");
+        if (toggle && box) {
+          toggle.addEventListener("click", () => {
+            box.style.display = box.style.display === "none" ? "block" : "none";
+          });
+        }
+      });
+    </script>
+
+    <!-- 动态加载 nav.html -->
+    <script>
+      fetch("https://htcb-12c7.github.io/htgov/nav/nav.html")
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById("sidebar-nav").innerHTML = html;
+        })
+        .catch(err => console.error("菜单加载失败：", err));
+    </script>
+
+    <!-- ✅ 头像弹出信息卡片逻辑 -->
+    <script>
+      function toggleAccountInfo() {
+        const popup = document.getElementById('accountPopup');
+        popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+      }
+    </script>
+
+    <!-- Firebase 登录逻辑 -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import { getAuth, signInWithEmailAndPassword, signInWithPopup,
+        GoogleAuthProvider, updateEmail, sendEmailVerification,
+        linkWithPopup, onAuthStateChanged, signOut } 
+        from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+      import { getDatabase, ref, set, get, remove, onValue } 
+        from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+      import { getStorage, ref as sRef, uploadBytes, getDownloadURL } 
+        from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
+        authDomain: "ht-chat-91e5f.firebaseapp.com",
+        databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
+        projectId: "ht-chat-91e5f",
+        storageBucket: "ht-chat-91e5f.firebasestorage.app",
+        messagingSenderId: "325331727527",
+        appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
+        measurementId: "G-VYV13LWP14"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getDatabase(app);
+      const provider = new GoogleAuthProvider();
+      const storage = getStorage(app);
+
+      // 便签管理逻辑
+      let currentEditingNoteId = null;
+      const noteModal = document.getElementById('noteModal');
+      const noteForm = document.getElementById('noteForm');
+      const addNoteBtn = document.getElementById('addNoteBtn');
+      const cancelNoteBtn = document.getElementById('cancelNote');
+      const loginRequired = document.getElementById('loginRequired');
+      const notesArea = document.getElementById('notesArea');
+
+      // 显示/隐藏模态框
+      function showModal() {
+        noteModal.style.display = 'flex';
+        currentEditingNoteId = null;
+        document.getElementById('modalTitle').textContent = '添加新便签';
+        noteForm.reset();
+      }
+
+      function hideModal() {
+        noteModal.style.display = 'none';
+      }
+
+      // 添加便签按钮事件
+      addNoteBtn.addEventListener('click', showModal);
+      cancelNoteBtn.addEventListener('click', hideModal);
+
+      // 点击模态框外部关闭
+      window.addEventListener('click', function(event) {
+        if (event.target === noteModal) {
+          hideModal();
+        }
+      });
+
+      // 表单提交
+      noteForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveNote();
+      });
+
+      // 保存便签到Firebase
+      async function saveNote() {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const noteData = {
+          title: document.getElementById('noteTitle').value,
+          content: document.getElementById('noteContent').value,
+          startDate: document.getElementById('startDate').value,
+          dueDate: document.getElementById('dueDate').value,
+          finalDueDate: document.getElementById('finalDueDate').value,
+          reminder: document.getElementById('reminder').checked,
+          completed: false,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+
+        try {
+          if (currentEditingNoteId) {
+            // 更新现有便签
+            await set(ref(db, `users/${user.uid}/notes/${currentEditingNoteId}`), {
+              ...noteData,
+              updatedAt: new Date().toISOString()
+            });
+          } else {
+            // 创建新便签
+            const newNoteRef = ref(db, `users/${user.uid}/notes/`);
+            const newNoteKey = push(newNoteRef).key;
+            await set(ref(db, `users/${user.uid}/notes/${newNoteKey}`), noteData);
+          }
+          hideModal();
+        } catch (error) {
+          console.error("保存便签失败:", error);
+          alert("保存便签失败，请重试");
+        }
+      }
+
+      // 加载用户便签
+      function loadUserNotes(userId) {
+        const notesRef = ref(db, `users/${userId}/notes`);
+        onValue(notesRef, (snapshot) => {
+          const notes = snapshot.val();
+          renderNotes(notes);
+        });
+      }
+
+      // 渲染便签
+      function renderNotes(notes) {
+        const activeNotesContainer = document.getElementById('activeNotes');
+        const completedNotesContainer = document.getElementById('completedNotes');
+        const overdueNotesContainer = document.getElementById('overdueNotes');
+        
+        activeNotesContainer.innerHTML = '';
+        completedNotesContainer.innerHTML = '';
+        overdueNotesContainer.innerHTML = '';
+        
+        if (!notes) return;
+        
+        const now = new Date();
+        
+        Object.keys(notes).forEach(noteId => {
+          const note = notes[noteId];
+          const noteElement = createNoteElement(noteId, note);
+          
+          if (note.completed) {
+            completedNotesContainer.appendChild(noteElement);
+          } else if (note.finalDueDate && new Date(note.finalDueDate) < now) {
+            overdueNotesContainer.appendChild(noteElement);
+          } else {
+            activeNotesContainer.appendChild(noteElement);
+          }
+        });
+      }
+
+      // 创建便签DOM元素
+      function createNoteElement(noteId, note) {
+        const noteDiv = document.createElement('div');
+        noteDiv.className = 'note';
+        
+        if (note.completed) {
+          noteDiv.classList.add('completed');
+        }
+        
+        const now = new Date();
+        if (note.finalDueDate && new Date(note.finalDueDate) < now && !note.completed) {
+          noteDiv.classList.add('overdue');
+        }
+        
+        let tagHtml = '';
+        if (note.completed) {
+          tagHtml = '<span class="note-tag tag-completed">已完成</span>';
+        } else if (note.finalDueDate && new Date(note.finalDueDate) < now) {
+          tagHtml = '<span class="note-tag tag-overdue">已截至</span>';
+        }
+        
+        let dateInfo = '';
+        if (note.startDate || note.dueDate || note.finalDueDate) {
+          dateInfo = `<div class="note-date">`;
+          if (note.startDate) dateInfo += `开始: ${formatDate(note.startDate)} `;
+          if (note.dueDate) dateInfo += `预计: ${formatDate(note.dueDate)} `;
+          if (note.finalDueDate) dateInfo += `截止: ${formatDate(note.finalDueDate)}`;
+          dateInfo += `</div>`;
+        }
+        
+        noteDiv.innerHTML = `
+          <div class="note-header">
+            <h3 class="note-title">${note.title}</h3>
+            ${tagHtml}
+          </div>
+          ${dateInfo}
+          <div class="note-content">${note.content || ''}</div>
+          <div class="note-actions">
+            <button class="btn btn-primary" onclick="editNote('${noteId}')">编辑</button>
+            <button class="btn btn-danger" onclick="deleteNote('${noteId}')">删除</button>
+            ${!note.completed ? `<button class="btn" onclick="toggleComplete('${noteId}', true)">完成</button>` : 
+              `<button class="btn" onclick="toggleComplete('${noteId}', false)">未完成</button>`}
+          </div>
+        `;
+        
+        return noteDiv;
+      }
+
+      // 格式化日期
+      function formatDate(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return `${date.getMonth()+1}/${date.getDate()}`;
+      }
+
+      // 编辑便签
+      window.editNote = function(noteId) {
+        const user = auth.currentUser;
+        if (!user) return;
+        
+        const noteRef = ref(db, `users/${user.uid}/notes/${noteId}`);
+        get(noteRef).then((snapshot) => {
+          if (snapshot.exists()) {
+            const note = snapshot.val();
+            document.getElementById('noteTitle').value = note.title || '';
+            document.getElementById('noteContent').value = note.content || '';
+            document.getElementById('startDate').value = note.startDate || '';
+            document.getElementById('dueDate').value = note.dueDate || '';
+            document.getElementById('finalDueDate').value = note.finalDueDate || '';
+            document.getElementById('reminder').checked = note.reminder || false;
+            
+            currentEditingNoteId = noteId;
+            document.getElementById('modalTitle').textContent = '编辑便签';
+            noteModal.style.display = 'flex';
+          }
+        });
+      }
+
+      // 删除便签
+      window.deleteNote = function(noteId) {
+        if (!confirm('确定要删除这个便签吗？')) return;
+        
+        const user = auth.currentUser;
+        if (!user) return;
+        
+        const noteRef = ref(db, `users/${user.uid}/notes/${noteId}`);
+        remove(noteRef).catch(error => {
+          console.error("删除便签失败:", error);
+          alert("删除便签失败，请重试");
+        });
+      }
+
+      // 切换完成状态
+      window.toggleComplete = function(noteId, completed) {
+        const user = auth.currentUser;
+        if (!user) return;
+        
+        const noteRef = ref(db, `users/${user.uid}/notes/${noteId}`);
+        get(noteRef).then((snapshot) => {
+          if (snapshot.exists()) {
+            const note = snapshot.val();
+            set(noteRef, {
+              ...note,
+              completed: completed,
+              updatedAt: new Date().toISOString()
+            }).catch(error => {
+              console.error("更新便签失败:", error);
+              alert("更新便签失败，请重试");
+            });
+          }
+        });
+      }
+
+      // ✅ 登录
+      document.getElementById("loginBtn").onclick = async () => {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+        } catch (err) {
+          alert("登录失败: " + err.message);
+        }
+      };
+
+      // ✅ Google 登录
+      document.getElementById("googleLoginBtn").onclick = async () => {
+        try {
+          await signInWithPopup(auth, provider);
+        } catch (err) {
+          alert("Google 登录失败: " + err.message);
+        }
+      };
+
+      // ✅ 绑定 Google
+      document.getElementById("bindGoogleBtn").onclick = async () => {
+        const user = auth.currentUser;
+        if (!user) return alert("请先登录");
+        try {
+          await linkWithPopup(user, provider);
+          alert("Google 账号绑定成功！");
+        } catch (err) {
+          alert("绑定失败: " + err.message);
+        }
+      };
+
+      // ✅ 邮箱验证
+      document.getElementById("sendVerifyBtn").onclick = async () => {
+        const user = auth.currentUser;
+        if (!user) return alert("请先登录");
+        const newEmail = document.getElementById("userEmail").value;
+        try {
+          await updateEmail(user, newEmail);
+          await sendEmailVerification(user);
+          alert("验证邮件已发送，请检查邮箱");
+        } catch (err) {
+          alert("发送失败: " + err.message);
+        }
+      };
+
+      // ✅ 保存用户信息 + 上传头像
+      let newAvatarFile = null;
+      document.getElementById("updateAvatar").addEventListener("change", function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 27 * 1024 * 1024) {
+          alert("图片大小不能超过27MB！");
+          return;
+        }
+        newAvatarFile = file;
+        document.getElementById("userPhotoPreview").src = URL.createObjectURL(file);
+      });
+
+      document.getElementById("saveBtn").onclick = async () => {
+        const user = auth.currentUser;
+        if (!user) return alert("请先登录");
+
+        let avatarURL = document.getElementById("userPhoto").src;
+
+        if (newAvatarFile) {
+          const fileRef = sRef(storage, "avatars/" + user.uid + ".jpg");
+          await uploadBytes(fileRef, newAvatarFile);
+          avatarURL = await getDownloadURL(fileRef);
+          document.getElementById("userPhoto").src = avatarURL;
+        }
+
+        const userRef = ref(db, "users/" + user.uid);
+        await set(userRef, {
+          nickname: document.getElementById("userNickname").value,
+          email: document.getElementById("userEmail").value,
+          payMethod: document.getElementById("userPayMethod").value,
+          payName: document.getElementById("userPayName").value,
+          payAccount: document.getElementById("userPayAccount").value,
+          avatar: avatarURL
+        });
+
+        alert("信息已更新！");
+      };
+
+      // ✅ 登出
+      document.getElementById("logoutBtn").onclick = () => {
+        signOut(auth);
+      };
+
+      // ✅ 登录状态监听
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          document.getElementById("loginForm").style.display = "none";
+          document.getElementById("userInfo").style.display = "block";
+          document.getElementById("userPhoto").src = user.photoURL || "https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png";
+
+          const userRef = ref(db, "users/" + user.uid);
+          const snapshot = await get(userRef);
+          if (snapshot.exists()) {
+            const data = snapshot.val();
+            document.getElementById("userNickname").value = data.nickname || "";
+            document.getElementById("userEmail").value = data.email || user.email || "";
+            document.getElementById("userPayMethod").value = data.payMethod || "";
+            document.getElementById("userPayName").value = data.payName || "";
+            document.getElementById("userPayAccount").value = data.payAccount || "";
+
+            const defaultAvatar = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
+            document.getElementById("userPhoto").src = data.avatar || user.photoURL || defaultAvatar;
+            document.getElementById("userPhotoPreview").src = data.avatar || user.photoURL || defaultAvatar;
+          }
+          
+          // 用户已登录，显示便签功能
+          loginRequired.style.display = 'none';
+          notesArea.style.display = 'block';
+          addNoteBtn.style.display = 'block';
+          
+          // 加载用户的便签
+          loadUserNotes(user.uid);
+        } else {
+          document.getElementById("loginForm").style.display = "block";
+          document.getElementById("userInfo").style.display = "none";
+          document.getElementById("userPhoto").src = defaultAvatar;
+          
+          // 用户未登录，隐藏便签功能
+          loginRequired.style.display = 'block';
+          notesArea.style.display = 'none';
+          addNoteBtn.style.display = 'none';
+        }
+      });
+    </script>
+</body>
+</html>
