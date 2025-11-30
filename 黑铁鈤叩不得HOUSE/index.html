@@ -255,10 +255,39 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-image: url('https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
-            opacity: 0.3;
+            opacity: 0.4;
+            z-index: -1;
+        }
+        
+        /* 标题样式 */
+        .header-title {
+            color: white;
+        }
+        
+        .header-title span.orange {
+            color: #FF9800;
+            font-weight: bold;
+        }
+        
+        .header-title span.red {
+            color: #F44336;
+            font-weight: bold;
+        }
+        
+        /* 室内绿植装饰 */
+        .plant-decoration {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background-image: url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: bottom;
+            opacity: 0.7;
             z-index: -1;
         }
     </style>
@@ -268,7 +297,7 @@
         <a href="https://htcb-12c7.github.io/htgov/">
             <img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png" alt="返回主页">
         </a>
-        黑铁鈤叩不得HOUSE  <span></span>
+        <span class="header-title">黑铁<span class="orange">鈤叩</span><span class="red">不得HOUSE</span></span>
         
         <!-- Language 按钮 -->
         <button id="lang-toggle" style="
@@ -355,6 +384,9 @@
             z-index: 9999;
         "></div>
     </div>
+
+    <!-- 室内绿植装饰 -->
+    <div class="plant-decoration"></div>
 
     <div class="main-container">
         <div class="sidebar">
@@ -487,7 +519,7 @@
         GoogleAuthProvider, updateEmail, sendEmailVerification,
         linkWithPopup, onAuthStateChanged, signOut } 
         from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-      import { getDatabase, ref, set, get, remove, onValue } 
+      import { getDatabase, ref, set, get, remove, onValue, push } 
         from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
       import { getStorage, ref as sRef, uploadBytes, getDownloadURL } 
         from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
@@ -567,15 +599,15 @@
         try {
           if (currentEditingNoteId) {
             // 更新现有便签
-            await set(ref(db, `users/${user.uid}/notes/${currentEditingNoteId}`), {
+            await set(ref(db, `users/${user.uid}/JapNoHOUSE/${currentEditingNoteId}`), {
               ...noteData,
               updatedAt: new Date().toISOString()
             });
           } else {
             // 创建新便签
-            const newNoteRef = ref(db, `users/${user.uid}/notes/`);
+            const newNoteRef = ref(db, `users/${user.uid}/JapNoHOUSE/`);
             const newNoteKey = push(newNoteRef).key;
-            await set(ref(db, `users/${user.uid}/notes/${newNoteKey}`), noteData);
+            await set(ref(db, `users/${user.uid}/JapNoHOUSE/${newNoteKey}`), noteData);
           }
           hideModal();
         } catch (error) {
@@ -586,7 +618,7 @@
 
       // 加载用户便签
       function loadUserNotes(userId) {
-        const notesRef = ref(db, `users/${userId}/notes`);
+        const notesRef = ref(db, `users/${userId}/JapNoHOUSE`);
         onValue(notesRef, (snapshot) => {
           const notes = snapshot.val();
           renderNotes(notes);
@@ -681,7 +713,7 @@
         const user = auth.currentUser;
         if (!user) return;
         
-        const noteRef = ref(db, `users/${user.uid}/notes/${noteId}`);
+        const noteRef = ref(db, `users/${user.uid}/JapNoHOUSE/${noteId}`);
         get(noteRef).then((snapshot) => {
           if (snapshot.exists()) {
             const note = snapshot.val();
@@ -706,7 +738,7 @@
         const user = auth.currentUser;
         if (!user) return;
         
-        const noteRef = ref(db, `users/${user.uid}/notes/${noteId}`);
+        const noteRef = ref(db, `users/${user.uid}/JapNoHOUSE/${noteId}`);
         remove(noteRef).catch(error => {
           console.error("删除便签失败:", error);
           alert("删除便签失败，请重试");
@@ -718,7 +750,7 @@
         const user = auth.currentUser;
         if (!user) return;
         
-        const noteRef = ref(db, `users/${user.uid}/notes/${noteId}`);
+        const noteRef = ref(db, `users/${user.uid}/JapNoHOUSE/${noteId}`);
         get(noteRef).then((snapshot) => {
           if (snapshot.exists()) {
             const note = snapshot.val();
@@ -856,6 +888,7 @@
         } else {
           document.getElementById("loginForm").style.display = "block";
           document.getElementById("userInfo").style.display = "none";
+          const defaultAvatar = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
           document.getElementById("userPhoto").src = defaultAvatar;
           
           // 用户未登录，隐藏便签功能
