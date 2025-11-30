@@ -181,23 +181,24 @@
         }
 
         /* 修复提醒复选框样式 */
-.form-group.checkbox-group {
-    display: flex;
-    align-items: center;
-    margin-top: 15px;
-}
+        .form-group.checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+        }
 
-.form-group.checkbox-group label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0;
-    cursor: pointer;
-}
+        .form-group.checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
 
-.form-group.checkbox-group input[type="checkbox"] {
-    width: auto;
-    margin-right: 8px;
-}
+        .form-group.checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
         
         .date-row {
             display: flex;
@@ -260,53 +261,70 @@
             margin-top: 30px;
         }
         
-/* 背景样式 */
-body {
-    background: linear-gradient(to bottom, #87CEEB, #E0F7FF);
-    min-height: 100vh;
-    position: relative;
-}
+        /* 背景样式 */
+        body {
+            background: linear-gradient(to bottom, #87CEEB, #E0F7FF);
+            min-height: 100vh;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
 
-/* 天空背景 - 放在页面顶部 */
-.sky-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 40%; /* 减少高度避免重叠 */
-    background-image: url('https://htb-12c7.github.io/htgov/assets/上海外滩全景白天.jpg');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.8; /* 增加不透明度 */
-    z-index: -2;
-}
+        /* 天空背景 - 放在页面顶部 */
+        .sky-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 45%;
+            background-image: url('https://htb-12c7.github.io/htgov/assets/上海外滩全景白天.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.9;
+            z-index: -2;
+        }
 
-/* 公园背景 - 放在页面底部 */
-.park-background {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50%; /* 调整高度 */
-    background-image: url('https://htb-12c7.github.io/htgov/assets/上海宝山公园.jpg');
-    background-size: cover;
-    background-position: center; /* 改为center */
-    opacity: 0.8; /* 增加不透明度 */
-    z-index: -1;
-}
+        /* 公园背景 - 放在页面底部 */
+        .park-background {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 55%;
+            background-image: url('https://htb-12c7.github.io/htgov/assets/上海宝山公园.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.9;
+            z-index: -1;
+        }
+        
         /* 标题样式 */
         .header-title {
             color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         
-        .header-title span.orange {
+        .header-title .orange {
             color: #FF9800;
             font-weight: bold;
         }
         
-        .header-title span.red {
+        .header-title .red {
             color: #F44336;
             font-weight: bold;
+        }
+
+        /* 确保内容区域可见 */
+        .main-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            margin: 10px;
         }
     </style>
 </head>
@@ -316,7 +334,7 @@ body {
             <img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png" alt="返回主页">
         </a>
         
-        <span>黑铁 <span class="orange">鈤叩</span><span class="header-title">不得HOUSE</span></span>
+        <span class="header-title">黑铁 <span class="orange">鈤叩</span> <span class="red">不得HOUSE</span></span>
         
         <!-- Language 按钮 -->
         <button id="lang-toggle" style="
@@ -324,7 +342,7 @@ body {
             top: 10px;
             right: 70px;
             padding: 8px 16px;
-            font-size: 16px;           /* 字体大小 */
+            font-size: 16px;
             background: black;
             color: #03a9f4;
             border: 1px solid #03a9f4;
@@ -391,7 +409,7 @@ body {
           </div>
         </div>
 
-        <!-- Google 翻译语言框（请放在最外面，不嵌套在上面的 div 中） -->
+        <!-- Google 翻译语言框 -->
         <div id="google_translate_element" style="
             position: absolute;
             top: 50px;
@@ -475,11 +493,11 @@ body {
                     <textarea id="noteContent"></textarea>
                 </div>
                 
-<div class="form-group checkbox-group">
-    <label>
-        <input type="checkbox" id="reminder"> 到期提醒
-    </label>
-</div>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="reminder"> 到期提醒
+                    </label>
+                </div>
                 
                 <div class="form-actions">
                     <button type="button" id="cancelNote" class="btn btn-secondary">取消</button>
@@ -489,7 +507,7 @@ body {
         </div>
     </div>
 
-    <!-- ✅ Google 语言选择初始化 -->
+    <!-- Google 语言选择初始化 -->
     <script>
       function googleTranslateElementInit() {
         new google.translate.TranslateElement({
@@ -500,10 +518,10 @@ body {
       }
     </script>
 
-    <!-- ✅ Google 提供的翻译组件脚本（只保留一条） -->
+    <!-- Google 提供的翻译组件脚本 -->
     <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-    <!-- ✅ 控制 Language 按钮点击时显示/隐藏语言框 -->
+    <!-- 控制 Language 按钮点击时显示/隐藏语言框 -->
     <script>
       window.addEventListener('load', function () {
         const toggle = document.getElementById("lang-toggle");
@@ -526,12 +544,21 @@ body {
         .catch(err => console.error("菜单加载失败：", err));
     </script>
 
-    <!-- ✅ 头像弹出信息卡片逻辑 -->
+    <!-- 头像弹出信息卡片逻辑 -->
     <script>
       function toggleAccountInfo() {
         const popup = document.getElementById('accountPopup');
         popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
       }
+
+      // 点击其他地方关闭弹出框
+      document.addEventListener('click', function(event) {
+        const popup = document.getElementById('accountPopup');
+        const avatar = document.getElementById('userPhoto');
+        if (popup.style.display === 'block' && !popup.contains(event.target) && !avatar.contains(event.target)) {
+          popup.style.display = 'none';
+        }
+      });
     </script>
 
     <!-- Firebase 登录逻辑 -->
@@ -604,7 +631,10 @@ body {
       // 保存便签到Firebase
       async function saveNote() {
         const user = auth.currentUser;
-        if (!user) return;
+        if (!user) {
+          alert('请先登录');
+          return;
+        }
 
         const noteData = {
           title: document.getElementById('noteTitle').value,
@@ -638,12 +668,34 @@ body {
         }
       }
 
+      // 修复日期显示问题 - 将日期转换为本地时区格式
+      function formatDateForInput(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        // 转换为本地时区的YYYY-MM-DD格式
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+
+      // 格式化显示日期
+      function formatDate(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+
       // 加载用户便签
       function loadUserNotes(userId) {
         const notesRef = ref(db, `users/${userId}/JapNoHOUSE`);
         onValue(notesRef, (snapshot) => {
           const notes = snapshot.val();
           renderNotes(notes);
+          checkReminders(notes);
         });
       }
 
@@ -723,25 +775,14 @@ body {
         return noteDiv;
       }
 
-// 修复日期显示问题 - 将日期转换为本地时区格式
-function formatDateForInput(dateString) {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    // 转换为本地时区的YYYY-MM-DD格式
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
-
-// 在编辑便签时使用修复后的函数
-window.editNote = function(noteId) {
-    const user = auth.currentUser;
-    if (!user) return;
-    
-    const noteRef = ref(db, `users/${user.uid}/JapNoHOUSE/${noteId}`);
-    get(noteRef).then((snapshot) => {
-        if (snapshot.exists()) {
+      // 编辑便签
+      window.editNote = function(noteId) {
+        const user = auth.currentUser;
+        if (!user) return;
+        
+        const noteRef = ref(db, `users/${user.uid}/JapNoHOUSE/${noteId}`);
+        get(noteRef).then((snapshot) => {
+          if (snapshot.exists()) {
             const note = snapshot.val();
             document.getElementById('noteTitle').value = note.title || '';
             document.getElementById('noteContent').value = note.content || '';
@@ -754,9 +795,9 @@ window.editNote = function(noteId) {
             currentEditingNoteId = noteId;
             document.getElementById('modalTitle').textContent = '编辑便签';
             noteModal.style.display = 'flex';
-        }
-    });
-}
+          }
+        });
+      }
 
       // 删除便签
       window.deleteNote = function(noteId) {
@@ -793,10 +834,52 @@ window.editNote = function(noteId) {
         });
       }
 
-      // ✅ 登录
+      // 检查到期提醒
+      function checkReminders(notes) {
+        if (!notes) return;
+        
+        const now = new Date();
+        let hasReminders = false;
+        let reminderMessage = '';
+        
+        Object.keys(notes).forEach(noteId => {
+          const note = notes[noteId];
+          if (note.reminder && !note.completed && note.finalDueDate) {
+            const dueDate = new Date(note.finalDueDate);
+            // 检查是否即将到期（3天内）
+            const daysUntilDue = Math.ceil((dueDate - now) / (1000 * 60 * 60 * 24));
+            
+            if (daysUntilDue <= 3 && daysUntilDue >= 0) {
+              hasReminders = true;
+              reminderMessage += `"${note.title}" 将在 ${daysUntilDue} 天后到期\n`;
+            } else if (daysUntilDue < 0) {
+              hasReminders = true;
+              reminderMessage += `"${note.title}" 已过期 ${Math.abs(daysUntilDue)} 天\n`;
+            }
+          }
+        });
+        
+        if (hasReminders && reminderMessage) {
+          // 使用alert显示提醒
+          setTimeout(() => {
+            alert('到期提醒:\n\n' + reminderMessage);
+          }, 1000);
+        }
+      }
+
+      // 请求通知权限
+      if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
+
+      // 登录功能
       document.getElementById("loginBtn").onclick = async () => {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
+        if (!email || !password) {
+          alert("请输入邮箱和密码");
+          return;
+        }
         try {
           await signInWithEmailAndPassword(auth, email, password);
         } catch (err) {
@@ -804,7 +887,7 @@ window.editNote = function(noteId) {
         }
       };
 
-      // ✅ Google 登录
+      // Google 登录
       document.getElementById("googleLoginBtn").onclick = async () => {
         try {
           await signInWithPopup(auth, provider);
@@ -813,7 +896,7 @@ window.editNote = function(noteId) {
         }
       };
 
-      // ✅ 绑定 Google
+      // 绑定 Google
       document.getElementById("bindGoogleBtn").onclick = async () => {
         const user = auth.currentUser;
         if (!user) return alert("请先登录");
@@ -825,7 +908,7 @@ window.editNote = function(noteId) {
         }
       };
 
-      // ✅ 邮箱验证
+      // 邮箱验证
       document.getElementById("sendVerifyBtn").onclick = async () => {
         const user = auth.currentUser;
         if (!user) return alert("请先登录");
@@ -839,7 +922,7 @@ window.editNote = function(noteId) {
         }
       };
 
-      // ✅ 保存用户信息 + 上传头像
+      // 保存用户信息 + 上传头像
       let newAvatarFile = null;
       document.getElementById("updateAvatar").addEventListener("change", function(e) {
         const file = e.target.files[0];
@@ -878,17 +961,19 @@ window.editNote = function(noteId) {
         alert("信息已更新！");
       };
 
-      // ✅ 登出
+      // 登出
       document.getElementById("logoutBtn").onclick = () => {
         signOut(auth);
       };
 
-      // ✅ 登录状态监听
+      // 登录状态监听
       onAuthStateChanged(auth, async (user) => {
+        const defaultAvatar = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
+        
         if (user) {
           document.getElementById("loginForm").style.display = "none";
           document.getElementById("userInfo").style.display = "block";
-          document.getElementById("userPhoto").src = user.photoURL || "https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png";
+          document.getElementById("userPhoto").src = user.photoURL || defaultAvatar;
 
           const userRef = ref(db, "users/" + user.uid);
           const snapshot = await get(userRef);
@@ -900,7 +985,6 @@ window.editNote = function(noteId) {
             document.getElementById("userPayName").value = data.payName || "";
             document.getElementById("userPayAccount").value = data.payAccount || "";
 
-            const defaultAvatar = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
             document.getElementById("userPhoto").src = data.avatar || user.photoURL || defaultAvatar;
             document.getElementById("userPhotoPreview").src = data.avatar || user.photoURL || defaultAvatar;
           }
@@ -915,7 +999,6 @@ window.editNote = function(noteId) {
         } else {
           document.getElementById("loginForm").style.display = "block";
           document.getElementById("userInfo").style.display = "none";
-          const defaultAvatar = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
           document.getElementById("userPhoto").src = defaultAvatar;
           
           // 用户未登录，隐藏便签功能
@@ -924,58 +1007,6 @@ window.editNote = function(noteId) {
           addNoteBtn.style.display = 'none';
         }
       });
-        // 检查到期提醒
-function checkReminders(notes) {
-    if (!notes) return;
-    
-    const now = new Date();
-    let hasReminders = false;
-    let reminderMessage = '';
-    
-    Object.keys(notes).forEach(noteId => {
-        const note = notes[noteId];
-        if (note.reminder && !note.completed && note.finalDueDate) {
-            const dueDate = new Date(note.finalDueDate);
-            // 检查是否即将到期（3天内）
-            const daysUntilDue = Math.ceil((dueDate - now) / (1000 * 60 * 60 * 24));
-            
-            if (daysUntilDue <= 3 && daysUntilDue >= 0) {
-                hasReminders = true;
-                reminderMessage += `"${note.title}" 将在 ${daysUntilDue} 天后到期\n`;
-            } else if (daysUntilDue < 0) {
-                hasReminders = true;
-                reminderMessage += `"${note.title}" 已过期 ${Math.abs(daysUntilDue)} 天\n`;
-            }
-        }
-    });
-    
-    if (hasReminders) {
-        // 可以改为更友好的通知方式
-        console.log('到期提醒:\n' + reminderMessage);
-        // 或者使用浏览器通知
-        if (Notification.permission === 'granted') {
-            new Notification('便签到期提醒', {
-                body: reminderMessage,
-                icon: 'https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png'
-            });
-        }
-    }
-}
-
-// 在加载便签时调用提醒检查
-function loadUserNotes(userId) {
-    const notesRef = ref(db, `users/${userId}/JapNoHOUSE`);
-    onValue(notesRef, (snapshot) => {
-        const notes = snapshot.val();
-        renderNotes(notes);
-        checkReminders(notes); // 添加提醒检查
-    });
-}
-
-// 请求通知权限
-if ('Notification' in window) {
-    Notification.requestPermission();
-}
     </script>
 </body>
 </html>
