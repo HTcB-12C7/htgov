@@ -179,6 +179,25 @@
             min-height: 100px;
             resize: vertical;
         }
+
+        /* 修复提醒复选框样式 */
+.form-group.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.form-group.checkbox-group label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.form-group.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+}
         
         .date-row {
             display: flex;
@@ -241,27 +260,40 @@
             margin-top: 30px;
         }
         
-        /* 背景样式 */
-        body {
-            background: linear-gradient(to bottom, #87CEEB, #E0F7FF);
-            min-height: 100vh;
-            position: relative;
-        }
-        
+/* 背景样式 */
+body {
+    background: linear-gradient(to bottom, #87CEEB, #E0F7FF);
+    min-height: 100vh;
+    position: relative;
+}
+
 /* 天空背景 - 放在页面顶部 */
 .sky-background {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 50%; /* 占据上半部分 */
-            background-image: url('https://htb-12c7.github.io/htgov/assets/上海外滩全景白天.jpg');
+    height: 40%; /* 减少高度避免重叠 */
+    background-image: url('https://htb-12c7.github.io/htgov/assets/上海外滩全景白天.jpg');
     background-size: cover;
     background-position: center;
-    opacity: 0.6;
+    opacity: 0.8; /* 增加不透明度 */
     z-index: -2;
-        }
-        
+}
+
+/* 公园背景 - 放在页面底部 */
+.park-background {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%; /* 调整高度 */
+    background-image: url('https://htb-12c7.github.io/htgov/assets/上海宝山公园.jpg');
+    background-size: cover;
+    background-position: center; /* 改为center */
+    opacity: 0.8; /* 增加不透明度 */
+    z-index: -1;
+}
         /* 标题样式 */
         .header-title {
             color: white;
@@ -276,20 +308,6 @@
             color: #F44336;
             font-weight: bold;
         }
-        
-/* 公园背景 - 放在页面底部 */
-.park-background {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 60%; /* 占据下半部分 */
-            background-image: url('https://htb-12c7.github.io/htgov/assets/上海宝山公园.jpg');
-    background-size: cover;
-    background-position: top; /* 让图片顶部对齐 */
-    opacity: 0.7;
-    z-index: -1;
-}
     </style>
 </head>
 <body>
@@ -457,11 +475,11 @@
                     <textarea id="noteContent"></textarea>
                 </div>
                 
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="reminder"> 到期提醒
-                    </label>
-                </div>
+<div class="form-group checkbox-group">
+    <label>
+        <input type="checkbox" id="reminder"> 到期提醒
+    </label>
+</div>
                 
                 <div class="form-actions">
                     <button type="button" id="cancelNote" class="btn btn-secondary">取消</button>
@@ -705,35 +723,40 @@
         return noteDiv;
       }
 
-      // 格式化日期
-      function formatDate(dateString) {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        return `${date.getMonth()+1}/${date.getDate()}`;
-      }
+// 修复日期显示问题 - 将日期转换为本地时区格式
+function formatDateForInput(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    // 转换为本地时区的YYYY-MM-DD格式
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
 
-      // 编辑便签
-      window.editNote = function(noteId) {
-        const user = auth.currentUser;
-        if (!user) return;
-        
-        const noteRef = ref(db, `users/${user.uid}/JapNoHOUSE/${noteId}`);
-        get(noteRef).then((snapshot) => {
-          if (snapshot.exists()) {
+// 在编辑便签时使用修复后的函数
+window.editNote = function(noteId) {
+    const user = auth.currentUser;
+    if (!user) return;
+    
+    const noteRef = ref(db, `users/${user.uid}/JapNoHOUSE/${noteId}`);
+    get(noteRef).then((snapshot) => {
+        if (snapshot.exists()) {
             const note = snapshot.val();
             document.getElementById('noteTitle').value = note.title || '';
             document.getElementById('noteContent').value = note.content || '';
-            document.getElementById('startDate').value = note.startDate || '';
-            document.getElementById('dueDate').value = note.dueDate || '';
-            document.getElementById('finalDueDate').value = note.finalDueDate || '';
+            // 使用修复后的日期格式化函数
+            document.getElementById('startDate').value = formatDateForInput(note.startDate) || '';
+            document.getElementById('dueDate').value = formatDateForInput(note.dueDate) || '';
+            document.getElementById('finalDueDate').value = formatDateForInput(note.finalDueDate) || '';
             document.getElementById('reminder').checked = note.reminder || false;
             
             currentEditingNoteId = noteId;
             document.getElementById('modalTitle').textContent = '编辑便签';
             noteModal.style.display = 'flex';
-          }
-        });
-      }
+        }
+    });
+}
 
       // 删除便签
       window.deleteNote = function(noteId) {
@@ -901,6 +924,58 @@
           addNoteBtn.style.display = 'none';
         }
       });
+        // 检查到期提醒
+function checkReminders(notes) {
+    if (!notes) return;
+    
+    const now = new Date();
+    let hasReminders = false;
+    let reminderMessage = '';
+    
+    Object.keys(notes).forEach(noteId => {
+        const note = notes[noteId];
+        if (note.reminder && !note.completed && note.finalDueDate) {
+            const dueDate = new Date(note.finalDueDate);
+            // 检查是否即将到期（3天内）
+            const daysUntilDue = Math.ceil((dueDate - now) / (1000 * 60 * 60 * 24));
+            
+            if (daysUntilDue <= 3 && daysUntilDue >= 0) {
+                hasReminders = true;
+                reminderMessage += `"${note.title}" 将在 ${daysUntilDue} 天后到期\n`;
+            } else if (daysUntilDue < 0) {
+                hasReminders = true;
+                reminderMessage += `"${note.title}" 已过期 ${Math.abs(daysUntilDue)} 天\n`;
+            }
+        }
+    });
+    
+    if (hasReminders) {
+        // 可以改为更友好的通知方式
+        console.log('到期提醒:\n' + reminderMessage);
+        // 或者使用浏览器通知
+        if (Notification.permission === 'granted') {
+            new Notification('便签到期提醒', {
+                body: reminderMessage,
+                icon: 'https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png'
+            });
+        }
+    }
+}
+
+// 在加载便签时调用提醒检查
+function loadUserNotes(userId) {
+    const notesRef = ref(db, `users/${userId}/JapNoHOUSE`);
+    onValue(notesRef, (snapshot) => {
+        const notes = snapshot.val();
+        renderNotes(notes);
+        checkReminders(notes); // 添加提醒检查
+    });
+}
+
+// 请求通知权限
+if ('Notification' in window) {
+    Notification.requestPermission();
+}
     </script>
 </body>
 </html>
