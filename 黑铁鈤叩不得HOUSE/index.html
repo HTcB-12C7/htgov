@@ -327,6 +327,56 @@
             margin: 10px;
         }
     </style>
+    <audio id="bgm" autoplay muted playsinline></audio>
+
+<script>
+const songs = [
+      "https://htcb-12c7.github.io/htgov/assets/我的童话不是梦.m4a"
+      "https://htcb-12c7.github.io/htgov/assets/童话.mp3"
+      "https://htcb-12c7.github.io/htgov/assets/勇气大爆发 (压缩).mp3"
+  // 可以在这里添加更多歌曲URL
+];
+
+const bgm = document.getElementById("bgm");
+const titleBox = document.createElement("div");
+titleBox.style.cssText = `
+  position: fixed; bottom: 8px; right: 12px;
+  color: gold; font-size: 14px; font-weight: bold;
+  text-shadow: 0 0 5px black; z-index: 9999;
+`;
+document.body.appendChild(titleBox);
+
+let currentSongIndex = 0;
+
+// ✅ 按顺序播放下一首歌曲
+function playNextSong() {
+  if (songs.length === 0) return;
+  
+  const song = songs[currentSongIndex];
+  bgm.src = song;
+  bgm.play().catch(err => console.log("播放失败：", err));
+  titleBox.textContent = "🎵 正在播放：" + decodeURIComponent(song.split("/").pop());
+  
+  // 更新索引，循环播放
+  currentSongIndex = (currentSongIndex + 1) % songs.length;
+}
+
+// ✅ 点击或按键解除静音
+function enableBgm() {
+  bgm.muted = false;
+  bgm.play().catch(err => console.log("播放失败：", err));
+}
+
+document.addEventListener('click', enableBgm, { once: true });
+document.addEventListener('keydown', enableBgm, { once: true });
+document.addEventListener('touchstart', enableBgm, { once: true });
+
+// ✅ 每首歌播完自动播放下一首
+bgm.addEventListener("ended", playNextSong);
+
+// ✅ 页面加载时开始播放
+window.addEventListener("load", playNextSong);
+</script>
 </head>
 <body>
     <div class="header">
