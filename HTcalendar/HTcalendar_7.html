@@ -151,7 +151,22 @@
     <div id="calendar-usa" class="calendar-block expandable">🦃 美国日历：2025 (Y)<div class="month-view" style="display:none;"></div></div>
   </div>
 </div>
-
+<!-- 在IFARM时钟页面的<body>标签后添加 -->
+<div style="position: fixed; top: 10px; left: 10px; z-index: 9999;">
+  <button id="switch-to-timer" style="
+    background: #ff4444;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  ">
+    ⏱️ 切换到计时器
+  </button>
+</div>
 <script>
 function updateTime() {
   const region = document.querySelector('input[name="region"]:checked').value;
@@ -256,6 +271,14 @@ document.querySelectorAll('input[name="region"]').forEach(radio => {
 
 setInterval(updateTime, 1000);
 updateTime();
+
+// 在IFARM页面的<script>标签内添加（放在最前面）
+document.getElementById('switch-to-timer').addEventListener('click', function() {
+  // 保存当前页面状态到localStorage
+  localStorage.setItem('timerActive', 'true');
+  // 切换到主页面
+  window.location.href = '你的主页面URL.html'; // 请替换为实际的页面URL
+});
 </script>
 </body>
 </html>
