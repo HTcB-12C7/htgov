@@ -433,7 +433,34 @@ document.addEventListener('touchstart', enableBgm, { once: true });
   </script>
 		    
 <!-- 左下角 iframe 嵌入展示其他仓库页面 -->
-<div style="position: fixed; top: 60px; left: 250px; width: 85%; height: 95%;max-width: 100%; max-height: 100%; border: 0px solid gold; box-shadow: 0 0 8px #000; z-index: 9997;">
+<!-- <div style="position: fixed; top: 60px; left: 250px; width: 85%; height: 95%;max-width: 100%; max-height: 100%; border: 0px solid gold; box-shadow: 0 0 8px #000; z-index: 9997;">
+  <iframe 
+    src="https://htcb-12c7.github.io/htgov/HTcalendar/HTcalendar_7.html" 
+    width="100%" height="100%" frameborder="0"
+    style="border: none;">
+  </iframe>
+</div> -->
+
+<!-- 修改主页面的iframe容器 -->
+<div id="iframe-container" style="position: fixed; top: 60px; left: 250px; width: 85%; height: 95%;max-width: 100%; max-height: 100%; border: 0px solid gold; box-shadow: 0 0 8px #000; z-index: 9997;">
+  <!-- 在iframe上方添加切换按钮 -->
+  <div style="position: absolute; top: 10px; left: 10px; z-index: 9998;">
+    <button id="iframe-switch-btn" style="
+      background: #ff4444;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    ">
+      ⏱️ 切换到计时器
+    </button>
+  </div>
+  
   <iframe 
     src="https://htcb-12c7.github.io/htgov/HTcalendar/HTcalendar_7.html" 
     width="100%" height="100%" frameborder="0"
@@ -519,39 +546,7 @@ document.addEventListener('touchstart', enableBgm, { once: true });
   gap: 15px;
 ">
   <span style="color: white; font-size: 16px;">显示模式:</span>
-  
-  <!-- 滑动切换开关 -->
-  <label class="switch" style="
-    position: relative;
-    display: inline-block;
-    width: 70px;
-    height: 34px;
-  ">
-    <input type="checkbox" id="page-toggle">
-    <span class="slider" style="
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ff4444;
-      transition: .4s;
-      border-radius: 34px;
-    "></span>
-    <span class="slider:before" style="
-      position: absolute;
-      content: '';
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    "></span>
-  </label>
-  
+
   <span id="toggle-label" style="color: white; font-size: 16px;">计时器模式</span>
 </div>
   <!-- ✅ 头像弹出信息卡片逻辑 -->
@@ -964,8 +959,9 @@ updateCountdownDisplay();
 // 页面切换功能
 const pageToggle = document.getElementById('page-toggle');
 const toggleLabel = document.getElementById('toggle-label');
-const iframe = document.querySelector('iframe'); // 你的iframe
+const iframeContainer = document.getElementById('iframe-container'); // 修改：获取iframe容器
 const timerContainer = document.querySelector('.timer-container');
+const iframeSwitchBtn = document.getElementById('iframe-switch-btn'); // 新增：获取iframe内的按钮
 
 // 检查localStorage中的状态
 if (localStorage.getItem('timerActive') === 'true') {
@@ -1011,6 +1007,7 @@ let stopwatchTime = 0;
 
 </body>
 </html>
+
 
 
 
