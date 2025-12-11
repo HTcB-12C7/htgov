@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
@@ -16,6 +16,7 @@
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  display: none; 
 }
 
 .timer-controls {
@@ -727,7 +728,7 @@ const startStopwatchBtn = document.getElementById('start-stopwatch');
 const lapStopwatchBtn = document.getElementById('lap-stopwatch');
 const resetStopwatchBtn = document.getElementById('reset-stopwatch');
 const lapTimesContainer = document.getElementById('lap-times');
-const startCountdownBtn = document.getElementById('start-countdown');
+const startCountdownBtn = document.getElementById('start-countdown');	
 const pauseCountdownBtn = document.getElementById('pause-countdown');
 const resetCountdownBtn = document.getElementById('reset-countdown');
 const hoursInput = document.getElementById('hours-input');
@@ -956,47 +957,60 @@ resetCountdownBtn.addEventListener('click', resetCountdown);
 updateStopwatchDisplay();
 updateCountdownDisplay();
 
-// 页面切换功能
-const pageToggle = document.getElementById('page-toggle');
+// 页面切换功能 - 修复这部分
+const pageToggle = document.getElementById('page-toggle'); // 需要滑动开关存在
 const toggleLabel = document.getElementById('toggle-label');
-const iframeContainer = document.getElementById('iframe-container'); // 修改：获取iframe容器
+const iframeContainer = document.getElementById('iframe-container');
 const timerContainer = document.querySelector('.timer-container');
-const iframeSwitchBtn = document.getElementById('iframe-switch-btn'); // 新增：获取iframe内的按钮
+const iframeSwitchBtn = document.getElementById('iframe-switch-btn');
 
 // 检查localStorage中的状态
 if (localStorage.getItem('timerActive') === 'true') {
   // 显示计时器，隐藏IFARM
-  iframe.style.display = 'none';
+  iframeContainer.style.display = 'none';
   timerContainer.style.display = 'block';
-  pageToggle.checked = true;
+  if (pageToggle) pageToggle.checked = true; // 添加判断
   toggleLabel.textContent = '计时器模式';
   toggleLabel.style.color = '#4CAF50';
 } else {
   // 显示IFARM，隐藏计时器
-  iframe.style.display = 'block';
+  iframeContainer.style.display = 'block';
   timerContainer.style.display = 'none';
-  pageToggle.checked = false;
+  if (pageToggle) pageToggle.checked = false; // 添加判断
   toggleLabel.textContent = 'IFARM时钟';
   toggleLabel.style.color = '#ff4444';
 }
 
-// 切换开关事件
-pageToggle.addEventListener('change', function() {
-  if (this.checked) {
-    // 切换到计时器模式
-    iframe.style.display = 'none';
-    timerContainer.style.display = 'block';
-    toggleLabel.textContent = '计时器模式';
-    toggleLabel.style.color = '#4CAF50';
-    localStorage.setItem('timerActive', 'true');
-  } else {
-    // 切换到IFARM时钟模式
-    iframe.style.display = 'block';
-    timerContainer.style.display = 'none';
-    toggleLabel.textContent = 'IFARM时钟';
-    toggleLabel.style.color = '#ff4444';
-    localStorage.setItem('timerActive', 'false');
-  }
+// 滑动开关事件（如果存在）
+if (pageToggle) {
+  pageToggle.addEventListener('change', function() {
+    if (this.checked) {
+      // 切换到计时器模式
+      iframeContainer.style.display = 'none';
+      timerContainer.style.display = 'block';
+      toggleLabel.textContent = '计时器模式';
+      toggleLabel.style.color = '#4CAF50';
+      localStorage.setItem('timerActive', 'true');
+    } else {
+      // 切换到IFARM时钟模式
+      iframeContainer.style.display = 'block';
+      timerContainer.style.display = 'none';
+      toggleLabel.textContent = 'IFARM时钟';
+      toggleLabel.style.color = '#ff4444';
+      localStorage.setItem('timerActive', 'false');
+    }
+  });
+}
+
+// iframe内按钮的点击事件
+iframeSwitchBtn.addEventListener('click', function() {
+  // 切换到计时器模式
+  iframeContainer.style.display = 'none';
+  timerContainer.style.display = 'block';
+  if (pageToggle) pageToggle.checked = true;
+  toggleLabel.textContent = '计时器模式';
+  toggleLabel.style.color = '#4CAF50';
+  localStorage.setItem('timerActive', 'true');
 });
 
 // 确保计时器变量在最前面（你已经有的代码）
@@ -1007,6 +1021,7 @@ let stopwatchTime = 0;
 
 </body>
 </html>
+
 
 
 
