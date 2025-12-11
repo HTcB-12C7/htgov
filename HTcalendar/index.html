@@ -957,8 +957,7 @@ resetCountdownBtn.addEventListener('click', resetCountdown);
 updateStopwatchDisplay();
 updateCountdownDisplay();
 
-// 页面切换功能 - 修复这部分
-const pageToggle = document.getElementById('page-toggle'); // 需要滑动开关存在
+// === 页面切换功能 ===
 const toggleLabel = document.getElementById('toggle-label');
 const iframeContainer = document.getElementById('iframe-container');
 const timerContainer = document.querySelector('.timer-container');
@@ -969,58 +968,50 @@ if (localStorage.getItem('timerActive') === 'true') {
   // 显示计时器，隐藏IFARM
   iframeContainer.style.display = 'none';
   timerContainer.style.display = 'block';
-  if (pageToggle) pageToggle.checked = true; // 添加判断
-  toggleLabel.textContent = '计时器模式';
+  toggleLabel.textContent = '当前：计时器模式';
   toggleLabel.style.color = '#4CAF50';
 } else {
   // 显示IFARM，隐藏计时器
   iframeContainer.style.display = 'block';
   timerContainer.style.display = 'none';
-  if (pageToggle) pageToggle.checked = false; // 添加判断
-  toggleLabel.textContent = 'IFARM时钟';
+  toggleLabel.textContent = '当前：IFARM时钟';
   toggleLabel.style.color = '#ff4444';
 }
 
-// 滑动开关事件（如果存在）
-if (pageToggle) {
-  pageToggle.addEventListener('change', function() {
-    if (this.checked) {
-      // 切换到计时器模式
-      iframeContainer.style.display = 'none';
-      timerContainer.style.display = 'block';
-      toggleLabel.textContent = '计时器模式';
-      toggleLabel.style.color = '#4CAF50';
-      localStorage.setItem('timerActive', 'true');
-    } else {
-      // 切换到IFARM时钟模式
-      iframeContainer.style.display = 'block';
-      timerContainer.style.display = 'none';
-      toggleLabel.textContent = 'IFARM时钟';
-      toggleLabel.style.color = '#ff4444';
-      localStorage.setItem('timerActive', 'false');
-    }
-  });
-}
-
-// iframe内按钮的点击事件
+// iframe按钮点击事件
 iframeSwitchBtn.addEventListener('click', function() {
-  // 切换到计时器模式
   iframeContainer.style.display = 'none';
   timerContainer.style.display = 'block';
-  if (pageToggle) pageToggle.checked = true;
-  toggleLabel.textContent = '计时器模式';
+  toggleLabel.textContent = '当前：计时器模式';
   toggleLabel.style.color = '#4CAF50';
   localStorage.setItem('timerActive', 'true');
 });
 
-// 确保计时器变量在最前面（你已经有的代码）
-let stopwatchInterval = null;
-let stopwatchTime = 0;
-// ... 你的其他计时器代码
+// 在计时器上添加返回按钮
+const timerControls = document.querySelector('.timer-controls');
+if (!document.getElementById('back-to-iframe-btn')) {
+  const backBtn = document.createElement('button');
+  backBtn.id = 'back-to-iframe-btn';
+  backBtn.textContent = '🔙 返回IFARM时钟';
+  backBtn.className = 'timer-mode-btn';
+  backBtn.style.cssText = 'margin-left:10px; background:#ff4444;';
+  
+  backBtn.addEventListener('click', function() {
+    iframeContainer.style.display = 'block';
+    timerContainer.style.display = 'none';
+    toggleLabel.textContent = '当前：IFARM时钟';
+    toggleLabel.style.color = '#ff4444';
+    localStorage.setItem('timerActive', 'false');
+  });
+  
+  timerControls.appendChild(backBtn);
+}
+// === 页面切换功能结束 ===
 </script>
 
 </body>
 </html>
+
 
 
 
