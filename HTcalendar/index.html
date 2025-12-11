@@ -6,7 +6,239 @@
   <title>黑铁实时日历</title>
 <link rel="stylesheet" href="../css/htgov.css" />
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<style>
+/* 计时器容器样式 */
+.timer-container {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 30px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
 
+.timer-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 10px;
+}
+
+.timer-mode-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  padding: 10px 25px;
+  margin: 0 5px;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.timer-mode-btn.active {
+  background: rgba(59, 130, 246, 0.7);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.timer-section {
+  display: none;
+}
+
+.timer-section.active {
+  display: block;
+}
+
+/* 时间显示样式 */
+.time-display {
+  font-size: 48px;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px 0;
+  font-family: 'Courier New', monospace;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* 控制按钮样式 */
+.control-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 12px 25px;
+  margin: 0 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 时间设置样式 */
+.time-setup {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 25px 0;
+}
+
+.time-input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.time-input-group input {
+  width: 80px;
+  padding: 12px;
+  font-size: 24px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: white;
+  margin-bottom: 5px;
+}
+
+.time-input-group span {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+/* 快速预设按钮 */
+.quick-presets {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.preset-btn {
+  background: rgba(59, 130, 246, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.preset-btn:hover {
+  background: rgba(59, 130, 246, 0.5);
+}
+
+/* 提醒选项样式 */
+.reminder-options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 25px 0;
+  gap: 15px;
+}
+
+.reminder-options label {
+  color: white;
+  font-size: 16px;
+}
+
+.reminder-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.reminder-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reminder-btn.active {
+  background: rgba(34, 197, 94, 0.5);
+  border-color: rgba(34, 197, 94, 0.7);
+}
+
+/* 计次容器样式 */
+.lap-container {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.lap-item {
+  padding: 8px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-family: 'Courier New', monospace;
+}
+
+.lap-item:last-child {
+  border-bottom: none;
+}
+
+/* 全屏提醒样式 */
+.fullscreen-alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1e40af 0%, #0ea5e9 100%);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  cursor: pointer;
+}
+
+.alert-content {
+  text-align: center;
+  animation: pulse 2s infinite;
+}
+
+.alert-content h1 {
+  font-size: 72px;
+  color: gold;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+  margin-bottom: 20px;
+}
+
+.alert-content p {
+  font-size: 36px;
+  color: #fffbeb;
+  margin-bottom: 30px;
+}
+
+.hint {
+  font-size: 20px !important;
+  color: rgba(255, 251, 235, 0.7) !important;
+  margin-top: 40px !important;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+</style>
         </head>
         <body>
             <div class="header">
@@ -184,6 +416,77 @@ document.addEventListener('touchstart', enableBgm, { once: true });
     style="border: none;">
   </iframe>
 </div>
+
+<!-- 在现有时钟区域下方添加此代码 -->
+<div class="timer-container">
+  <div class="timer-controls">
+    <button id="stopwatch-btn" class="timer-mode-btn active">秒表</button>
+    <button id="countdown-btn" class="timer-mode-btn">倒计时</button>
+  </div>
+  
+  <!-- 秒表界面 -->
+  <div id="stopwatch-section" class="timer-section active">
+    <div class="time-display" id="stopwatch-display">00:00:00.00</div>
+    <div class="stopwatch-controls">
+      <button id="start-stopwatch" class="control-btn">开始</button>
+      <button id="lap-stopwatch" class="control-btn" disabled>计次</button>
+      <button id="reset-stopwatch" class="control-btn">重置</button>
+    </div>
+    <div id="lap-times" class="lap-container"></div>
+  </div>
+  
+  <!-- 倒计时界面 -->
+  <div id="countdown-section" class="timer-section">
+    <div class="time-display" id="countdown-display">00:05:00</div>
+    
+    <div class="time-setup">
+      <div class="time-input-group">
+        <input type="number" id="hours-input" min="0" max="99" value="0">
+        <span>时</span>
+      </div>
+      <div class="time-input-group">
+        <input type="number" id="minutes-input" min="0" max="59" value="5">
+        <span>分</span>
+      </div>
+      <div class="time-input-group">
+        <input type="number" id="seconds-input" min="0" max="59" value="0">
+        <span>秒</span>
+      </div>
+    </div>
+    
+    <div class="quick-presets">
+      <button class="preset-btn" data-minutes="1">1分钟</button>
+      <button class="preset-btn" data-minutes="5">5分钟</button>
+      <button class="preset-btn" data-minutes="10">10分钟</button>
+      <button class="preset-btn" data-minutes="15">15分钟</button>
+      <button class="preset-btn" data-minutes="30">30分钟</button>
+    </div>
+    
+    <div class="reminder-options">
+      <label>提醒方式:</label>
+      <div class="reminder-buttons">
+        <button id="popup-reminder" class="reminder-btn active">弹窗提醒</button>
+        <button id="no-popup-reminder" class="reminder-btn">不弹窗</button>
+      </div>
+    </div>
+    
+    <div class="countdown-controls">
+      <button id="start-countdown" class="control-btn">开始</button>
+      <button id="pause-countdown" class="control-btn" disabled>暂停</button>
+      <button id="reset-countdown" class="control-btn">重置</button>
+    </div>
+  </div>
+</div>
+
+<!-- 全屏提醒覆盖层 -->
+<div id="fullscreen-alert" class="fullscreen-alert">
+  <div class="alert-content">
+    <h1>时间到！</h1>
+    <p>倒计时已完成</p>
+    <p class="hint">按任意键或点击任意位置继续</p>
+  </div>
+</div>
+	
   <!-- ✅ 头像弹出信息卡片逻辑 -->
         <script>
           function toggleAccountInfo() {
@@ -337,8 +640,263 @@ document.addEventListener('touchstart', enableBgm, { once: true });
     }
   });
 </script>
+	
+<script>
+// 计时器变量
+let stopwatchInterval = null;
+let stopwatchTime = 0;
+let stopwatchRunning = false;
+let lapTimes = [];
+
+let countdownInterval = null;
+let countdownTime = 300; // 默认5分钟
+let originalCountdownTime = 300;
+let countdownRunning = false;
+let reminderType = 'popup'; // 默认弹窗提醒
+
+// DOM元素
+const stopwatchBtn = document.getElementById('stopwatch-btn');
+const countdownBtn = document.getElementById('countdown-btn');
+const stopwatchSection = document.getElementById('stopwatch-section');
+const countdownSection = document.getElementById('countdown-section');
+const stopwatchDisplay = document.getElementById('stopwatch-display');
+const countdownDisplay = document.getElementById('countdown-display');
+const startStopwatchBtn = document.getElementById('start-stopwatch');
+const lapStopwatchBtn = document.getElementById('lap-stopwatch');
+const resetStopwatchBtn = document.getElementById('reset-stopwatch');
+const lapTimesContainer = document.getElementById('lap-times');
+const startCountdownBtn = document.getElementById('start-countdown');
+const pauseCountdownBtn = document.getElementById('pause-countdown');
+const resetCountdownBtn = document.getElementById('reset-countdown');
+const hoursInput = document.getElementById('hours-input');
+const minutesInput = document.getElementById('minutes-input');
+const secondsInput = document.getElementById('seconds-input');
+const presetBtns = document.querySelectorAll('.preset-btn');
+const popupReminderBtn = document.getElementById('popup-reminder');
+const noPopupReminderBtn = document.getElementById('no-popup-reminder');
+const fullscreenAlert = document.getElementById('fullscreen-alert');
+
+// 计时器模式切换
+stopwatchBtn.addEventListener('click', () => {
+  stopwatchBtn.classList.add('active');
+  countdownBtn.classList.remove('active');
+  stopwatchSection.classList.add('active');
+  countdownSection.classList.remove('active');
+});
+
+countdownBtn.addEventListener('click', () => {
+  countdownBtn.classList.add('active');
+  stopwatchBtn.classList.remove('active');
+  countdownSection.classList.add('active');
+  stopwatchSection.classList.remove('active');
+});
+
+// 秒表功能
+function formatStopwatchTime(ms) {
+  const hours = Math.floor(ms / 3600000);
+  const minutes = Math.floor((ms % 3600000) / 60000);
+  const seconds = Math.floor((ms % 60000) / 1000);
+  const milliseconds = Math.floor((ms % 1000) / 10);
+  
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(2, '0')}`;
+}
+
+function updateStopwatchDisplay() {
+  stopwatchDisplay.textContent = formatStopwatchTime(stopwatchTime);
+}
+
+function startStopwatch() {
+  if (!stopwatchRunning) {
+    const startTime = Date.now() - stopwatchTime;
+    
+    stopwatchInterval = setInterval(() => {
+      stopwatchTime = Date.now() - startTime;
+      updateStopwatchDisplay();
+    }, 10);
+    
+    stopwatchRunning = true;
+    startStopwatchBtn.textContent = '暂停';
+    lapStopwatchBtn.disabled = false;
+  } else {
+    clearInterval(stopwatchInterval);
+    stopwatchRunning = false;
+    startStopwatchBtn.textContent = '继续';
+  }
+}
+
+function lapStopwatch() {
+  if (stopwatchRunning) {
+    lapTimes.push({
+      time: stopwatchTime,
+      display: formatStopwatchTime(stopwatchTime)
+    });
+    
+    updateLapTimes();
+  }
+}
+
+function resetStopwatch() {
+  clearInterval(stopwatchInterval);
+  stopwatchTime = 0;
+  stopwatchRunning = false;
+  lapTimes = [];
+  updateStopwatchDisplay();
+  updateLapTimes();
+  startStopwatchBtn.textContent = '开始';
+  lapStopwatchBtn.disabled = true;
+}
+
+function updateLapTimes() {
+  lapTimesContainer.innerHTML = '';
+  
+  lapTimes.forEach((lap, index) => {
+    const lapItem = document.createElement('div');
+    lapItem.className = 'lap-item';
+    lapItem.textContent = `计次 ${index + 1}: ${lap.display}`;
+    lapTimesContainer.appendChild(lapItem);
+  });
+}
+
+startStopwatchBtn.addEventListener('click', startStopwatch);
+lapStopwatchBtn.addEventListener('click', lapStopwatch);
+resetStopwatchBtn.addEventListener('click', resetStopwatch);
+
+// 倒计时功能
+function formatCountdownTime(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+function updateCountdownDisplay() {
+  countdownDisplay.textContent = formatCountdownTime(countdownTime);
+}
+
+function updateCountdownFromInputs() {
+  const hours = parseInt(hoursInput.value) || 0;
+  const minutes = parseInt(minutesInput.value) || 0;
+  const seconds = parseInt(secondsInput.value) || 0;
+  
+  countdownTime = hours * 3600 + minutes * 60 + seconds;
+  originalCountdownTime = countdownTime;
+  updateCountdownDisplay();
+}
+
+function startCountdown() {
+  if (countdownTime <= 0) return;
+  
+  if (!countdownRunning) {
+    countdownInterval = setInterval(() => {
+      if (countdownTime <= 0) {
+        clearInterval(countdownInterval);
+        countdownRunning = false;
+        startCountdownBtn.textContent = '开始';
+        pauseCountdownBtn.disabled = true;
+        
+        // 时间到，根据设置显示提醒
+        if (reminderType === 'popup') {
+          showFullscreenAlert();
+        } else {
+          // 如果不弹窗，可以在这里添加其他提醒方式，比如声音
+          console.log('时间到！');
+        }
+        return;
+      }
+      
+      countdownTime--;
+      updateCountdownDisplay();
+    }, 1000);
+    
+    countdownRunning = true;
+    startCountdownBtn.textContent = '继续';
+    pauseCountdownBtn.disabled = false;
+    hoursInput.disabled = true;
+    minutesInput.disabled = true;
+    secondsInput.disabled = true;
+  }
+}
+
+function pauseCountdown() {
+  clearInterval(countdownInterval);
+  countdownRunning = false;
+  startCountdownBtn.textContent = '开始';
+  pauseCountdownBtn.disabled = true;
+}
+
+function resetCountdown() {
+  clearInterval(countdownInterval);
+  countdownTime = originalCountdownTime;
+  countdownRunning = false;
+  updateCountdownDisplay();
+  startCountdownBtn.textContent = '开始';
+  pauseCountdownBtn.disabled = true;
+  hoursInput.disabled = false;
+  minutesInput.disabled = false;
+  secondsInput.disabled = false;
+}
+
+// 快速预设按钮
+presetBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const minutes = parseInt(btn.getAttribute('data-minutes'));
+    countdownTime = minutes * 60;
+    originalCountdownTime = countdownTime;
+    updateCountdownDisplay();
+    
+    // 更新输入框
+    hoursInput.value = 0;
+    minutesInput.value = minutes;
+    secondsInput.value = 0;
+  });
+});
+
+// 提醒方式选择
+popupReminderBtn.addEventListener('click', () => {
+  reminderType = 'popup';
+  popupReminderBtn.classList.add('active');
+  noPopupReminderBtn.classList.remove('active');
+});
+
+noPopupReminderBtn.addEventListener('click', () => {
+  reminderType = 'no-popup';
+  noPopupReminderBtn.classList.add('active');
+  popupReminderBtn.classList.remove('active');
+});
+
+// 全屏提醒
+function showFullscreenAlert() {
+  fullscreenAlert.style.display = 'flex';
+  
+  // 点击任意位置关闭
+  const closeAlert = () => {
+    fullscreenAlert.style.display = 'none';
+    document.removeEventListener('click', closeAlert);
+    document.removeEventListener('keydown', closeAlert);
+  };
+  
+  document.addEventListener('click', closeAlert);
+  document.addEventListener('keydown', closeAlert);
+}
+
+// 输入框变化时更新倒计时
+hoursInput.addEventListener('change', updateCountdownFromInputs);
+minutesInput.addEventListener('change', updateCountdownFromInputs);
+secondsInput.addEventListener('change', updateCountdownFromInputs);
+
+// 按钮事件
+startCountdownBtn.addEventListener('click', startCountdown);
+pauseCountdownBtn.addEventListener('click', pauseCountdown);
+resetCountdownBtn.addEventListener('click', resetCountdown);
+
+// 初始化显示
+updateStopwatchDisplay();
+updateCountdownDisplay();
+</script>
 
 </body>
 </html>
+
 
 
