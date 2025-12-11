@@ -238,6 +238,30 @@
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
+	/* 开关样式 */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(36px);
+}
+
+/* 开关标签文字动画 */
+#toggle-label {
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.switch input:checked ~ #toggle-label {
+  color: #4CAF50;
+}
 </style>
         </head>
         <body>
@@ -486,7 +510,50 @@ document.addEventListener('touchstart', enableBgm, { once: true });
     <p class="hint">按任意键或点击任意位置继续</p>
   </div>
 </div>
-	
+<!-- 在计时器容器之前添加 -->
+<div style="
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 15px;
+">
+  <span style="color: white; font-size: 16px;">显示模式:</span>
+  
+  <!-- 滑动切换开关 -->
+  <label class="switch" style="
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    height: 34px;
+  ">
+    <input type="checkbox" id="page-toggle">
+    <span class="slider" style="
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ff4444;
+      transition: .4s;
+      border-radius: 34px;
+    "></span>
+    <span class="slider:before" style="
+      position: absolute;
+      content: '';
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    "></span>
+  </label>
+  
+  <span id="toggle-label" style="color: white; font-size: 16px;">计时器模式</span>
+</div>
   <!-- ✅ 头像弹出信息卡片逻辑 -->
         <script>
           function toggleAccountInfo() {
@@ -893,10 +960,64 @@ resetCountdownBtn.addEventListener('click', resetCountdown);
 // 初始化显示
 updateStopwatchDisplay();
 updateCountdownDisplay();
+
+// 页面切换功能
+const pageToggle = document.getElementById('page-toggle');
+const toggleLabel = document.getElementById('toggle-label');
+const iframe = document.querySelector('iframe'); // 你的iframe
+const timerContainer = document.querySelector('.timer-container');
+
+// 检查localStorage中的状态
+if (localStorage.getItem('timerActive') === 'true') {
+  // 显示计时器，隐藏IFARM
+  iframe.style.display = 'none';
+  timerContainer.style.display = 'block';
+  pageToggle.checked = true;
+  toggleLabel.textContent = '计时器模式';
+  toggleLabel.style.color = '#4CAF50';
+} else {
+  // 显示IFARM，隐藏计时器
+  iframe.style.display = 'block';
+  timerContainer.style.display = 'none';
+  pageToggle.checked = false;
+  toggleLabel.textContent = 'IFARM时钟';
+  toggleLabel.style.color = '#ff4444';
+}
+
+// 切换开关事件
+pageToggle.addEventListener('change', function() {
+  if (this.checked) {
+    // 切换到计时器模式
+    iframe.style.display = 'none';
+    timerContainer.style.display = 'block';
+    toggleLabel.textContent = '计时器模式';
+    toggleLabel.style.color = '#4CAF50';
+    localStorage.setItem('timerActive', 'true');
+  } else {
+    // 切换到IFARM时钟模式
+    iframe.style.display = 'block';
+    timerContainer.style.display = 'none';
+    toggleLabel.textContent = 'IFARM时钟';
+    toggleLabel.style.color = '#ff4444';
+    localStorage.setItem('timerActive', 'false');
+  }
+});
+
+// 确保计时器变量在最前面（你已经有的代码）
+let stopwatchInterval = null;
+let stopwatchTime = 0;
+// ... 你的其他计时器代码
 </script>
 
 </body>
 </html>
+
+
+
+
+
+
+
 
 
 
