@@ -7,245 +7,203 @@
 <link rel="stylesheet" href="../css/htgov.css" />
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <style>
-/* 计时器容器样式 - 黑金色短版 */
+/* ========== 计时器主容器 - 金色背景，黑色文字，更紧凑 ========== */
 .timer-container {
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
-  border-radius: 20px;
-  padding: 25px;
-  margin: 20px auto;
-  border: 2px solid #ffd700;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6),
-              0 0 30px rgba(255, 215, 0, 0.3),
-              inset 0 0 20px rgba(255, 215, 0, 0.1);
+  /* 核心改动：背景改为金色，文字预设为黑色，大幅减小内边距 */
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); /* 金色背景 */
+  border-radius: 16px; /* 圆角稍小 */
+  padding: 15px 20px;  /* 上下内边距从25px减为15px，左右也减小 */
+  margin: 10px auto;   /* 上下外边距大幅减小 */
+  border: 2px solid rgba(0, 0, 0, 0.3); /* 边框改为深色 */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), /* 阴影减弱 */
+              inset 0 0 15px rgba(255, 255, 255, 0.5); /* 内发光改为浅色 */
   display: none;
-  max-width: 600px;  /* 限制最大宽度 */
+  max-width: 580px;    /* 最大宽度微调 */
   position: relative;
   overflow: hidden;
+  color: #000000;      /* 容器内默认文字颜色为黑色 */
 }
 
-/* 添加金色装饰边框 */
-.timer-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #ffd700, #ffed4e, #ffd700);
-  border-radius: 20px 20px 0 0;
-}
+/* 移除之前的顶部金色装饰条（因为背景已是金色） */
+/* .timer-container::before 相关代码已移除 */
 
-/* 添加内部光晕 */
+/* 修改内部光晕为深色，以在金色背景上形成对比 */
 .timer-container::after {
   content: '';
   position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  bottom: 10px;
-  border: 1px solid rgba(255, 215, 0, 0.2);
-  border-radius: 15px;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.15); /* 改为深色边框 */
+  border-radius: 10px;
   pointer-events: none;
 }
 
+/* ========== 内部组件通用调整：大幅减少间距，统一黑色文字 ========== */
 .timer-controls {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding-bottom: 10px;
+  margin-bottom: 12px; /* 减小下边距 */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2); /* 分割线改为深色 */
+  padding-bottom: 8px;
 }
 
-/* 计时器模式按钮样式 - 金色主题 */
+/* 计时器模式切换按钮 */
 .timer-mode-btn {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-  border: 1px solid #ffd700;
-  color: #ffd700;
-  padding: 8px 20px;  /* 减小内边距 */
-  margin: 0 4px;      /* 减小外边距 */
-  border-radius: 20px;
-  font-size: 16px;
+  background: rgba(0, 0, 0, 0.85); /* 深色背景 */
+  border: 1px solid #000;
+  color: #ffd700; /* 按钮文字保持金色 */
+  padding: 6px 16px;
+  margin: 0 3px;
+  border-radius: 18px;
+  font-size: 15px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
 .timer-mode-btn.active {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  color: #000;
+  background: #000; /* 激活状态纯黑 */
+  color: #ffd700;
   font-weight: bold;
-  border-color: #ffd700;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  border-color: #000;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 }
 
-.timer-section {
-  display: none;
-}
-
-.timer-section.active {
-  display: block;
-}
-
-/* 时间显示样式 - 调整为更紧凑 */
+/* 时间显示 - 改为黑色，减小间距 */
 .time-display {
-  font-size: 42px;  /* 稍微减小字体 */
+  font-size: 40px;  /* 字体稍减小 */
   font-weight: bold;
   text-align: center;
-  margin: 15px 0;   /* 减小边距 */
+  margin: 8px 0;   /* 上下边距大幅减小 */
   font-family: 'Courier New', monospace;
-  color: #ffd700;   /* 改为金色 */
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5),
-               0 0 20px rgba(255, 215, 0, 0.3);
+  color: #000000;   /* 核心：改为黑色文字 */
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7); /* 阴影改为白色系，在金色背景上更清晰 */
 }
 
-/* 控制按钮样式 - 改为金色主题 */
+/* 通用控制按钮（开始、暂停、重置等） */
 .control-btn {
-  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
-  border: 1px solid #ffd700;
-  color: #ffd700;
-  padding: 10px 20px;  /* 减小内边距 */
-  margin: 0 8px;       /* 减小外边距 */
-  border-radius: 8px;
-  font-size: 16px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid #000;
+  color: #ffd700; /* 金色文字 */
+  padding: 8px 16px; /* 内边距减小 */
+  margin: 0 5px;     /* 左右边距减小 */
+  border-radius: 6px;
+  font-size: 15px;
   cursor: pointer;
   transition: all 0.3s ease;
-  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
-
 .control-btn:hover {
-  background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
-  border-color: #ffed4e;
+  background: #000;
+  border-color: #333;
   color: #ffed4e;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
-
 .control-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* 时间设置样式 - 调整为更紧凑 */
+/* 时间输入组 */
 .time-setup {
   display: flex;
   justify-content: center;
-  gap: 12px;  /* 减小间距 */
-  margin: 20px 0;
+  gap: 10px; /* 间距减小 */
+  margin: 12px 0; /* 上下边距减小 */
 }
-
-.time-input-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .time-input-group input {
-  width: 70px;  /* 减小宽度 */
-  padding: 10px; /* 减小内边距 */
-  font-size: 22px;
+  width: 65px;
+  padding: 8px;
+  font-size: 20px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid #ffd700;
-  border-radius: 8px;
-  color: #ffd700;
-  margin-bottom: 5px;
+  background: rgba(255, 255, 255, 0.9); /* 输入框背景改为浅色 */
+  border: 1px solid rgba(0, 0, 0, 0.4); /* 边框深色 */
+  border-radius: 6px;
+  color: #000; /* 输入数字为黑色 */
 }
-
 .time-input-group span {
-  color: #ffd700;
-  font-size: 14px;
-  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+  color: #333; /* 文字改为深灰色 */
+  font-size: 13px;
 }
 
 /* 快速预设按钮 */
 .quick-presets {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin: 20px 0;
+  gap: 8px; /* 间距减小 */
+  margin: 12px 0; /* 边距减小 */
   flex-wrap: wrap;
 }
-
-/* 预设按钮样式 - 金色主题 */
 .preset-btn {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-  border: 1px solid #ffd700;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #333;
   color: #ffd700;
-  padding: 6px 12px;  /* 减小内边距 */
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 14px;    /* 减小字体 */
+  font-size: 13px;
 }
-
 .preset-btn:hover {
-  background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
-  border-color: #ffed4e;
+  background: #000;
   color: #ffed4e;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
 
-/* 提醒选项样式 */
+/* 提醒选项区域 */
 .reminder-options {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 25px 0;
-  gap: 15px;
-}
-
-.reminder-options label {
-  color: white;
-  font-size: 16px;
-}
-
-.reminder-buttons {
-  display: flex;
+  margin: 15px 0; /* 边距减小 */
   gap: 10px;
 }
-
-/* 提醒按钮样式 - 金色主题 */
+.reminder-options label {
+  color: #333; /* 改为深灰色 */
+  font-size: 15px;
+}
+.reminder-buttons {
+  display: flex;
+  gap: 8px;
+}
 .reminder-btn {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-  border: 1px solid #ffd700;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #333;
   color: #ffd700;
-  padding: 6px 16px;  /* 减小内边距 */
-  border-radius: 6px;
+  padding: 4px 12px;
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 14px;    /* 减小字体 */
+  font-size: 13px;
 }
 .reminder-btn.active {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  border-color: #ffd700;
-  color: #000;
-  font-weight: bold;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-}
-
-/* 计次容器样式 - 金色主题 */
-.lap-container {
-  max-height: 150px;  /* 减小高度 */
-  overflow-y: auto;
-  margin-top: 15px;
-  padding: 8px;
-  background: rgba(255, 215, 0, 0.05);
-  border: 1px solid rgba(255, 215, 0, 0.3);
-  border-radius: 8px;
-}
-
-.lap-item {
-  padding: 6px 12px;  /* 减小内边距 */
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  background: #000;
   color: #ffd700;
-  font-family: 'Courier New', monospace;
-  font-size: 14px;    /* 减小字体 */
+  font-weight: bold;
+  border-color: #000;
 }
 
+/* 计次容器 */
+.lap-container {
+  max-height: 120px; /* 高度减小 */
+  overflow-y: auto;
+  margin-top: 10px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.7); /* 背景改为浅色半透明白 */
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+.lap-item {
+  padding: 5px 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: #222; /* 文字深灰色 */
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+}
 .lap-item:last-child {
   border-bottom: none;
 }
 
-/* 全屏提醒样式 */
+/* ========== 以下样式为页面其他部分，保持不变 ========== */
+/* 全屏提醒样式 - 保持不变 */
 .fullscreen-alert {
   position: fixed;
   top: 0;
@@ -259,72 +217,59 @@
   z-index: 9999;
   cursor: pointer;
 }
-
 .alert-content {
   text-align: center;
   animation: pulse 2s infinite;
 }
-
 .alert-content h1 {
   font-size: 72px;
   color: gold;
   text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
   margin-bottom: 20px;
 }
-
 .alert-content p {
   font-size: 36px;
   color: #fffbeb;
   margin-bottom: 30px;
 }
-
 .hint {
   font-size: 20px !important;
   color: rgba(255, 251, 235, 0.7) !important;
   margin-top: 40px !important;
 }
-
 @keyframes pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
-	/* 开关样式 */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
 
-.switch input:checked + .slider {
-  background-color: #4CAF50;
-}
-
-.switch input:checked + .slider:before {
-  transform: translateX(36px);
-}
-
-/* 开关标签文字动画 */
+/* 页面切换标签样式 - 保持不变 */
 #toggle-label {
   transition: all 0.3s ease;
   font-weight: bold;
 }
-
 .switch input:checked ~ #toggle-label {
   color: #4CAF50;
 }
-/* 返回按钮样式调整 */
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch input:checked + .slider { background-color: #4CAF50; }
+.switch input:checked + .slider:before { transform: translateX(36px); }
+
+/* 返回IFARM按钮样式 - 保持不变 */
 #back-to-iframe-btn {
   background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%) !important;
   border: 1px solid #ff4444 !important;
   color: white !important;
   box-shadow: 0 0 10px rgba(255, 68, 68, 0.5) !important;
 }
-
 #back-to-iframe-btn:hover {
   background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%) !important;
   border-color: #ff6b6b !important;
 }
+
+/* 隐藏/显示切换 */
+.timer-section { display: none; }
+.timer-section.active { display: block; }
 </style>
         </head>
         <body>
@@ -1073,6 +1018,7 @@ if (!document.getElementById('back-to-iframe-btn')) {
 
 </body>
 </html>
+
 
 
 
