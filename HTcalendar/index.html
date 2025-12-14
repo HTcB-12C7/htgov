@@ -7,16 +7,45 @@
 <link rel="stylesheet" href="../css/htgov.css" />
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <style>
-/* 计时器容器样式 */
+/* 计时器容器样式 - 黑金色短版 */
 .timer-container {
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+  border-radius: 20px;
+  padding: 25px;
+  margin: 20px auto;
+  border: 2px solid #ffd700;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6),
+              0 0 30px rgba(255, 215, 0, 0.3),
+              inset 0 0 20px rgba(255, 215, 0, 0.1);
+  display: none;
+  max-width: 600px;  /* 限制最大宽度 */
+  position: relative;
+  overflow: hidden;
+}
+
+/* 添加金色装饰边框 */
+.timer-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ffd700, #ffed4e, #ffd700);
+  border-radius: 20px 20px 0 0;
+}
+
+/* 添加内部光晕 */
+.timer-container::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 1px solid rgba(255, 215, 0, 0.2);
   border-radius: 15px;
-  padding: 20px;
-  margin-top: 30px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  display: none; 
+  pointer-events: none;
 }
 
 .timer-controls {
@@ -27,12 +56,13 @@
   padding-bottom: 10px;
 }
 
+/* 计时器模式按钮样式 - 金色主题 */
 .timer-mode-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: #fff;
-  padding: 10px 25px;
-  margin: 0 5px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  padding: 8px 20px;  /* 减小内边距 */
+  margin: 0 4px;      /* 减小外边距 */
   border-radius: 20px;
   font-size: 16px;
   cursor: pointer;
@@ -40,8 +70,11 @@
 }
 
 .timer-mode-btn.active {
-  background: rgba(59, 130, 246, 0.7);
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #000;
+  font-weight: bold;
+  border-color: #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
 }
 
 .timer-section {
@@ -52,32 +85,37 @@
   display: block;
 }
 
-/* 时间显示样式 */
+/* 时间显示样式 - 调整为更紧凑 */
 .time-display {
-  font-size: 48px;
+  font-size: 42px;  /* 稍微减小字体 */
   font-weight: bold;
   text-align: center;
-  margin: 20px 0;
+  margin: 15px 0;   /* 减小边距 */
   font-family: 'Courier New', monospace;
-  color: #fff;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  color: #ffd700;   /* 改为金色 */
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5),
+               0 0 20px rgba(255, 215, 0, 0.3);
 }
 
-/* 控制按钮样式 */
+/* 控制按钮样式 - 改为金色主题 */
 .control-btn {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 12px 25px;
-  margin: 0 10px;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  padding: 10px 20px;  /* 减小内边距 */
+  margin: 0 8px;       /* 减小外边距 */
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
 
 .control-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+  border-color: #ffed4e;
+  color: #ffed4e;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
   transform: translateY(-2px);
 }
 
@@ -86,12 +124,12 @@
   cursor: not-allowed;
 }
 
-/* 时间设置样式 */
+/* 时间设置样式 - 调整为更紧凑 */
 .time-setup {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  margin: 25px 0;
+  gap: 12px;  /* 减小间距 */
+  margin: 20px 0;
 }
 
 .time-input-group {
@@ -101,20 +139,21 @@
 }
 
 .time-input-group input {
-  width: 80px;
-  padding: 12px;
-  font-size: 24px;
+  width: 70px;  /* 减小宽度 */
+  padding: 10px; /* 减小内边距 */
+  font-size: 22px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #ffd700;
   border-radius: 8px;
-  color: white;
+  color: #ffd700;
   margin-bottom: 5px;
 }
 
 .time-input-group span {
-  color: rgba(255, 255, 255, 0.8);
+  color: #ffd700;
   font-size: 14px;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
 
 /* 快速预设按钮 */
@@ -126,18 +165,23 @@
   flex-wrap: wrap;
 }
 
+/* 预设按钮样式 - 金色主题 */
 .preset-btn {
-  background: rgba(59, 130, 246, 0.3);
-  border: 1px solid rgba(59, 130, 246, 0.5);
-  color: white;
-  padding: 8px 15px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  padding: 6px 12px;  /* 减小内边距 */
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 14px;    /* 减小字体 */
 }
 
 .preset-btn:hover {
-  background: rgba(59, 130, 246, 0.5);
+  background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+  border-color: #ffed4e;
+  color: #ffed4e;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
 
 /* 提醒选项样式 */
@@ -159,36 +203,42 @@
   gap: 10px;
 }
 
+/* 提醒按钮样式 - 金色主题 */
 .reminder-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 8px 20px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  padding: 6px 16px;  /* 减小内边距 */
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 14px;    /* 减小字体 */
 }
-
 .reminder-btn.active {
-  background: rgba(34, 197, 94, 0.5);
-  border-color: rgba(34, 197, 94, 0.7);
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  border-color: #ffd700;
+  color: #000;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
-/* 计次容器样式 */
+/* 计次容器样式 - 金色主题 */
 .lap-container {
-  max-height: 200px;
+  max-height: 150px;  /* 减小高度 */
   overflow-y: auto;
-  margin-top: 20px;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.2);
+  margin-top: 15px;
+  padding: 8px;
+  background: rgba(255, 215, 0, 0.05);
+  border: 1px solid rgba(255, 215, 0, 0.3);
   border-radius: 8px;
 }
 
 .lap-item {
-  padding: 8px 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
+  padding: 6px 12px;  /* 减小内边距 */
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  color: #ffd700;
   font-family: 'Courier New', monospace;
+  font-size: 14px;    /* 减小字体 */
 }
 
 .lap-item:last-child {
@@ -262,6 +312,18 @@
 
 .switch input:checked ~ #toggle-label {
   color: #4CAF50;
+}
+/* 返回按钮样式调整 */
+#back-to-iframe-btn {
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%) !important;
+  border: 1px solid #ff4444 !important;
+  color: white !important;
+  box-shadow: 0 0 10px rgba(255, 68, 68, 0.5) !important;
+}
+
+#back-to-iframe-btn:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%) !important;
+  border-color: #ff6b6b !important;
 }
 </style>
         </head>
@@ -1011,6 +1073,7 @@ if (!document.getElementById('back-to-iframe-btn')) {
 
 </body>
 </html>
+
 
 
 
