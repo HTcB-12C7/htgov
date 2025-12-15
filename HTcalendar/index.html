@@ -13,7 +13,7 @@
   background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); /* 金色背景 */
   border-radius: 16px; /* 圆角稍小 */
   padding: 15px 20px;  /* 上下内边距从25px减为15px，左右也减小 */
-  margin: 10px auto;   /* 上下外边距大幅减小 */
+  margin: 100px auto;   /* 上下外边距大幅减小 */
   border: 2px solid rgba(0, 0, 0, 0.3); /* 边框改为深色 */
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), /* 阴影减弱 */
               inset 0 0 15px rgba(255, 255, 255, 0.5); /* 内发光改为浅色 */
@@ -975,13 +975,13 @@ if (localStorage.getItem('timerActive') === 'true') {
   // 显示计时器，隐藏IFARM
   iframeContainer.style.display = 'none';
   timerContainer.style.display = 'block';
-  toggleLabel.textContent = '当前：计时器模式';
+  toggleLabel.textContent = '当前：黑铁金蛋记时';
   toggleLabel.style.color = '#4CAF50';
 } else {
   // 显示IFARM，隐藏计时器
   iframeContainer.style.display = 'block';
   timerContainer.style.display = 'none';
-  toggleLabel.textContent = '当前：IFARM时钟';
+  toggleLabel.textContent = '当前：黑铁实时日历';
   toggleLabel.style.color = '#ff4444';
 }
 
@@ -989,7 +989,7 @@ if (localStorage.getItem('timerActive') === 'true') {
 iframeSwitchBtn.addEventListener('click', function() {
   iframeContainer.style.display = 'none';
   timerContainer.style.display = 'block';
-  toggleLabel.textContent = '当前：计时器模式';
+  toggleLabel.textContent = '当前：黑铁金蛋记时';
   toggleLabel.style.color = '#4CAF50';
   localStorage.setItem('timerActive', 'true');
 });
@@ -999,14 +999,14 @@ const timerControls = document.querySelector('.timer-controls');
 if (!document.getElementById('back-to-iframe-btn')) {
   const backBtn = document.createElement('button');
   backBtn.id = 'back-to-iframe-btn';
-  backBtn.textContent = '🔙 返回IFARM时钟';
+  backBtn.textContent = '🔙 返回黑铁实时日历';
   backBtn.className = 'timer-mode-btn';
   backBtn.style.cssText = 'margin-left:10px; background:#ff4444;';
   
   backBtn.addEventListener('click', function() {
     iframeContainer.style.display = 'block';
     timerContainer.style.display = 'none';
-    toggleLabel.textContent = '当前：IFARM时钟';
+    toggleLabel.textContent = '当前：黑铁实时日历';
     toggleLabel.style.color = '#ff4444';
     localStorage.setItem('timerActive', 'false');
   });
@@ -1018,6 +1018,7 @@ if (!document.getElementById('back-to-iframe-btn')) {
 
 </body>
 </html>
+
 
 
 
