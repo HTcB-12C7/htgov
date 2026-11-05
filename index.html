@@ -229,17 +229,14 @@ import { getAuth, signInWithEmailAndPassword, signInWithPopup,
   from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 import { getDatabase, ref, set, get } 
   from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-import { getStorage, ref as sRef, uploadBytes, getDownloadURL, listAll, getMetadata } 
-  from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+// 注意：这里移除了 Firebase Storage 的导入
 
 const firebaseConfig = {
   apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
   authDomain: "ht-chat-91e5f.firebaseapp.com",
   databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
   projectId: "ht-chat-91e5f",
-  // ✅ 修正为正确存储桶域名
-// ✅ 改成新版域名
-storageBucket: "ht-chat-91e5f.firebasestorage.app",
+  storageBucket: "ht-chat-91e5f.firebasestorage.app",
   messagingSenderId: "325331727527",
   appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
   measurementId: "G-VYV13LWP14"
@@ -249,25 +246,31 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
 const provider = new GoogleAuthProvider();
-const storage = getStorage(app);
-  
+
+// 你的 ImgBB API Key
+const IMGBB_API_KEY = "4442b285f46cd24fe8771ca5e8d442c7"; 
+
+// 回车确认登录
+document.getElementById("email").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") { e.preventDefault(); document.getElementById("loginBtn").click(); }
+});
+document.getElementById("password").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") { e.preventDefault(); document.getElementById("loginBtn").click(); }
+});
+
 let newAvatarFile = null;
 document.getElementById("updateAvatar").addEventListener("change", function(e) {
   const file = e.target.files[0];
   if (!file) return;
-  if (file.size > 27 * 1024 * 1024) {
-    alert("图片大小不能超过27MB！");
+  if (file.size > 5 * 1024 * 1024) { // 限制 5MB 足够头像了
+    alert("头像图片不能超过 5MB！");
     return;
   }
   newAvatarFile = file;
   document.getElementById("userPhotoPreview").src = URL.createObjectURL(file);
 });
-window.toggleAccountInfo = function () {
-  const popup = document.getElementById('accountPopup');
-  popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
-};
 
-// ✅ 登录逻辑
+// 登录逻辑
 document.getElementById("loginBtn").onclick = async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -278,7 +281,7 @@ document.getElementById("loginBtn").onclick = async () => {
   }
 };
 
-// ✅ Google 登录
+// Google 登录
 document.getElementById("googleLoginBtn").onclick = async () => {
   try {
     await signInWithPopup(auth, provider);
@@ -287,7 +290,7 @@ document.getElementById("googleLoginBtn").onclick = async () => {
   }
 };
 
-// ✅ 绑定 Google
+// 绑定 Google
 document.getElementById("bindGoogleBtn").onclick = async () => {
   const user = auth.currentUser;
   if (!user) return alert("请先登录");
@@ -299,7 +302,7 @@ document.getElementById("bindGoogleBtn").onclick = async () => {
   }
 };
 
-// ✅ 邮箱验证
+// 邮箱验证
 document.getElementById("sendVerifyBtn").onclick = async () => {
   const user = auth.currentUser;
   if (!user) return alert("请先登录");
@@ -313,58 +316,45 @@ document.getElementById("sendVerifyBtn").onclick = async () => {
   }
 };
 
-// ✅ 检查 Firebase Storage 当前占用
-async function checkStorageUsageAndUploadLimit() {
-  const rootRef = sRef(storage, "avatars/");
-  let totalBytes = 0;
-  try {
-    const result = await listAll(rootRef);
-    for (const itemRef of result.items) {
-      const meta = await getMetadata(itemRef);
-      totalBytes += meta.size || 0;
-    }
-    const totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
-    const totalGB = (totalBytes / (1024 * 1024 * 1024)).toFixed(3);
-    console.log(`当前 Firebase Storage 占用：${totalMB} MB (${totalGB} GB)`);
-
-    if (totalBytes > 1 * 1024 * 1024 * 1024) {
-      alert("⚠️ 已达到 Firebase 免费存储上限 (1GB)，请等待下个月再上传头像。");
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.error("检查存储空间出错：", err);
-    return true;
-  }
-}
-
-// ✅ 保存用户信息（含头像上传）
+// 保存用户信息（含 ImgBB 头像上传）
 document.getElementById("saveBtn").onclick = async () => {
   const user = auth.currentUser;
   if (!user) return alert("请先登录");
 
   let avatarURL = document.getElementById("userPhoto").src;
 
-  // 检查剩余空间
-  const canUpload = await checkStorageUsageAndUploadLimit();
-  if (!canUpload) return;
+  // 如果用户选了新头像，上传到 ImgBB
+  if (newAvatarFile) {
+    try {
+      document.getElementById("saveBtn").innerText = "上传头像中...";
+      
+      const formData = new FormData();
+      formData.append("image", newAvatarFile);
 
-if (newAvatarFile) {
-  try {
-    console.log("开始上传头像：", newAvatarFile.name);
-    const fileRef = sRef(storage, "avatars/" + user.uid + ".jpg");
-    await uploadBytes(fileRef, newAvatarFile);
-    console.log("✅ 上传成功，获取下载链接...");
-    avatarURL = await getDownloadURL(fileRef);
-    document.getElementById("userPhoto").src = avatarURL;
-    console.log("✅ 下载链接已获取：", avatarURL);
-  } catch (err) {
-    console.error("❌ 上传头像失败：", err);
-    alert("上传头像失败：" + err.message);
-    return;
+      // 调用 ImgBB API
+      const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+        method: "POST",
+        body: formData
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        avatarURL = result.data.url; 
+        document.getElementById("userPhoto").src = avatarURL;
+        newAvatarFile = null; // 上传成功后清空暂存
+      } else {
+        throw new Error(result.error.message);
+      }
+    } catch (err) {
+      console.error("上传头像失败：", err);
+      alert("上传头像失败：" + err.message);
+      document.getElementById("saveBtn").innerText = "保存";
+      return;
+    }
   }
-}
 
+  // 把 ImgBB 的在线链接存进 Firebase 数据库
   const userRef = ref(db, "users/" + user.uid);
   await set(userRef, {
     nickname: document.getElementById("userNickname").value,
@@ -376,40 +366,66 @@ if (newAvatarFile) {
   });
 
   alert("信息已更新！");
+  document.getElementById("saveBtn").innerText = "保存";
 };
 
-// ✅ 登出
+// 登出
 document.getElementById("logoutBtn").onclick = () => {
   signOut(auth);
 };
 
-// ✅ 登录状态监听
+// 登录状态监听
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     document.getElementById("loginForm").style.display = "none";
     document.getElementById("userInfo").style.display = "block";
-    document.getElementById("userPhoto").src = user.photoURL || "assets/HTgovIconV2.png";
+    
+    let finalAvatar = "assets/login-placeholder.svg"; 
 
     const userRef = ref(db, "users/" + user.uid);
     const snapshot = await get(userRef);
+    
     if (snapshot.exists()) {
       const data = snapshot.val();
+      
+      // 优先用数据库里的 ImgBB 链接，如果没有，再用 Google 头像
+      finalAvatar = data.avatar || user.photoURL || "assets/login-placeholder.svg";
+
       document.getElementById("userNickname").value = data.nickname || "";
       document.getElementById("userEmail").value = data.email || user.email || "";
       document.getElementById("userPayMethod").value = data.payMethod || "";
       document.getElementById("userPayName").value = data.payName || "";
       document.getElementById("userPayAccount").value = data.payAccount || "";
-      document.getElementById("userPhoto").src = data.avatar || user.photoURL || "assets/login-placeholder.svg";
-      document.getElementById("userPhotoPreview").src = data.avatar || user.photoURL || "assets/login-placeholder.svg";
+    } else {
+      finalAvatar = user.photoURL || "assets/login-placeholder.svg";
     }
+
+    const photoEl = document.getElementById("userPhoto");
+    const previewEl = document.getElementById("userPhotoPreview");
+    
+    // 防止防盗链导致头像加载失败
+    photoEl.referrerPolicy = "no-referrer";
+    previewEl.referrerPolicy = "no-referrer";
+    
+    // 错误兜底，如果加载失败立刻显示默认图
+    photoEl.onerror = function() {
+      this.onerror = null;
+      this.src = "assets/login-placeholder.svg";
+    };
+    previewEl.onerror = function() {
+      this.onerror = null;
+      this.src = "assets/login-placeholder.svg";
+    };
+
+    photoEl.src = finalAvatar;
+    previewEl.src = finalAvatar;
+
   } else {
     document.getElementById("loginForm").style.display = "block";
     document.getElementById("userInfo").style.display = "none";
     document.getElementById("userPhoto").src = "assets/login-placeholder.svg";
   }
 });
-
 </script>
-
 </body>
 </html>
