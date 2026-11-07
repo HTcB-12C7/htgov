@@ -586,7 +586,7 @@ window.addEventListener("load", playNextSong);
 
     <!-- 动态加载 nav.html -->
     <script>
-      fetch("https://htcb-12c7.github.io/htgov/nav/nav.html")
+      fetch("https://raw.githubusercontent.com/HTcB-12C7/htgov/main/nav/nav.html")
         .then(r => r.text())
         .then(html => {
           document.getElementById("sidebar-nav").innerHTML = html;
