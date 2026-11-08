@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黑铁工作室 | 拼音特训终端</title>
+<link rel="stylesheet" href="https://htcb-12c7.github.io/htgov/css/htgov.css" />
+<style>
+:root {
+  --bg-coffee-dark: #120d0a;
+  --panel-bg: #231b16;
+  --gold: #D4AF37;
+  --gold-muted: #C9A355;
+  --orange-caramel: #d35400;
+  --green-sbux: #006241;
+  --pistachio: #93C572;
+  --text-main: #e8dfd3;
+  --text-muted: #9c8c80;
+  --border-gold: rgba(201, 163, 85, 0.25);
+  --red: #ff5252;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background-color: var(--bg-coffee-dark);
+  color: var(--text-main);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background-image:
+    radial-gradient(circle at 15% 15%, rgba(211, 84, 0, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(0, 98, 65, 0.04) 0%, transparent 40%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  padding-top: 70px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===================== HEADER ===================== */
+.header {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 60px; z-index: 1000;
+  background: rgba(18, 13, 10, 0.95);
+  border-bottom: 1px solid var(--border-gold);
+}
+.header .logo {
+  position: absolute; left: 12px; top: 7px;
+  height: 46px; width: 46px; border-radius: 50%;
+  border: 1px solid var(--gold-muted); object-fit: cover;
+  cursor: pointer; transition: box-shadow .3s;
+}
+.header .logo:hover { box-shadow: 0 0 15px rgba(212,175,55,.5); }
+.header-title {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.05rem; font-weight: 700; color: var(--gold);
+  letter-spacing: 1px; white-space: nowrap; text-align: center;
+  pointer-events: none;
+}
+.header-title .badge {
+  font-size: 0.65rem; background: var(--green-sbux); color: #fff;
+  padding: 2px 7px; border-radius: 4px; margin-left: 6px;
+  font-weight: 500; vertical-align: middle;
+}
+.lang-btn {
+  position: absolute; top: 10px; right: 66px;
+  padding: 7px 14px; font-size: 14px;
+  background: black; color: #03a9f4;
+  border: 1px solid #03a9f4; border-radius: 5px;
+  cursor: pointer; font-weight: bold;
+  font-family: inherit; transition: all .2s;
+  white-space: nowrap;
+}
+.lang-btn:hover { background: #03a9f4; color: #000; }
+.account-toggle { position: absolute; top: 10px; right: 10px; }
+.avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  cursor: pointer; display: block;
+}
+
+/* 账号弹窗 */
+.account-popup {
+  display: none;
+  position: fixed;
+  top: 58px; right: 12px;
+  width: 300px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 72px);
+  overflow-y: auto;
+  background: rgba(0,0,0,0.96);
+  border: 1px solid var(--border-gold);
+  padding: 16px;
+  border-radius: 8px;
+  color: white;
+  z-index: 9999999;
+  box-shadow: 0 20px 60px rgba(0,0,0,.95);
+}
+.account-popup.show { display: block; }
+.account-popup input {
+  margin: 3px; padding: 5px 7px;
+  background: #120d0a; color: var(--gold);
+  border: 1px solid var(--border-gold); border-radius: 4px;
+  font-size: 0.85rem; outline: none;
+}
+.account-popup input:focus { border-color: var(--pistachio); }
+.account-popup button {
+  cursor: pointer; padding: 6px 10px;
+  border-radius: 4px; border: none; font-weight: bold;
+  font-size: 0.82rem; margin-top: 5px;
+}
+.account-popup .row { margin-top: 6px; font-size: 0.85rem; }
+.account-popup .row strong { color: #03a9f4; }
+
+/* ===================== 主布局 ===================== */
+.training-layout {
+  max-width: 1500px;
+  margin: 20px auto 0;
+  padding: 0 16px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  flex: 1;
+  width: 100%;
+}
+.left-dock {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+  max-height: calc(100vh - 100px);
+}
+.left-dock .sidebar {
+  width: 165px;
+  flex-shrink: 0;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  border-radius: 8px;
+}
+.progress-panel {
+  width: 215px;
+  flex-shrink: 0;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 100px);
+}
+.progress-panel > h3 {
+  margin: 0; padding: 11px 13px;
+  color: var(--gold); font-size: 0.83rem;
+  letter-spacing: 1px;
+  border-bottom: 1px dashed var(--border-gold);
+  background: rgba(0,0,0,.2);
+  flex-shrink: 0;
+}
+.training-nav-list {
+  list-style: none; padding: 8px; margin: 0;
+  overflow-y: auto;
+}
+.training-nav-list li {
+  padding: 9px 10px; margin-bottom: 5px;
+  border-radius: 6px; font-size: 0.8rem;
+  cursor: not-allowed;
+  border: 1px solid transparent;
+  transition: all .25s; color: var(--text-muted);
+  position: relative; line-height: 1.45;
+  padding-right: 26px;
+  pointer-events: none;
+}
+.training-nav-list li.active {
+  background: #000;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 12px rgba(212,175,55,.35), inset 0 0 12px rgba(212,175,55,.08);
+  text-shadow: 0 0 8px rgba(212,175,55,.55);
+  font-weight: 600;
+}
+.training-nav-list li.locked { opacity: .3; }
+.training-nav-list li.completed::after {
+  content: '✓'; color: var(--pistachio);
+  position: absolute; right: 9px; top: 50%;
+  transform: translateY(-50%); font-weight: bold;
+}
+
+.content-main { flex: 1; min-width: 0; }
+
+/* ===================== 内容区 ===================== */
+.level-header { margin-bottom: 14px; }
+#levelTitle {
+  color: var(--gold); font-size: 1.5rem;
+  margin: 0 0 6px; letter-spacing: .5px;
+}
+.level-desc {
+  color: var(--text-muted); font-size: 0.86rem;
+  margin: 0; line-height: 1.6;
+}
+.level-desc strong { color: var(--orange-caramel); }
+
+.terminal {
+  background: rgba(0,0,0,.45);
+  border: 1px solid rgba(255,255,255,.05);
+  border-radius: 10px;
+  padding: 26px 20px 20px;
+  box-shadow: inset 0 0 30px rgba(0,0,0,.8);
+  position: relative; text-align: center;
+  overflow: hidden;
+}
+.terminal::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-muted), transparent);
+  opacity: .35;
+}
+.mode-badge {
+  display: inline-block; padding: 4px 14px;
+  border-radius: 20px; font-size: 0.72rem;
+  font-weight: 600; letter-spacing: 1px;
+  margin-bottom: 12px; border: 1px solid;
+}
+.mode-badge.learn {
+  color: var(--pistachio); border-color: rgba(147,197,114,.4);
+  background: rgba(147,197,114,.08);
+}
+.mode-badge.exam {
+  color: var(--orange-caramel); border-color: rgba(211,84,0,.4);
+  background: rgba(211,84,0,.08);
+}
+.mode-badge.final {
+  color: var(--red); border-color: rgba(255,82,82,.4);
+  background: rgba(255,82,82,.08);
+  animation: pulse-final 1.5s infinite;
+}
+@keyframes pulse-final {
+  0%,100% { box-shadow: 0 0 0 rgba(255,82,82,0); }
+  50% { box-shadow: 0 0 18px rgba(255,82,82,.35); }
+}
+.target-pinyin {
+  font-size: 3.2rem; font-family: 'Consolas', 'Courier New', monospace;
+  font-weight: bold; letter-spacing: 5px;
+  color: var(--gold); margin: 8px 0 6px;
+  min-height: 60px; line-height: 1.1;
+  word-break: break-all;
+  transition: color .3s;
+}
+.target-pinyin.blind-mode {
+  font-size: 2rem; color: var(--orange-caramel);
+  letter-spacing: 2px;
+}
+.target-hint {
+  font-size: 1.05rem; color: var(--pistachio);
+  margin-bottom: 18px; min-height: 24px;
+  letter-spacing: 1px;
+}
+.target-hint .tip { color: var(--text-muted); font-size: .8rem; }
+.input-area {
+  width: 68%; max-width: 400px;
+  background: var(--bg-coffee-dark);
+  border: 2px solid var(--border-gold);
+  color: var(--pistachio);
+  font-size: 1.5rem; font-family: 'Consolas', monospace;
+  text-align: center; padding: 11px 14px;
+  border-radius: 8px; outline: none;
+  margin-bottom: 16px;
+  transition: all .2s;
+  letter-spacing: 3px;
+}
+.input-area:focus {
+  border-color: var(--pistachio);
+  box-shadow: 0 0 22px rgba(147,197,114,.2);
+}
+.input-area.error {
+  border-color: var(--red) !important;
+  color: var(--red) !important;
+  animation: shake .3s;
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.keyboard-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 14px auto 4px;
+  max-width: 100%;
+}
+.kbd-row { display: flex; gap: 4px; }
+.key-btn {
+  width: 30px; height: 30px;
+  background: var(--panel-bg);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  font-family: 'Consolas', monospace;
+  font-size: .78rem;
+  transition: all .15s;
+  text-transform: uppercase;
+}
+.key-btn.active-key {
+  background: var(--pistachio); color: #000;
+  box-shadow: 0 0 15px rgba(147,197,114,.55);
+  transform: translateY(2px);
+  font-weight: bold;
+}
+.stats {
+  display: flex; justify-content: space-around;
+  color: var(--text-muted); font-size: 0.86rem;
+  border-top: 1px dashed var(--border-gold);
+  padding-top: 12px; margin-top: 12px;
+  gap: 10px; flex-wrap: wrap;
+}
+.actions {
+  display: flex; justify-content: center;
+  margin-top: 16px;
+}
+.btn {
+  background: transparent; color: var(--gold);
+  border: 1px solid var(--gold-muted);
+  padding: 9px 24px; border-radius: 5px;
+  cursor: pointer; font-weight: 600;
+  font-size: 0.86rem; transition: all .25s;
+  font-family: inherit;
+}
+.btn:hover { background: var(--gold-muted); color: #000; }
+.btn:active { transform: scale(.97); }
+
+/* ===================== FOOTER ===================== */
+.site-footer {
+  margin-top: 40px;
+  padding: 26px 20px 22px;
+  background: rgba(0,0,0,0.5);
+  border-top: 1px solid var(--border-gold);
+  text-align: center;
+  position: relative;
+}
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-muted), transparent);
+  opacity: 0.6;
+}
+.site-footer .gift {
+  color: var(--gold-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  margin: 6px 0 10px;
+  text-shadow: 0 0 10px rgba(201,163,85,.35);
+}
+.site-footer .divider {
+  width: 50px; height: 1px;
+  background: var(--gold-muted);
+  margin: 10px auto;
+  opacity: 0.45;
+}
+.site-footer .copyright {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  letter-spacing: 1.2px;
+  line-height: 2;
+  margin-top: 4px;
+}
+.site-footer .designed {
+  color: var(--gold-muted);
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  margin-top: 4px;
+  font-style: italic;
+}
+.site-footer .legal {
+  color: rgba(156,140,128,0.55);
+  font-size: 0.66rem;
+  letter-spacing: 0.8px;
+  margin-top: 10px;
+  line-height: 1.8;
+}
+
+/* ===================== TOAST ===================== */
+.toast {
+  position: fixed; top: 80px; left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: var(--panel-bg);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 12px 26px; border-radius: 8px;
+  font-size: .92rem; font-weight: 600;
+  opacity: 0; pointer-events: none;
+  transition: all .35s;
+  z-index: 20000;
+  box-shadow: 0 10px 30px rgba(0,0,0,.7);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ===================== MODALS ===================== */
+.modal-overlay {
+  display: none; position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,.85);
+  backdrop-filter: blur(10px);
+  z-index: 15000;
+  justify-content: center; align-items: center;
+  padding: 20px;
+}
+.modal-overlay.show { display: flex; }
+.modal-content {
+  background: var(--panel-bg);
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+  padding: 28px 30px;
+  width: 100%; max-width: 520px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.9);
+  animation: modalIn .3s ease;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(.92) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal-content h2 {
+  text-align: center; margin-top: 0; margin-bottom: 18px;
+  color: var(--gold); font-size: 1.3rem;
+}
+.info-row {
+  display: flex; justify-content: space-between;
+  border-bottom: 1px dashed rgba(201,163,85,.2);
+  padding: 9px 0; font-size: 0.88rem;
+  gap: 12px; word-break: break-all;
+}
+.info-row span:first-child {
+  color: var(--gold-muted); font-weight: bold;
+  flex-shrink: 0;
+}
+.info-row .hash {
+  color: var(--pistachio);
+  font-family: 'Consolas', monospace;
+  font-weight: bold;
+  user-select: all;
+}
+.alert-content { text-align: center; }
+.alert-icon { font-size: 2.8rem; margin-bottom: 6px; }
+.alert-message {
+  color: var(--text-main); font-size: .9rem;
+  line-height: 1.7; white-space: pre-line;
+  margin: 14px 0 20px;
+}
+.alert-message .hl { color: var(--orange-caramel); font-weight: bold; }
+.alert-message .bad { color: var(--red); font-weight: bold; }
+.legal-declare {
+  margin-top: 14px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  padding: 10px 12px;
+  background: rgba(0,0,0,0.28);
+  border-radius: 6px;
+  border-left: 3px solid var(--gold-muted);
+  text-align: left;
+}
+
+/* ===================== CEO ===================== */
+.secret-admin-btn {
+  position: fixed; bottom: 12px; right: 12px;
+  font-size: 0.72rem; color: rgba(255,255,255,.08);
+  cursor: not-allowed; z-index: 9999;
+  transition: .3s; letter-spacing: 1px;
+}
+.secret-admin-btn.ceo-unlocked { color: var(--gold); cursor: pointer; }
+.secret-admin-btn.ceo-unlocked:hover { text-shadow: 0 0 10px var(--gold); }
+.verify-input {
+  width: 100%; background: var(--bg-coffee-dark);
+  border: 1px solid var(--border-gold);
+  color: var(--gold); padding: 12px;
+  border-radius: 6px; margin-bottom: 14px;
+  font-family: 'Consolas', monospace;
+  outline: none;
+}
+.verify-input:focus { border-color: var(--pistachio); }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 1100px) {
+  .left-dock .sidebar { width: 145px; }
+  .progress-panel { width: 190px; }
+}
+@media (max-width: 820px) {
+  .training-layout { padding: 0 10px; gap: 10px; }
+  .left-dock { gap: 8px; }
+  .left-dock .sidebar { width: 120px; }
+  .progress-panel { width: 160px; }
+  .training-nav-list li { font-size: .72rem; padding: 7px 8px; }
+  .progress-panel > h3 { font-size: .75rem; padding: 9px 10px; }
+}
+@media (max-width: 620px) {
+  .header-title { font-size: .78rem; }
+  .header-title .badge { display: none; }
+  .lang-btn { right: 56px; font-size: .7rem; padding: 5px 8px; }
+  .left-dock { flex-direction: column; width: 110px; }
+  .left-dock .sidebar, .progress-panel { width: 100%; max-height: 32vh; }
+  .input-area { width: 92%; font-size: 1.2rem; }
+  .target-pinyin { font-size: 2.2rem; letter-spacing: 2px; }
+  .target-pinyin.blind-mode { font-size: 1.6rem; }
+  .modal-content { padding: 20px 16px; }
+  .key-btn { width: 24px; height: 24px; font-size: .66rem; }
+  .kbd-row { gap: 3px; }
+  .account-popup { width: 270px; }
+  .site-footer .gift { font-size: .78rem; letter-spacing: 2px; }
+  .site-footer .copyright { font-size: .68rem; }
+  .site-footer .designed { font-size: .64rem; }
+  .site-footer .legal { font-size: .6rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<div class="header">
+  <a href="https://htcb-12c7.github.io/htgov">
+    <img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png" alt="返回主页">
+  </a>
+
+  <div class="header-title">
+    <span class="title-text">拼音特训终端</span>
+    <span class="badge">HTj 专属</span>
+  </div>
+
+  <button id="lang-toggle" class="lang-btn">🌐 English</button>
+
+  <div class="account-toggle">
+    <img id="userPhoto" src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg"
+         alt="头像" class="avatar" onclick="toggleAccountInfo()" />
+  </div>
+</div>
+
+<!-- 账号弹窗 -->
+<div class="account-popup" id="accountPopup">
+  <div id="loginForm">
+    <input type="email" id="email" placeholder="邮箱/用户名" style="width:150px;" />
+    <input type="password" id="password" placeholder="密码" style="width:150px;" />
+    <button id="loginBtn" style="background:#C9A355; color:#000; width:100%; margin-top:6px;">登录</button>
+    <button id="googleLoginBtn" style="background:#fff; color:#000; width:100%; margin-top:5px;">使用 Google 登录</button>
+  </div>
+  <div id="userInfo" style="display:none;">
+    <div>
+      <label style="font-size:.82rem; color:#C9A355;">头像：</label>
+      <input type="file" id="updateAvatar" accept="image/*" style="font-size:.75rem;" />
+      <img id="userPhotoPreview"
+           src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg"
+           style="width:56px; height:56px; border-radius:50%; margin-top:6px; display:block;" />
+    </div>
+    <div class="row"><strong>昵称：</strong><input id="userNickname" style="width:170px;" /></div>
+    <div class="row">
+      <strong>邮箱：</strong><input id="userEmail" style="width:170px;" />
+      <button id="sendVerifyBtn" style="background:#C9A355; color:#000; margin-top:4px;">发送验证邮件</button>
+    </div>
+    <div class="row"><strong>支付方式：</strong><input id="userPayMethod" style="width:160px;" /></div>
+    <div class="row"><strong>支付名称：</strong><input id="userPayName" style="width:160px;" /></div>
+    <div class="row"><strong>支付账号：</strong><input id="userPayAccount" style="width:160px;" /></div>
+    <button id="saveBtn" style="background:#C9A355; color:#000; width:100%; margin-top:8px;">保存信息</button>
+    <button id="bindGoogleBtn" style="background:#4285F4; color:white; width:100%; margin-top:5px;">绑定 Google 账号</button>
+    <button id="logoutBtn" style="background:#444; color:#fff; width:100%; margin-top:5px;">退出登录</button>
+  </div>
+</div>
+
+<!-- ===================== 主布局：左 dock 双导航 + 右内容 ===================== -->
+<div class="training-layout">
+  <aside class="left-dock">
+    <div class="sidebar">
+      <h3>黑铁工作室</h3>
+      <ul id="sidebar-nav">
+        <li style="padding:8px;font-size:.8rem;color:#888;">导航加载中…</li>
+      </ul>
+    </div>
+
+    <div class="progress-panel">
+      <h3>🎯 特训进度</h3>
+      <ul class="training-nav-list" id="training-nav"></ul>
+    </div>
+  </aside>
+
+  <main class="content-main">
+    <div class="level-header">
+      <h1 id="levelTitle">加载中…</h1>
+      <p class="level-desc" id="levelDesc"></p>
+    </div>
+
+    <div class="terminal" id="terminal">
+      <div class="mode-badge learn" id="modeBadge">📖 学习模式</div>
+      <div class="target-pinyin" id="targetPinyin">—</div>
+      <div class="target-hint" id="targetHint"></div>
+
+      <input type="text" id="inputArea" class="input-area"
+             placeholder="在此敲击拼音…"
+             autocomplete="off" autocorrect="off"
+             autocapitalize="off" spellcheck="false" />
+
+      <div class="keyboard-hint" id="keyboardHint"></div>
+
+      <div class="stats">
+        <span id="progressDisplay">进度: 0 / 0</span>
+        <span id="errorDisplay">失误: 0 次</span>
+        <span id="ttsToggle" style="cursor:pointer; user-select:none;" title="切换自动朗读">🔊 朗读开</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="restartBtn" onclick="restartCurrentStage()">🔄 重置本关</button>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="gift">黑铁工作室【HTc】赠与【HTj】专属</div>
+  <div class="divider"></div>
+  <div class="copyright">Copyright © 2026 HT Studio (黑铁工作室). All rights reserved.</div>
+  <div class="designed">Designed &amp; Engineered by HTc.</div>
+  <div class="legal">本作品受《中华人民共和国著作权法》保护 · 未经授权禁止转载、复制或商用 · 违者必究</div>
+</footer>
+
+<!-- ===================== TOAST ===================== -->
+<div class="toast" id="toast"></div>
+
+<!-- ===================== ALERT MODAL ===================== -->
+<div class="modal-overlay" id="alertModal">
+  <div class="modal-content alert-content">
+    <div class="alert-icon" id="alertIcon">⚠️</div>
+    <h2 id="alertTitle" style="margin-bottom:6px;">警告</h2>
+    <div class="alert-message" id="alertMessage"></div>
+    <button class="btn" id="alertOkBtn" style="width:100%;">我明白了（按回车确认）</button>
+    <div class="legal-declare">
+      ⚖️ 点击「我明白了」或按回车即表示您已阅读并同意本协议，自动完成电子签署。本协议受中华人民共和国法律保护，具有法律效力。
+    </div>
+  </div>
+</div>
+
+<!-- ===================== RESULT MODAL ===================== -->
+<div class="modal-overlay" id="resultModal">
+  <div class="modal-content">
+    <h2 id="resultTitle">🏆 终极考核通过！</h2>
+    <div class="info-row"><span id="lblTimeUsed">完成用时:</span> <span id="infoTimeUsed" style="color:var(--orange-caramel);font-weight:bold;">—</span></div>
+    <div class="info-row"><span id="lblDate">完成日期:</span> <span id="infoDate">—</span></div>
+    <div class="info-row"><span id="lblOS">操作系统:</span> <span id="infoOS">—</span></div>
+    <div class="info-row"><span id="lblDevice">设备机型:</span> <span id="infoDevice">—</span></div>
+    <div class="info-row"><span id="lblIP">终端 IP:</span> <span id="infoIP">—</span></div>
+    <div class="info-row" style="border-bottom:none;margin-top:12px;background:rgba(0,0,0,.35);padding:12px;border-radius:6px;">
+      <span id="lblHash">官方凭证码:</span>
+      <span id="infoHash" class="hash">—</span>
+    </div>
+    <div style="text-align:center;margin-top:22px;">
+      <button class="btn" id="backToConsoleBtn" onclick="document.getElementById('resultModal').classList.remove('show')">返回控制台</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CEO VERIFY MODAL ===================== -->
+<div class="modal-overlay" id="verifyModal">
+  <div class="modal-content">
+    <h2>🔐 凭证鉴伪验证</h2>
+    <p style="color:var(--text-muted);font-size:.86rem;text-align:center;margin-bottom:18px;">
+      系统检测到 <strong>vipLevel == CEO</strong>。输入凭证码查库比对。
+    </p>
+    <input type="text" id="verifyInput" class="verify-input"
+           placeholder="输入凭证哈希码 (HTC-XXXX)…" autocomplete="off">
+    <button class="btn" style="width:100%;" onclick="verifyHash()">验证凭证</button>
+    <div id="verifyResult" style="margin-top:16px;padding:12px;border-radius:6px;display:none;text-align:center;font-weight:bold;font-size:.88rem;"></div>
+    <div style="text-align:center;margin-top:18px;">
+      <button class="btn" style="padding:8px 20px;font-size:.85rem;border:none;"
+              onclick="document.getElementById('verifyModal').classList.remove('show')">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- 隐藏 CEO 入口 -->
+<div class="secret-admin-btn" id="ceoBtn" onclick="tryOpenVerify()">CEO Access</div>
+
+<!-- ===================== 基础交互脚本 ===================== -->
+<script>
+function toggleAccountInfo() {
+  const popup = document.getElementById('accountPopup');
+  popup.classList.toggle('show');
+}
+
+// 登录按钮兜底
+document.addEventListener('DOMContentLoaded', function () {
+  var loginBtn = document.getElementById('loginBtn');
+  if (!loginBtn) return;
+  loginBtn.addEventListener('click', function () {
+    if (!window.__fbReady) {
+      if (window.__fbLoadError) {
+        alert('❌ 登录模块加载失败\n\n原因：Firebase CDN 无法访问（可能是网络问题）。\n\n建议：\n1. 检查网络连接\n2. 尝试刷新页面\n3. 如有代理工具，请开启后重试');
+      } else {
+        alert('⏳ 登录模块正在加载中，请稍候 3 秒后重试…\n\n如果一直没反应，可能是网络无法访问 Firebase CDN。');
+      }
+    }
+  });
+});
+
+// 回车确定（登录表单 + 用户信息）
+document.addEventListener('DOMContentLoaded', function () {
+  var email = document.getElementById('email');
+  var password = document.getElementById('password');
+  if (email) email.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); document.getElementById('loginBtn').click(); }
+  });
+  if (password) password.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); document.getElementById('loginBtn').click(); }
+  });
+  ['userNickname','userEmail','userPayMethod','userPayName','userPayAccount'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('saveBtn').click(); }
+    });
+  });
+});
+</script>
+
+<!-- ===================== Firebase 原生 CDN 异步加载 ===================== -->
+<script>
+window.__fbReady = false;
+window.__fbLoadError = false;
+
+// 记录加载失败
+window.addEventListener('error', function (e) {
+  if (e.target && e.target.tagName === 'SCRIPT' && e.target.src && e.target.src.indexOf('gstatic.com/firebasejs') !== -1) {
+    console.error('Firebase SDK 脚本加载失败:', e.target.src);
+    window.__fbLoadError = true;
+  }
+}, true);
+
+function loadFirebaseAndInit() {
+  // 依次加载 4 个 Firebase SDK 脚本（用原生 script 标签，带错误回调）
+  var scripts = [
+    'https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js',
+    'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js',
+    'https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js',
+    'https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js'
+  ];
+
+  var loaded = 0;
+  var failed = false;
+
+  function loadNext(index) {
+    if (index >= scripts.length) {
+      if (!failed) initFirebase();
+      return;
+    }
+    var s = document.createElement('script');
+    s.src = scripts[index];
+    s.async = false;
+    s.onload = function () { loadNext(index + 1); };
+    s.onerror = function () {
+      failed = true;
+      window.__fbLoadError = true;
+      console.error('Firebase SDK 加载失败:', scripts[index]);
+    };
+    document.head.appendChild(s);
+  }
+  loadNext(0);
+}
+
+// 超时兜底：8 秒未就绪则标记失败
+setTimeout(function () {
+  if (!window.__fbReady && !window.__fbLoadError) {
+    window.__fbLoadError = true;
+    console.error('Firebase SDK 8秒内未就绪');
+  }
+}, 8000);
+
+function initFirebase() {
+  if (!window.firebase || !window.firebase.initializeApp) {
+    window.__fbLoadError = true;
+    console.error('Firebase SDK 未正确加载');
+    return;
+  }
+
+  var firebaseConfig = {
+    apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
+    authDomain: "ht-chat-91e5f.firebaseapp.com",
+    databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
+    projectId: "ht-chat-91e5f",
+    storageBucket: "ht-chat-91e5f.firebasestorage.app",
+    messagingSenderId: "325331727527",
+    appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
+    measurementId: "G-VYV13LWP14"
+  };
+
+  try {
+    firebase.initializeApp(firebaseConfig);
+  } catch (e) {
+    console.error('Firebase 初始化失败:', e);
+    window.__fbLoadError = true;
+    return;
+  }
+
+  var auth = firebase.auth();
+  var db = firebase.database();
+  var storage = firebase.storage();
+  var provider = new firebase.auth.GoogleAuthProvider();
+
+  window.__fb = { auth: auth, db: db, storage: storage, provider: provider, firebase: firebase };
+  window.__fbReady = true;
+
+  document.getElementById("loginBtn").onclick = async function () {
+    try {
+      await auth.signInWithEmailAndPassword(
+        document.getElementById("email").value,
+        document.getElementById("password").value
+      );
+    } catch (err) { alert("登录失败: " + err.message); }
+  };
+
+  document.getElementById("googleLoginBtn").onclick = async function () {
+    try { await auth.signInWithPopup(provider); }
+    catch (err) { alert("Google 登录失败: " + err.message); }
+  };
+
+  document.getElementById("bindGoogleBtn").onclick = async function () {
+    var user = auth.currentUser;
+    if (!user) return alert("请先登录");
+    try {
+      await user.linkWithPopup(provider);
+      alert("Google 账号绑定成功！");
+    } catch (err) { alert("绑定失败: " + err.message); }
+  };
+
+  document.getElementById("sendVerifyBtn").onclick = async function () {
+    var user = auth.currentUser;
+    if (!user) return alert("请先登录");
+    var newEmail = document.getElementById("userEmail").value;
+    try {
+      await user.updateEmail(newEmail);
+      await user.sendEmailVerification();
+      alert("验证邮件已发送，请检查邮箱");
+    } catch (err) { alert("发送失败: " + err.message); }
+  };
+
+  var newAvatarFile = null;
+  document.getElementById("updateAvatar").addEventListener("change", function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 27 * 1024 * 1024) {
+      alert("图片大小不能超过27MB！");
+      return;
+    }
+    newAvatarFile = file;
+    document.getElementById("userPhotoPreview").src = URL.createObjectURL(file);
+  });
+
+  document.getElementById("saveBtn").onclick = async function () {
+    var user = auth.currentUser;
+    if (!user) return alert("请先登录");
+
+    var avatarURL = document.getElementById("userPhoto").src;
+    if (newAvatarFile) {
+      var fileRef = storage.ref("avatars/" + user.uid + ".jpg");
+      await fileRef.put(newAvatarFile);
+      avatarURL = await fileRef.getDownloadURL();
+      document.getElementById("userPhoto").src = avatarURL;
+    }
+
+    var userRef = db.ref("users/" + user.uid);
+    var snap = await userRef.get();
+    var vLevel = "User";
+    if (snap.exists() && snap.val().vipLevel) vLevel = snap.val().vipLevel;
+
+    await userRef.set({
+      nickname: document.getElementById("userNickname").value,
+      email: document.getElementById("userEmail").value,
+      payMethod: document.getElementById("userPayMethod").value,
+      payName: document.getElementById("userPayName").value,
+      payAccount: document.getElementById("userPayAccount").value,
+      avatar: avatarURL,
+      vipLevel: vLevel
+    });
+    alert("信息已更新！");
+  };
+
+  document.getElementById("logoutBtn").onclick = function () { auth.signOut(); };
+
+  var defaultAvatar = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
+  window.__appState = { currentUser: null, isCEO: false };
+
+  auth.onAuthStateChanged(async function (user) {
+    window.__appState.currentUser = user || null;
+    if (user) {
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("userInfo").style.display = "block";
+      document.getElementById("userPhoto").src = user.photoURL || "https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png";
+
+      var userRef = db.ref("users/" + user.uid);
+      var snapshot = await userRef.get();
+      if (snapshot.exists()) {
+        var data = snapshot.val();
+        window.__appState.isCEO = (data.vipLevel === "CEO");
+        var btn = document.getElementById("ceoBtn");
+        if (window.__appState.isCEO) {
+          btn.style.color = "rgba(212, 175, 55, 0.6)";
+          btn.classList.add("ceo-unlocked");
+        } else {
+          btn.style.color = "rgba(255,255,255,0.1)";
+          btn.classList.remove("ceo-unlocked");
+        }
+        document.getElementById("userNickname").value = data.nickname || "";
+        document.getElementById("userEmail").value = data.email || user.email || "";
+        document.getElementById("userPayMethod").value = data.payMethod || "";
+        document.getElementById("userPayName").value = data.payName || "";
+        document.getElementById("userPayAccount").value = data.payAccount || "";
+        var av = data.avatar || user.photoURL || defaultAvatar;
+        document.getElementById("userPhoto").src = av;
+        document.getElementById("userPhotoPreview").src = av;
+      }
+    } else {
+      window.__appState.isCEO = false;
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("userInfo").style.display = "none";
+      document.getElementById("userPhoto").src = defaultAvatar;
+      var btn2 = document.getElementById("ceoBtn");
+      btn2.style.color = "rgba(255,255,255,0.1)";
+      btn2.classList.remove("ceo-unlocked");
+    }
+  });
+
+  window.tryOpenVerify = function () {
+    if (!window.__appState.isCEO) {
+      alert("权限不足：您的账号 vipLevel 不是 CEO！");
+      return;
+    }
+    document.getElementById("verifyModal").classList.add("show");
+    document.getElementById("verifyInput").value = '';
+    document.getElementById("verifyResult").style.display = 'none';
+  };
+
+  window.verifyHash = async function () {
+    var inputHash = document.getElementById("verifyInput").value.trim().toUpperCase();
+    var resultBox = document.getElementById("verifyResult");
+
+    if (!inputHash) {
+      resultBox.style.display = 'block';
+      resultBox.style.background = 'rgba(255, 68, 68, 0.2)';
+      resultBox.style.color = '#ff4444';
+      resultBox.innerText = "请输入凭证码！";
+      return;
+    }
+
+    resultBox.style.display = 'block';
+    resultBox.style.background = 'rgba(255,255,255,0.08)';
+    resultBox.style.color = '#fff';
+    resultBox.innerText = "正在连接黑铁数据库鉴伪…";
+
+    try {
+      var snap = await db.ref("exam_records/" + inputHash).get();
+      if (snap.exists()) {
+        var r = snap.val();
+        resultBox.style.background = 'rgba(147, 197, 114, 0.2)';
+        resultBox.style.color = 'var(--pistachio)';
+        resultBox.style.textAlign = 'left';
+        resultBox.innerHTML =
+          '<div style="text-align:center;font-size:1.05rem;margin-bottom:10px;">✅ 凭证真实有效</div>' +
+          '<div style="font-size:.82rem;color:#e8dfd3;line-height:1.9;">' +
+          '<div>考试用时: <span style="color:var(--gold);">' + r.timeUsed + '</span></div>' +
+          '<div>考核账号: ' + (r.email || '未知') + '</div>' +
+          '<div>通过日期: ' + r.date + '</div>' +
+          '<div>设备信息: ' + r.os + ' / ' + r.device + '</div>' +
+          '<div>终端 IP 地址: ' + r.ip + '</div>' +
+          '<div>系统评级: <span style="color:var(--pistachio);">' + r.status + '</span></div>' +
+          '</div>';
+      } else {
+        resultBox.style.background = 'rgba(255, 68, 68, 0.2)';
+        resultBox.style.color = '#ff4444';
+        resultBox.innerHTML = '❌ 警告：凭证码无效或伪造！<br><span style="font-size:.72rem;font-weight:normal;">数据库未找到此凭证记录。</span>';
+      }
+    } catch (error) {
+      resultBox.style.background = 'rgba(255, 68, 68, 0.2)';
+      resultBox.style.color = '#ff4444';
+      resultBox.innerText = "查询失败：" + error.message;
+    }
+  };
+}
+
+window.addEventListener('load', loadFirebaseAndInit);
+</script>
+
+<!-- ===================== 导航栏 fetch ===================== -->
+<script>
+fetch("https://htcb-12c7.github.io/htgov/nav/nav.html")
+  .then(function (r) { return r.text(); })
+  .then(function (html) {
+    document.getElementById("sidebar-nav").innerHTML = html;
+  })
+  .catch(function (err) {
+    console.error("菜单加载失败：", err);
+    document.getElementById("sidebar-nav").innerHTML =
+      '<li style="padding:8px;font-size:.8rem;color:#888;">导航加载失败</li>';
+  });
+</script>
+
+<!-- ===================== 拼音特训核心逻辑 ===================== -->
+<script>
+(function () {
+  'use strict';
+
+  var I18N = {
+    zh: {
+      title: '拼音特训终端', badge: 'HTj 专属', langBtn: '🌐 English',
+      learn: '📖 学习模式', exam: '📝 考试模式（无拼音提示）', final: '💀 终极盲打考核',
+      progress: '进度', errors: '失误', reset: '🔄 重置本关',
+      ttsOn: '🔊 朗读开', ttsOff: '🔇 朗读关', gotIt: '我明白了（按回车确认）',
+      examFail: '考试失败', finalFail: '终极考核失败', warning: '警告',
+      resultTitle: '🏆 终极考核通过！',
+      timeUsed: '完成用时:', date: '完成日期:', os: '操作系统:',
+      device: '设备机型:', ip: '终端 IP:', hash: '官方凭证码:', backToConsole: '返回控制台'
+    },
+    en: {
+      title: 'Pinyin Training Terminal', badge: 'HTj Exclusive', langBtn: '🌐 中文',
+      learn: '📖 Learning', exam: '📝 Exam (No Pinyin)', final: '💀 Final Blind Test',
+      progress: 'Progress', errors: 'Mistakes', reset: '🔄 Reset Stage',
+      ttsOn: '🔊 TTS On', ttsOff: '🔇 TTS Off', gotIt: 'Got it (Press Enter)',
+      examFail: 'Exam Failed', finalFail: 'Final Test Failed', warning: 'Warning',
+      resultTitle: '🏆 Final Test Passed!',
+      timeUsed: 'Time Used:', date: 'Date:', os: 'OS:',
+      device: 'Device:', ip: 'IP Address:', hash: 'Certificate:', backToConsole: 'Back to Console'
+    }
+  };
+  var currentLang = 'zh';
+  var t = function (k) { return I18N[currentLang][k] || k; };
+
+  var FINAL_STAGE_INDEX = 5;
+
+  var STAGES = [
+    { key: '单韵母', title: '第 1 关：单韵母', icon: '1',
+      desc: '单韵母是最基础的六个元音：<strong>a o e i u ü</strong>。注意：<strong>ü 在键盘上用 v 代替</strong>。照着上方拼音敲击键盘即可。',
+      words: [
+        { py: 'a', cn: '啊', tip: '张大嘴巴' },
+        { py: 'o', cn: '哦', tip: '圆圆嘴巴' },
+        { py: 'e', cn: '鹅', tip: '扁扁嘴巴' },
+        { py: 'i', cn: '衣', tip: '牙齿对齐' },
+        { py: 'u', cn: '乌', tip: '嘴巴突出' },
+        { py: 'v', cn: '鱼', tip: 'ü —— 键盘上打 v' }
+      ]},
+    { key: '声母', title: '第 2 关：基础声母', icon: '2',
+      desc: '声母是音节开头的辅音。注意 <strong>zh ch sh r</strong> 是翘舌音，<strong>z c s</strong> 是平舌音，一定要分清。',
+      words: [
+        { py: 'b', cn: '玻', tip: '听广播 b' },
+        { py: 'p', cn: '坡', tip: '爬山坡 p' },
+        { py: 'm', cn: '摸', tip: '摸瞎子 m' },
+        { py: 'f', cn: '佛', tip: '大佛 f' },
+        { py: 'd', cn: '得', tip: '得得得 d' },
+        { py: 't', cn: '特', tip: '特别 t' },
+        { py: 'n', cn: '讷', tip: '讷讷 n' },
+        { py: 'l', cn: '勒', tip: '勒马 l' },
+        { py: 'g', cn: '哥', tip: '哥哥 g' },
+        { py: 'k', cn: '科', tip: '科学 k' },
+        { py: 'h', cn: '喝', tip: '喝水 h' },
+        { py: 'j', cn: '基', tip: '基础 j' },
+        { py: 'q', cn: '欺', tip: '欺负 q' },
+        { py: 'x', cn: '希', tip: '希望 x' },
+        { py: 'zh', cn: '知', tip: '翘舌音 zh' },
+        { py: 'ch', cn: '吃', tip: '翘舌音 ch' },
+        { py: 'sh', cn: '诗', tip: '翘舌音 sh' },
+        { py: 'r', cn: '日', tip: '翘舌音 r' },
+        { py: 'z', cn: '资', tip: '平舌音 z' },
+        { py: 'c', cn: '次', tip: '平舌音 c' },
+        { py: 's', cn: '思', tip: '平舌音 s' },
+        { py: 'y', cn: '衣', tip: '衣服 y' },
+        { py: 'w', cn: '乌', tip: '乌鸦 w' }
+      ]},
+    { key: '复韵母', title: '第 3 关：复韵母', icon: '3',
+      desc: '复韵母由两个或以上的元音组成：<strong>ai ei ui ao ou iu ie üe er</strong>。连起来读要流畅。',
+      words: [
+        { py: 'ai', cn: '爱', tip: '白菜的菜' },
+        { py: 'ei', cn: '诶', tip: '北方的北' },
+        { py: 'ui', cn: '威', tip: '谁的谁' },
+        { py: 'ao', cn: '袄', tip: '毛巾的毛' },
+        { py: 'ou', cn: '欧', tip: '海鸥的鸥' },
+        { py: 'iu', cn: '优', tip: '优秀的优' },
+        { py: 'ie', cn: '耶', tip: '树叶的叶' },
+        { py: 've', cn: '约', tip: 'üe —— 键盘上打 ve' },
+        { py: 'er', cn: '儿', tip: '儿子的儿' }
+      ]},
+    { key: '鼻韵母', title: '第 4 关：鼻韵母', icon: '4',
+      desc: '鼻韵母分前鼻音 <strong>an en in un ün</strong> 和后鼻音 <strong>ang eng ing ong</strong>。前后鼻音是最大难点，慢慢来。',
+      words: [
+        { py: 'an', cn: '安', tip: '安全 an' },
+        { py: 'en', cn: '恩', tip: '恩人 en' },
+        { py: 'in', cn: '因', tip: '因为 in' },
+        { py: 'un', cn: '温', tip: '温暖 un' },
+        { py: 'vn', cn: '云', tip: 'ün —— 键盘上打 vn' },
+        { py: 'ang', cn: '昂', tip: '昂首 ang' },
+        { py: 'eng', cn: '鞥', tip: '台灯 eng' },
+        { py: 'ing', cn: '英', tip: '英雄 ing' },
+        { py: 'ong', cn: '翁', tip: '嗡嗡 ong' }
+      ]},
+    { key: '整体认读音节', title: '第 5 关：整体认读音节', icon: '5',
+      desc: '整体认读音节不需要拼读，直接整体记住：<strong>zhi chi shi ri / zi ci si / yi wu yu / ye yue yuan / yin yun ying</strong>。',
+      words: [
+        { py: 'zhi', cn: '知', tip: '知道 zhi' },
+        { py: 'chi', cn: '吃', tip: '吃饭 chi' },
+        { py: 'shi', cn: '诗', tip: '诗歌 shi' },
+        { py: 'ri', cn: '日', tip: '日出 ri' },
+        { py: 'zi', cn: '字', tip: '写字 zi' },
+        { py: 'ci', cn: '词', tip: '词语 ci' },
+        { py: 'si', cn: '四', tip: '四个 si' },
+        { py: 'yi', cn: '一', tip: '一二三 yi' },
+        { py: 'wu', cn: '五', tip: '五六七 wu' },
+        { py: 'yu', cn: '鱼', tip: '小鱼 yu' },
+        { py: 'ye', cn: '叶', tip: '树叶 ye' },
+        { py: 'yue', cn: '月', tip: '月亮 yue' },
+        { py: 'yuan', cn: '圆', tip: '圆圈 yuan' },
+        { py: 'yin', cn: '音', tip: '音乐 yin' },
+        { py: 'yun', cn: '云', tip: '白云 yun' },
+        { py: 'ying', cn: '鹰', tip: '老鹰 ying' }
+      ]},
+    { key: '终极盲打', title: '⚠️ 终极盲打考核', icon: '★',
+      desc: '题目只有汉字，<strong>没有任何拼音提示</strong>。打错任何一个字母，系统会判断你哪一类基础不牢，<strong>直接踢回对应关卡重修</strong>！',
+      words: [] }
+  ];
+
+  var FINAL_WORDS = [
+    { cn: '草莓甜心', syls: ['cao', 'mei', 'tian', 'xin'] },
+    { cn: '黑铁工作室', syls: ['hei', 'tie', 'gong', 'zuo', 'shi'] },
+    { cn: '拼音打字', syls: ['pin', 'yin', 'da', 'zi'] },
+    { cn: '服务器', syls: ['fu', 'wu', 'qi'] },
+    { cn: '装箱子', syls: ['zhuang', 'xiang', 'zi'] },
+    { cn: '成功', syls: ['cheng', 'gong'] },
+    { cn: '天气', syls: ['tian', 'qi'] },
+    { cn: '学习', syls: ['xue', 'xi'] },
+    { cn: '加油', syls: ['jia', 'you'] },
+    { cn: '中国', syls: ['zhong', 'guo'] },
+    { cn: '生日快乐', syls: ['sheng', 'ri', 'kuai', 'le'] },
+    { cn: '爸爸妈妈', syls: ['ba', 'ba', 'ma', 'ma'] },
+    { cn: '我喜欢你', syls: ['wo', 'xi', 'huan', 'ni'] },
+    { cn: '早上好', syls: ['zao', 'shang', 'hao'] },
+    { cn: '谢谢你', syls: ['xie', 'xie', 'ni'] },
+    { cn: '我爱你', syls: ['wo', 'ai', 'ni'] },
+    { cn: '好孩子', syls: ['hao', 'hai', 'zi'] },
+    { cn: '春天来了', syls: ['chun', 'tian', 'lai', 'le'] },
+    { cn: '小猫钓鱼', syls: ['xiao', 'mao', 'diao', 'yu'] },
+    { cn: '蓝天白云', syls: ['lan', 'tian', 'bai', 'yun'] },
+    { cn: '太阳升起', syls: ['tai', 'yang', 'sheng', 'qi'] },
+    { cn: '月亮弯弯', syls: ['yue', 'liang', 'wan', 'wan'] },
+    { cn: '星星闪亮', syls: ['xing', 'xing', 'shan', 'liang'] },
+    { cn: '小猪佩奇', syls: ['xiao', 'zhu', 'pei', 'qi'] },
+    { cn: '快乐成长', syls: ['kuai', 'le', 'cheng', 'zhang'] },
+    { cn: '努力奋斗', syls: ['nu', 'li', 'fen', 'dou'] },
+    { cn: '明天更好', syls: ['ming', 'tian', 'geng', 'hao'] }
+  ];
+  FINAL_WORDS.forEach(function (w) { w.py = w.syls.join(''); });
+
+  var state = {
+    stageIndex: 0,
+    mode: 'learn',
+    wordIndex: 0,
+    errors: 0,
+    unlocked: 0,
+    stageCompleted: {},
+    finalStartTime: 0,
+    ttsEnabled: true
+  };
+
+  var inErrorState = false;
+  var errorTimeout = null;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var levelTitle = $('levelTitle');
+  var levelDesc = $('levelDesc');
+  var targetPinyin = $('targetPinyin');
+  var targetHint = $('targetHint');
+  var inputArea = $('inputArea');
+  var progressDisplay = $('progressDisplay');
+  var errorDisplay = $('errorDisplay');
+  var keyboardHint = $('keyboardHint');
+  var trainingNav = $('training-nav');
+  var modeBadge = $('modeBadge');
+  var terminal = $('terminal');
+  var toastEl = $('toast');
+  var alertModal = $('alertModal');
+  var alertIcon = $('alertIcon');
+  var alertTitle = $('alertTitle');
+  var alertMessage = $('alertMessage');
+  var alertOkBtn = $('alertOkBtn');
+  var resultModal = $('resultModal');
+
+  function speak(text) {
+    if (!state.ttsEnabled) return;
+    if (!window.speechSynthesis) return;
+    try {
+      window.speechSynthesis.cancel();
+      var clean = String(text).replace(/[\s()（）]/g, '').replace(/[a-zA-Z]/g, '');
+      if (!clean) return;
+      var u = new SpeechSynthesisUtterance(clean);
+      u.lang = 'zh-CN';
+      u.rate = 0.8;
+      u.pitch = 1;
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+
+  function showToast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function () { toastEl.classList.remove('show'); }, 2200);
+  }
+
+  function showAlert(icon, titleKey, message, onOk) {
+    alertIcon.textContent = icon;
+    alertTitle.textContent = (typeof titleKey === 'string' && I18N[currentLang][titleKey]) ? I18N[currentLang][titleKey] : titleKey;
+    alertMessage.innerHTML = message;
+    alertModal.classList.add('show');
+    inputArea.disabled = true;
+    alertOkBtn.onclick = function () {
+      alertModal.classList.remove('show');
+      inputArea.disabled = false;
+      showToast('✅ 已签署明白协议（受中国法律保护）');
+      if (typeof onOk === 'function') onOk();
+      else inputArea.focus();
+    };
+  }
+
+  var WHOLE_READ = ['zhi','chi','shi','ri','zi','ci','si','yi','wu','yu','ye','yue','yuan','yin','yun','ying'];
+
+  function classifyErrorInSyllable(syl, idx) {
+    if (WHOLE_READ.indexOf(syl) !== -1) return '整体认读音节';
+    var m = syl.match(/^(zh|ch|sh|[bpmfdtnlgkhjqxzcsrwy])/);
+    var initLen = m ? m[0].length : 0;
+    if (idx < initLen) return '声母';
+    var fin = syl.slice(initLen);
+    if (/ang|eng|ing|ong|an|en|in|un|vn/.test(fin)) return '鼻韵母';
+    if (/ai|ei|ui|ao|ou|iu|ie|ue|ve|er/.test(fin)) return '复韵母';
+    return '单韵母';
+  }
+
+  function analyzeFinalError(input, target) {
+    var i = 0;
+    while (i < input.length && i < target.length && input[i] === target[i]) i++;
+    var word = FINAL_WORDS[state.wordIndex];
+    if (!word) return '单韵母';
+    var pos = 0;
+    for (var s = 0; s < word.syls.length; s++) {
+      var syl = word.syls[s];
+      if (i < pos + syl.length) return classifyErrorInSyllable(syl, i - pos);
+      pos += syl.length;
+    }
+    return '单韵母';
+  }
+
+  function getCurrentWordList() {
+    if (state.mode === 'final') return FINAL_WORDS.map(function (w) { return { py: w.py, cn: w.cn }; });
+    return STAGES[state.stageIndex].words;
+  }
+
+  function getCurrentWord() {
+    var list = getCurrentWordList();
+    return list[state.wordIndex] || null;
+  }
+
+  // 渲染进度：只有当前关 + 已通关的显示为可看，但都不可点击
+  function renderNav() {
+    trainingNav.innerHTML = '';
+    STAGES.forEach(function (stage, idx) {
+      var li = document.createElement('li');
+      var locked = idx > state.unlocked;
+      var isFinal = idx === FINAL_STAGE_INDEX;
+      if (locked) li.classList.add('locked');
+      if (idx === state.stageIndex) li.classList.add('active');
+      if (state.stageCompleted[idx]) li.classList.add('completed');
+      li.innerHTML = '<span style="opacity:.6;margin-right:5px;">' + (isFinal ? '★' : stage.icon) + '</span>' + stage.title;
+      // 不绑定 onclick —— 用户无法点击跳关
+      trainingNav.appendChild(li);
+    });
+  }
+
+  function renderKeyboard(targetPy) {
+    if (!targetPy || state.mode !== 'learn') {
+      keyboardHint.style.display = 'none';
+      keyboardHint.innerHTML = '';
+      return;
+    }
+    keyboardHint.style.display = 'flex';
+    keyboardHint.innerHTML = '';
+    var typedLen = inputArea.value.length;
+    var nextChar = targetPy[typedLen] || '';
+    var rows = [
+      ['q','w','e','r','t','y','u','i','o','p'],
+      ['a','s','d','f','g','h','j','k','l'],
+      ['z','x','c','v','b','n','m']
+    ];
+    rows.forEach(function (row, rowIdx) {
+      var rowDiv = document.createElement('div');
+      rowDiv.className = 'kbd-row';
+      if (rowIdx === 1) rowDiv.style.paddingLeft = '16px';
+      if (rowIdx === 2) rowDiv.style.paddingLeft = '34px';
+      row.forEach(function (letter) {
+        var key = document.createElement('div');
+        key.className = 'key-btn' + (letter === nextChar ? ' active-key' : '');
+        key.textContent = letter;
+        rowDiv.appendChild(key);
+      });
+      keyboardHint.appendChild(rowDiv);
+    });
+  }
+
+  function updateStats() {
+    var list = getCurrentWordList();
+    progressDisplay.textContent = t('progress') + ': ' + Math.min(state.wordIndex + 1, list.length) + ' / ' + list.length;
+    errorDisplay.textContent = t('errors') + ': ' + state.errors;
+  }
+
+  function updateModeBadge() {
+    modeBadge.className = 'mode-badge ' + state.mode;
+    if (state.mode === 'learn') modeBadge.textContent = t('learn');
+    else if (state.mode === 'exam') modeBadge.textContent = t('exam');
+    else modeBadge.textContent = t('final');
+  }
+
+  function render() {
+    var stage = STAGES[state.stageIndex];
+    var word = getCurrentWord();
+
+    levelTitle.textContent = stage.title;
+    levelDesc.innerHTML = stage.desc;
+
+    updateModeBadge();
+
+    if (!word) return;
+
+    if (state.mode === 'learn') {
+      targetPinyin.classList.remove('blind-mode');
+      targetPinyin.textContent = word.py;
+      targetPinyin.style.color = 'var(--gold)';
+      targetHint.innerHTML = word.cn + (word.tip ? ' <span class="tip">— ' + word.tip + '</span>' : '');
+    } else {
+      targetPinyin.classList.add('blind-mode');
+      targetPinyin.textContent = '? ? ?';
+      targetPinyin.style.color = '';
+      targetHint.innerHTML = '<strong style="font-size:1.3rem;color:var(--orange-caramel);">' + word.cn + '</strong> <span class="tip">— 请打出完整拼音</span>';
+    }
+
+    renderKeyboard(word.py);
+    updateStats();
+
+    inputArea.value = '';
+    inputArea.disabled = false;
+    inputArea.classList.remove('error');
+    inErrorState = false;
+
+    speak(word.cn);
+
+    setTimeout(function () {
+      if (!inputArea.disabled) inputArea.focus();
+    }, 30);
+  }
+
+  function loadStage(index) {
+    if (index > state.unlocked) return;
+    state.stageIndex = index;
+    state.wordIndex = 0;
+    state.errors = 0;
+    inErrorState = false;
+    if (index === FINAL_STAGE_INDEX) {
+      state.mode = 'final';
+      state.finalStartTime = Date.now();
+    } else {
+      state.mode = 'learn';
+    }
+    renderNav();
+    render();
+  }
+
+  inputArea.addEventListener('input', function (e) {
+    var raw = e.target.value;
+    var val = raw.toLowerCase().replace(/[^a-z]/g, '');
+    if (raw !== val) {
+      var pos = e.target.selectionStart;
+      e.target.value = val;
+      try { e.target.setSelectionRange(Math.min(pos, val.length), Math.min(pos, val.length)); } catch (err) {}
+    }
+    if (state.mode === 'learn') handleLearnInput(val);
+    else if (state.mode === 'exam') handleExamInput(val);
+    else if (state.mode === 'final') handleFinalInput(val);
+  });
+
+  inputArea.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); }
+  });
+
+  function handleLearnInput(val) {
+    var word = getCurrentWord();
+    if (!word) return;
+    var target = word.py;
+    if (val === '') {
+      inputArea.classList.remove('error');
+      inErrorState = false;
+      renderKeyboard(target);
+      return;
+    }
+    if (target.indexOf(val) === 0) {
+      inputArea.classList.remove('error');
+      inErrorState = false;
+      renderKeyboard(target);
+      if (val === target) completeWord();
+    } else {
+      inputArea.classList.add('error');
+      if (!inErrorState) {
+        inErrorState = true;
+        state.errors++;
+        updateStats();
+      }
+      clearTimeout(errorTimeout);
+      errorTimeout = setTimeout(function () {
+        if (inputArea.classList.contains('error')) {
+          inputArea.value = '';
+          inputArea.classList.remove('error');
+          inErrorState = false;
+          renderKeyboard(target);
+          inputArea.focus();
+        }
+      }, 400);
+    }
+  }
+
+  function handleExamInput(val) {
+    var word = getCurrentWord();
+    if (!word) return;
+    var target = word.py;
+    if (val === '') return;
+    if (target.indexOf(val) === 0) {
+      if (val === target) completeWord();
+    } else {
+      examFail(val, target);
+    }
+  }
+
+  function handleFinalInput(val) {
+    var word = getCurrentWord();
+    if (!word) return;
+    var target = word.py;
+    if (val === '') return;
+    if (target.indexOf(val) === 0) {
+      if (val === target) completeWord();
+    } else {
+      finalFail(val, target);
+    }
+  }
+
+  function examFail(inputVal, target) {
+    inputArea.disabled = true;
+    inputArea.classList.add('error');
+    state.errors++;
+    updateStats();
+    var stageName = STAGES[state.stageIndex].title;
+    showAlert(
+      '❌', 'examFail',
+      '打错啦！\n\n你输入的是：<span class="bad">' + inputVal + '</span>\n正确答案是：<span class="hl">' + target + '</span>\n\n本关（' + stageName + '）考试进度清零，需要重新学习一遍才能再次考试。\n别灰心，慢一点，一定可以的！',
+      function () {
+        state.mode = 'learn';
+        state.wordIndex = 0;
+        state.errors = 0;
+        inErrorState = false;
+        render();
+      }
+    );
+  }
+
+  function finalFail(inputVal, target) {
+    inputArea.disabled = true;
+    inputArea.classList.add('error');
+    var errStageKey = analyzeFinalError(inputVal, target);
+    var errStageIdx = STAGES.findIndex(function (s) { return s.key === errStageKey; });
+    var word = getCurrentWord();
+    var stageName = STAGES[errStageIdx] ? STAGES[errStageIdx].title : '第 1 关：单韵母';
+    showAlert(
+      '💀', 'finalFail',
+      '在「<span class="hl">' + word.cn + '</span>」这一题翻车了！\n\n你输入的是：<span class="bad">' + inputVal + '</span>\n正确答案是：<span class="hl">' + target + '</span>\n\n系统判定你的 <span class="bad">【' + errStageKey + '】</span> 基础不牢。\n\n正在将你传送回 <span class="hl">' + stageName + '</span> 重新修炼……\n修完考过，才能再次挑战终极考核！',
+      function () {
+        var idx = errStageIdx >= 0 ? errStageIdx : 0;
+        // 关键：不只是解锁，而是强制回到该关卡的学习模式
+        state.unlocked = Math.max(state.unlocked, idx);
+        state.stageIndex = idx;
+        state.mode = 'learn';
+        state.wordIndex = 0;
+        state.errors = 0;
+        inErrorState = false;
+        renderNav();
+        render();
+        showToast('⚠️ 已退回【' + STAGES[idx].title + '】重新学习');
+      }
+    );
+  }
+
+  function completeWord() {
+    var list = getCurrentWordList();
+    state.wordIndex++;
+    if (state.wordIndex >= list.length) onStageComplete();
+    else render();
+  }
+
+  function onStageComplete() {
+    if (state.mode === 'learn') {
+      showToast('✅ 学习完成！进入考试模式…');
+      inputArea.disabled = true;
+      setTimeout(function () {
+        state.mode = 'exam';
+        state.wordIndex = 0;
+        state.errors = 0;
+        inErrorState = false;
+        render();
+      }, 900);
+    } else if (state.mode === 'exam') {
+      state.stageCompleted[state.stageIndex] = true;
+      if (state.stageIndex < FINAL_STAGE_INDEX) {
+        state.unlocked = Math.max(state.unlocked, state.stageIndex + 1);
+      }
+      renderNav();
+      showToast('🏆 考试通过！');
+      targetPinyin.classList.remove('blind-mode');
+      targetPinyin.textContent = '通关！';
+      targetPinyin.style.color = 'var(--pistachio)';
+      targetHint.textContent = '准备进入下一关吧～';
+      keyboardHint.style.display = 'none';
+      inputArea.disabled = true;
+      setTimeout(function () {
+        targetPinyin.style.color = '';
+        if (state.stageIndex < FINAL_STAGE_INDEX) loadStage(state.stageIndex + 1);
+        else loadStage(FINAL_STAGE_INDEX);
+      }, 1600);
+    } else if (state.mode === 'final') {
+      inputArea.disabled = true;
+      targetPinyin.textContent = '🏆 全部通过！';
+      targetPinyin.classList.remove('blind-mode');
+      targetPinyin.style.color = 'var(--pistachio)';
+      targetHint.textContent = '你已彻底掌握拼音！';
+      keyboardHint.style.display = 'none';
+      showResultModal();
+    }
+  }
+
+  function generateHash(str) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      var char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    return 'HTC-' + Math.abs(hash).toString(16).toUpperCase();
+  }
+
+  async function showResultModal() {
+    var timeSpentSec = Math.max(0, Math.floor((Date.now() - state.finalStartTime) / 1000));
+    var timeUsedStr = timeSpentSec >= 60
+      ? Math.floor(timeSpentSec / 60) + '分' + (timeSpentSec % 60) + '秒'
+      : timeSpentSec + '秒';
+    var now = new Date();
+    var dateStr = now.toLocaleDateString('zh-CN') + ' ' + now.toLocaleTimeString('zh-CN');
+    var ua = navigator.userAgent;
+    var os = 'Unknown OS', device = 'Desktop';
+    if (ua.indexOf('Win') !== -1) os = 'Windows';
+    if (ua.indexOf('Mac') !== -1) os = 'macOS';
+    if (ua.indexOf('Linux') !== -1 && ua.indexOf('Android') === -1) os = 'Linux';
+    if (/Mobi|Android|iPhone|iPad/i.test(ua)) device = 'Mobile';
+    var ipStr = 'Local IP';
+    try {
+      var res = await fetch('https://api.ipify.org?format=json');
+      var data = await res.json();
+      ipStr = data.ip;
+    } catch (e) {}
+    var finalHash = generateHash(dateStr + ipStr + device + timeUsedStr + Math.random());
+    $('infoTimeUsed').textContent = timeUsedStr;
+    $('infoDate').textContent = dateStr;
+    $('infoOS').textContent = os;
+    $('infoDevice').textContent = device;
+    $('infoIP').textContent = ipStr;
+    $('infoHash').textContent = finalHash;
+
+    var user = window.__appState && window.__appState.currentUser;
+    var fb = window.__fb;
+    if (user && fb) {
+      try {
+        await fb.db.ref('exam_records/' + finalHash).set({
+          uid: user.uid, email: user.email, timeUsed: timeUsedStr,
+          date: dateStr, os: os, device: device, ip: ipStr, status: 'PASSED'
+        });
+      } catch (e) { console.error('成绩上传失败:', e); }
+    }
+    resultModal.classList.add('show');
+  }
+
+  window.restartCurrentStage = function () {
+    var idx = state.stageIndex;
+    if (idx === FINAL_STAGE_INDEX) {
+      state.mode = 'final';
+      state.wordIndex = 0;
+      state.errors = 0;
+      state.finalStartTime = Date.now();
+    } else {
+      state.mode = 'learn';
+      state.wordIndex = 0;
+      state.errors = 0;
+    }
+    inErrorState = false;
+    render();
+    showToast('已重置本关');
+  };
+
+  // ===== 快捷键 =====
+  var keyBuffer = [];
+  window.addEventListener('keydown', function (e) {
+    // 回车：如果弹窗打开，自动点击「我明白了」
+    if (e.key === 'Enter') {
+      if (alertModal.classList.contains('show')) {
+        e.preventDefault();
+        alertOkBtn.click();
+        return;
+      }
+    }
+
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    var k = (e.key || '').toLowerCase();
+    if (k.length !== 1) {
+      if (k === 'backspace' || k === 'enter' || k === 'escape' || k === 'tab' || k === ' ') keyBuffer = [];
+      return;
+    }
+    if (k < 'a' || k > 'z') { keyBuffer = []; return; }
+    keyBuffer.push(k);
+    if (keyBuffer.length > 3) keyBuffer.shift();
+    var combo = keyBuffer.join('');
+    if (combo === 'htc') {
+      keyBuffer = [];
+      e.preventDefault();
+      state.unlocked = Math.max(state.unlocked, FINAL_STAGE_INDEX);
+      loadStage(FINAL_STAGE_INDEX);
+      showToast('🔓 已解锁终极盲打考核');
+      return;
+    }
+    if (combo === 'htj') {
+      keyBuffer = [];
+      e.preventDefault();
+      if (state.stageIndex === FINAL_STAGE_INDEX) {
+        showToast('已经在终极考核中啦');
+      } else {
+        state.mode = 'exam';
+        state.wordIndex = 0;
+        state.errors = 0;
+        inErrorState = false;
+        render();
+        showToast('⏭️ 已跳到考试模式');
+      }
+      return;
+    }
+  }, true);
+
+  terminal.addEventListener('click', function (e) {
+    if (e.target === inputArea) return;
+    if (!inputArea.disabled) inputArea.focus();
+  });
+
+  var ttsToggle = $('ttsToggle');
+  ttsToggle.addEventListener('click', function () {
+    state.ttsEnabled = !state.ttsEnabled;
+    ttsToggle.textContent = state.ttsEnabled ? t('ttsOn') : t('ttsOff');
+    if (!state.ttsEnabled && window.speechSynthesis) {
+      try { window.speechSynthesis.cancel(); } catch (e) {}
+    } else if (state.ttsEnabled) {
+      var w = getCurrentWord();
+      if (w) speak(w.cn);
+    }
+  });
+
+  // ===== 语言切换 =====
+  function applyLang(lang) {
+    currentLang = lang;
+    document.querySelector('.header-title .title-text').textContent = t('title');
+    document.querySelector('.header-title .badge').textContent = t('badge');
+    $('lang-toggle').textContent = t('langBtn');
+    $('restartBtn').textContent = t('reset');
+    $('alertOkBtn').textContent = t('gotIt');
+    $('resultTitle').textContent = t('resultTitle');
+    $('lblTimeUsed').textContent = t('timeUsed');
+    $('lblDate').textContent = t('date');
+    $('lblOS').textContent = t('os');
+    $('lblDevice').textContent = t('device');
+    $('lblIP').textContent = t('ip');
+    $('lblHash').textContent = t('hash');
+    $('backToConsoleBtn').textContent = t('backToConsole');
+    ttsToggle.textContent = state.ttsEnabled ? t('ttsOn') : t('ttsOff');
+    updateStats();
+    updateModeBadge();
+  }
+
+  $('lang-toggle').addEventListener('click', function () {
+    applyLang(currentLang === 'zh' ? 'en' : 'zh');
+  });
+
+  window.addEventListener('load', function () {
+    renderNav();
+    loadStage(0);
+  });
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    renderNav();
+    loadStage(0);
+  } else {
+    document.addEventListener('DOMContentLoaded', function () {
+      renderNav();
+      loadStage(0);
+    });
+  }
+
+})();
+</script>
+</body>
+</html>
