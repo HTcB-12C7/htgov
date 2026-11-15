@@ -1,435 +1,101 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>黑铁VIP 注册</title>
-  <link rel="stylesheet" href="https://htcb-12c7.github.io/htgov/css/htgov.css" />
+<meta charset="UTF-8">
+<title>头像组件 - 完整版</title>
 <style>
-  .register-box {
-    max-width: 400px;
-    margin: 40px auto;
-    padding: 20px;
-    background: #222;
-    color: white;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
-  }
-  .register-box h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .register-box input, 
-  .register-box select {
-    width: 100%;              /* ✅ 统一长度 */
-    box-sizing: border-box;   /* ✅ 包含内边距和边框 */
-    margin: 6px 0;
-    padding: 10px;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  .register-box button {
-    width: 100%;              /* ✅ 按钮也统一 */
-    padding: 10px;
-    background: orange;
-    border: none;
-    border-radius: 5px;
-    color: black;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  .small-btn {
-    width: 100%;              /* ✅ 独占一行 */
-    background: #03a9f4;
-    color: white;
-    padding: 8px 10px;
-    font-size: 12px;
-    margin: 5px 0;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-  }
-  .avatar-preview {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin: 10px auto;
-    display: block;
-    object-fit: cover;
-    border: 2px solid #666;
-    background: #444;
-  }
-      /* 头像上传组件样式 */
-.avatar-upload-section {
-  margin: 10px 0;
-  text-align: center; /* 添加这一行让内容居中 */
-}
+/* 头部基础 */
+.header { position:relative; background:#111; color:#ffd700; padding:12px 20px; font-family:Arial; }
+.logo { height:40px; vertical-align:middle; margin-right:12px; }
 
-.avatar-upload-section label {
-  color: #f5deb3;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-}
+/* 头像切换 */
+.account-toggle { position:absolute; top:10px; right:10px; }
+#userPhoto { width:40px; height:40px; border-radius:50%; cursor:pointer; border:2px solid #ffd700; }
 
-.avatar-upload-section input[type="file"] {
-  background: linear-gradient(145deg, #1e1e1e, #2b2b2b);
-  color: #f5deb3;
-  border: 1px solid #8b6914;
-  padding: 6px 10px;
-  border-radius: 6px;
-  outline: none;
-  font-size: 14px;
-  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.8),
-              inset -2px -2px 5px rgba(255,255,255,0.05);
-  transition: all 0.3s ease;
-  width: 100%;
-  max-width: 250px;
-  margin: 0 auto; /* 添加这一行让输入框居中 */
-  display: block; /* 添加这一行让输入框居中 */
+/* 下拉弹窗 */
+.account-popup {
+  display:none; position:absolute; top:50px; right:0;
+  background:rgba(0,0,0,0.95); padding:15px; border-radius:8px;
+  color:#fff; width:280px; box-shadow:0 0 15px rgba(255,215,0,0.3); z-index:9999;
 }
+.account-popup input { width:100%; margin:6px 0; padding:6px 8px; border-radius:6px; border:1px solid #8b6914; background:#1e1e1e; color:#f5deb3; }
+.account-popup button { background:#000; color:#ffd700; border:1px solid #ffd700; padding:8px 12px; border-radius:5px; cursor:pointer; margin:4px 2px; font-weight:bold; }
+.account-popup button:hover { background:#2b2b2b; color:#fff8dc; }
 
-.avatar-upload-section input[type="file"]:focus {
-  border-color: #ffd700;
-  box-shadow: 0 0 6px #ffd700, inset 1px 1px 3px rgba(0,0,0,0.6);
-  background: linear-gradient(145deg, #252525, #333);
-}
-
-.avatar-upload-section img {
-  display: block;
-  border: 2px solid #ffd700;
-  margin: 10px auto; /* 修改这一行让图片居中 */
-}
+/* 预览 */
+#userPhotoPreview { width:60px; height:60px; border-radius:50%; margin-top:6px; border:2px solid #ffd700; }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script>
-  (function(){
-    emailjs.init("sbFx6huxFVrhXPqr5"); // 你的 Public Key
-  })();
-</script>
 </head>
 <body>
-  <div class="header">
-    <a href="https://htcb-12c7.github.io/htgov/">
-      <img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png" alt="返回主页">
-    </a>
-    黑铁VIP 注册 <span></span>
-  </div>
-
-  <div class="main-container">
-    <div class="sidebar">
-      <h3>黑铁工作室</h3>
-      <ul id="sidebar-nav"></ul>
-    </div>
-
-    <div class="content">
-      <div class="container">
-        <div class="register-box">
-          <h2>注册黑铁VIP账号</h2>
-
-          <!-- 昵称 -->
-          <input type="text" id="regNickname" placeholder="昵称" />
-          <button type="button" class="small-btn" onclick="checkNickname()">检查昵称</button>
-          <div id="nickStatus" style="font-size:12px;color:orange;"></div>
-
-          <!-- 真实姓名 -->
-          <input type="text" id="regName" placeholder="真实姓名（中文/英文）" />
-
-          <!-- 邮箱 -->
-          <input type="email" id="regEmail" placeholder="邮箱" />
-          <button type="button" class="small-btn" onclick="sendEmailCode()">发送验证码</button>
-          <input type="text" id="emailCode" placeholder="输入邮箱验证码" />
-
-          <!-- 密码 -->
-          <input type="password" id="regPassword" placeholder="密码" />
-          <input type="password" id="regConfirmPassword" placeholder="确认密码" />
-
-          <!-- ✅ 上传头像 -->
-<!-- 头像上传组件 -->
-<div class="avatar-upload-section">
-  <label>头像：</label>
-  <input type="file" id="updateAvatar" accept="image/*" />
-<img id="userPhotoPreview" 
-     src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg"
-     style="width:60px; height:60px; border-radius:50%; margin-top:5px;" />
-</div>
-
-<style>
-/* 头像上传组件样式 */
-.avatar-upload-section {
-  margin: 10px 0;
-}
-
-.avatar-upload-section label {
-  color: #f5deb3;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-}
-
-.avatar-upload-section input[type="file"] {
-  background: linear-gradient(145deg, #1e1e1e, #2b2b2b);
-  color: #f5deb3;
-  border: 1px solid #8b6914;
-  padding: 6px 10px;
-  border-radius: 6px;
-  outline: none;
-  font-size: 14px;
-  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.8),
-              inset -2px -2px 5px rgba(255,255,255,0.05);
-  transition: all 0.3s ease;
-  width: 100%;
-  max-width: 250px;
-}
-
-.avatar-upload-section input[type="file"]:focus {
-  border-color: #ffd700;
-  box-shadow: 0 0 6px #ffd700, inset 1px 1px 3px rgba(0,0,0,0.6);
-  background: linear-gradient(145deg, #252525, #333);
-}
-
-.avatar-upload-section img {
-  display: block;
-  border: 2px solid #ffd700;
-}
-</style>
-
-<script>
-// 头像上传功能
-let newAvatarFile = null;
-
-// 初始化头像上传功能
-function initAvatarUpload() {
-  const avatarInput = document.getElementById("updateAvatar");
-  const previewImg = document.getElementById("userPhotoPreview");
-  
-  if (avatarInput) {
-    avatarInput.addEventListener("change", function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      
-      // 检查文件大小 (27MB限制)
-      if (file.size > 27 * 1024 * 1024) {
-        alert("图片大小不能超过27MB！");
-        return;
-      }
-      
-      newAvatarFile = file;
-      
-      // 预览图片
-      previewImg.src = URL.createObjectURL(file);
-    });
-  }
-}
-
-// 获取选中的头像文件
-function getAvatarFile() {
-  return newAvatarFile;
-}
-
-// 重置头像上传状态
-function resetAvatarUpload() {
-  newAvatarFile = null;
-  const previewImg = document.getElementById("userPhotoPreview");
-  if (previewImg) {
-    previewImg.src = "assets/login-placeholder.svg";
-  }
-  const avatarInput = document.getElementById("updateAvatar");
-  if (avatarInput) {
-    avatarInput.value = "";
-  }
-}
-
-// 页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', initAvatarUpload);
-</script>
-
-          <!-- 支付方式 -->
-          <select id="payType">
-            <option value="">支付方式（可选）</option>
-            <option value="bank">银行卡</option>
-            <option value="wechat">微信</option>
-            <option value="alipay">支付宝</option>
-            <option value="zelle">Zelle</option>
-            <option value="other">其他（请填写名称）</option>
-          </select>
-          <input type="text" id="payName" placeholder="名称（例：银行名称/微信名称/其他）" />
-          <input type="text" id="payAccount" placeholder="账号（例：银行卡号/微信号）" />
-
-          <button id="registerBtn">注册</button>
+<div class="header">
+  <a href="https://htcb-12c7.github.io/htgov/"><img class="logo" src="https://htcb-12c7.github.io/htgov/assets/HTgovIconV2.png" alt="logo"></a>
+  黑铁工作室
+  <div class="account-toggle">
+    <img id="userPhoto" src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg" alt="头像" onclick="toggleAccountInfo()">
+    <div class="account-popup" id="accountPopup">
+      <div id="loginForm">
+        <input type="email" id="email" placeholder="邮箱/用户名">
+        <input type="password" id="password" placeholder="密码">
+        <br>
+        <button id="loginBtn">登录</button>
+        <button id="googleLoginBtn">使用 Google 登录</button>
+      </div>
+      <div id="userInfo" style="display:none;">
+        <div>
+          <label>头像：</label>
+          <input type="file" id="updateAvatar" accept="image/*">
+          <br><img id="userPhotoPreview" src="https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg">
         </div>
+        <div><label>昵称：</label><input id="userNickname"></div>
+        <div><label>邮箱：</label><input id="userEmail"><button id="sendVerifyBtn">发送验证邮件</button></div>
+        <div><label>支付方式：</label><input id="userPayMethod"></div>
+        <div><label>支付名称：</label><input id="userPayName"></div>
+        <div><label>支付账号：</label><input id="userPayAccount"></div>
+        <br>
+        <button id="saveBtn">保存</button>
+        <button id="bindGoogleBtn">绑定 Google 账号</button>
+        <button id="logoutBtn">退出登录</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Firebase 注册逻辑 -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCDKAAxNpKqcSsS2onwlKANl9tLmCy6UGo",
-      authDomain: "ht-chat-91e5f.firebaseapp.com",
-      databaseURL: "https://ht-chat-91e5f-default-rtdb.firebaseio.com",
-      projectId: "ht-chat-91e5f",
-      storageBucket: "ht-chat-91e5f.appspot.com",
-      messagingSenderId: "325331727527",
-      appId: "1:325331727527:web:d994b7241a7cc28e9dd782",
-      measurementId: "G-VYV13LWP14"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
-    const storage = getStorage(app);
-
-    let avatarFile = null;
-    let avatarURL = "";
-
-// ✅ 实时预览头像 - 使用新的头像上传组件
-document.getElementById("updateAvatar").addEventListener("change", function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 27 * 1024 * 1024) {
-    alert("图片大小不能超过27MB！");
-    return;
-  }
-  avatarFile = file;
-  document.getElementById("userPhotoPreview").src = URL.createObjectURL(file);
-});
-
-    // ✅ 昵称检查
-    window.checkNickname = async function () {
-      const nick = document.getElementById("regNickname").value.trim();
-      if (!nick) return alert("请输入昵称");
-      const snapshot = await get(ref(db, "nicknames/" + nick));
-      document.getElementById("nickStatus").innerText = snapshot.exists() ? "❌ 昵称已存在，请更换" : "✅ 昵称可用";
-    };
-
-
-// ✅ 邮箱验证码 Email JS
-let emailCodeSent = "";
-let emailCodeExpire = 0;   // 验证码过期时间戳
-let isSendingCode = false; // 防止重复点击
-
-window.sendEmailCode = function () {
-  const email = document.getElementById("regEmail").value.trim();
-  if (!email) return alert("请输入邮箱");
-
-  // 邮箱格式校验
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return alert("请输入正确的邮箱格式");
-  }
-
-  // 防止重复点击
-  if (isSendingCode) return alert("验证码发送中，请稍候...");
-  isSendingCode = true;
-
-  // 生成验证码 + 设置过期时间（7分钟）
-  emailCodeSent = Math.floor(100000 + Math.random() * 900000).toString();
-  emailCodeExpire = Date.now() + 7 * 60 * 1000; // 当前时间+7分钟
-
-  // 调用 EmailJS 发送
-  emailjs.send("htcoutlook01", "htgov_code", {
-    to_email: email,
-    code: emailCodeSent
-  })
-  .then(() => {
-    alert("验证码已发送到邮箱，请在7分钟内使用！");
-  })
-  .catch((err) => {
-    console.error("发送失败:", err);
-    alert("验证码发送失败，请稍后再试");
-  })
-  .finally(() => {
-    isSendingCode = false; // 无论成功失败，都解锁
-  });
-};
-
-    // ✅ 注册
-let isRegistering = false; // 防止重复点击
-
-document.getElementById("registerBtn").onclick = async () => {
-  if (isRegistering) return; // 已经在注册中，直接忽略
-  isRegistering = true;
-
-  const nickname = document.getElementById("regNickname").value.trim();
-  const name = document.getElementById("regName").value.trim();
-  const email = document.getElementById("regEmail").value.trim();
-  const code = document.getElementById("emailCode").value.trim();
-  const password = document.getElementById("regPassword").value;
-  const confirm = document.getElementById("regConfirmPassword").value;
-  const payType = document.getElementById("payType").value;
-  const payName = document.getElementById("payName").value;
-  const payAccount = document.getElementById("payAccount").value;
-
-  if (!nickname || !name || !email || !password) {
-    isRegistering = false;
-    return alert("请填写完整信息！");
-  }
-  if (password !== confirm) {
-    isRegistering = false;
-    return alert("两次密码输入不一致！");
-  }
-if (emailCodeSent) {
-  if (Date.now() > emailCodeExpire) {
-    isRegistering = false;
-    return alert("验证码已过期，请重新获取！");
-  }
-  if (code !== emailCodeSent) {
-    isRegistering = false;
-    return alert("邮箱验证码错误！");
-  }
+<script>
+// 弹窗开关
+function toggleAccountInfo(){
+  const p = document.getElementById('accountPopup');
+  p.style.display = p.style.display==='none' ? 'block' : 'none';
 }
 
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+// 头像压缩预览
+let newAvatarBase64 = null;
+document.getElementById('updateAvatar').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 5*1024*1024){ alert('头像图片不能超过5MB！'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const max = 200;
+      let w = img.width, h = img.height;
+      if(w>h && w>max){ h*=max/w; w=max; } else if(h>max){ w*=max/h; h=max; }
+      canvas.width = w; canvas.height = h;
+      ctx.drawImage(img,0,0,w,h);
+      newAvatarBase64 = canvas.toDataURL('image/jpeg',0.85);
+      document.getElementById('userPhotoPreview').src = newAvatarBase64;
+      document.getElementById('userPhoto').src = newAvatarBase64;
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
 
-    // ✅ 上传头像
-    if (avatarFile) {
-      const fileRef = sRef(storage, "avatars/" + user.uid + ".jpg");
-      await uploadBytes(fileRef, avatarFile);
-      avatarURL = await getDownloadURL(fileRef);
-    } else {
-      avatarURL = "https://htcb-12c7.github.io/htgov/assets/login-placeholder.svg";
-    }
-
-    // ✅ 保存用户数据
-    await set(ref(db, "users/" + user.uid), {
-      nickname, name, email,
-      avatar: avatarURL,
-      payMethod: payType,
-      payName,
-      payAccount
-    });
-    await set(ref(db, "nicknames/" + nickname), { uid: user.uid });
-
-    alert("🎉 注册成功！");
-  } catch (err) {
-    if (err.code === "auth/email-already-in-use") {
-      alert("该邮箱已注册，请直接登录");
-    } else {
-      alert("注册失败: " + err.message);
-    }
-  } finally {
-    isRegistering = false; // 不管成功失败，最后解锁
-  }
-};
-  </script>
-
-  <!-- 导航加载 -->
-  <script>
-    fetch("https://raw.githubusercontent.com/HTcB-12C7/htgov/main/nav/nav.html")
-      .then(r => r.text())
-      .then(html => {
-        document.getElementById("sidebar-nav").innerHTML = html;
-      })
-      .catch(err => console.error("菜单加载失败：", err));
-  </script>
+// 这里放你的 Firebase 初始化和登录/保存逻辑
+// 例如：loginBtn.onclick = ... ; saveBtn.onclick = ... ;
+// 保存时把 newAvatarBase64 上传到 Storage / 数据库
+</script>
 </body>
 </html>
